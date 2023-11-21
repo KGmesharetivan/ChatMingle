@@ -29,6 +29,7 @@ const Home = () => {
           </div>
         </section>
       </>
+      {/* ==== hero section End ===== */}
     </>
   );
 };
