@@ -3,6 +3,7 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
 import landing from "../assets/images/landing.png";
+import { Link, NavLink } from "react-router-dom";
 
 const Home = () => {
   return (
@@ -16,14 +17,14 @@ const Home = () => {
               <h1 className="text-[36px] leading-[46px] text-headingColor font-[800] md:text-[60px] md:leading-[70px]">
                 Welcome to Chatmingle.net
               </h1>
-              <p className="text__para">
+              <p className="text__para ">
                 At Chatmingle.net, we believe in the power of communication to
                 bring people together from all corners of the world. Whether
                 you're looking to make new friends, find a study buddy, or
                 explore new cultures, our platform is designed to make your
                 experience seamless and enjoyable.
               </p>
-              <div className="flex justify-center items-center mt-2.5">
+              <div className="flex justify-center items-center mt-4">
                 <button className="customButton">
                   <div>GET STARTED</div>
                   <svg
