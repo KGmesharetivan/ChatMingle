@@ -20,6 +20,68 @@ body {
   box-shadow: 3px 3px -8px 3px;
 }
 
+.customButton {
+  --color: #3dd5f3;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.5s;
+  border: none;
+  background-color: transparent;
+}
+
+.customButton div {
+  letter-spacing: 2px;
+  font-weight: bold;
+  background: var(--color);
+  border-radius: 2rem;
+  color: black;
+  padding: 1rem;
+}
+
+.customButton::before {
+  content: "";
+  z-index: -1;
+  background-color: var(--color);
+  border: 2px solid black;
+  border-radius: 2rem;
+  width: 110%;
+  height: 100%;
+  position: absolute;
+  transform: rotate(10deg);
+  transition: 0.5s;
+  opacity: 0.2;
+}
+
+.customButton:hover {
+  cursor: pointer;
+  filter: brightness(1.2);
+  transform: scale(1.1);
+}
+
+.customButton:hover::before {
+  transform: rotate(0deg);
+  opacity: 1;
+}
+
+.customButton svg {
+  transform: translateX(-200%);
+  transition: 0.5s;
+  width: 0;
+  opacity: 0;
+}
+
+.customButton:hover svg {
+  width: 25px;
+  transform: translateX(0%);
+  opacity: 1;
+}
+
+.customButton:active {
+  filter: brightness(1.4);
+}
+
 @media only screen and (max-width: 768px) {
   .navigation {
     width: 100%;

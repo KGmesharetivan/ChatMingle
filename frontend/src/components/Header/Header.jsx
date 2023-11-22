@@ -11,12 +11,12 @@ const navLinks = [
     display: "Home",
   },
   {
-    path: "/profile",
-    display: "Profile",
-  },
-  {
     path: "/mingle",
     display: "Mingle",
+  },
+  {
+    path: "/profile",
+    display: "Profile",
   },
   {
     path: "/contact",
