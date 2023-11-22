@@ -30,12 +30,39 @@
   }
 }
 
+@media only screen and (max-width: 1440px) {
+  .hero__section .flex {
+    @apply flex-row gap-[30px];
+  }
+
+  .hero__section img {
+    @apply w-full h-auto max-w-md;
+  }
+
+  .hero__section .text-container {
+    @apply w-full max-w-lg;
+  }
+}
+
 @media only screen and (max-width: 1024px) {
   .container {
     @apply w-full;
   }
   section {
     @apply py-[35px];
+  }
+  /* More specific targeting of the flex container */
+  .hero__section > .container > .flex {
+    @apply flex-col gap-[30px];
+  }
+
+  .hero__section img {
+    @apply w-full h-auto max-w-xs mx-auto;
+  }
+
+  /* Adjust this if there's a specific container for the text */
+  .hero__section .text-container {
+    @apply w-full max-w-md;
   }
 }
 
