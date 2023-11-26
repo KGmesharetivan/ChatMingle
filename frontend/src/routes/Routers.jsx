@@ -5,8 +5,8 @@ import Services from "../pages/Mingle";
 import Contact from "../pages/Contact";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
-import Doctors from "../pages/Doctors/Doctors";
-import DoctorDetails from "../pages/Doctors/DoctorDetails";
+import Profile from "../pages/Profile/Profile";
+import ProfileDetails from "../pages/Profile/ProfileDetails";
 
 import { Routes, Route } from "react-router-dom";
 
@@ -15,8 +15,8 @@ const Routers = () => {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="home" element={<Home />} />
-      <Route path="/profile" element={<Doctors />} />
-      <Route path="/profile/:id" element={<DoctorDetails />} />
+      <Route path="/profile" element={<Profile />} />
+      <Route path="/profile/:id" element={<ProfileDetails />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/mingle" element={<Services />} />
