@@ -4,7 +4,6 @@ import logo from "../assets/images/logo.png";
 import copyButton from "../assets/images/copyButton.png";
 import chatButton from "../assets/images/chatButton.png";
 import videoButton from "../assets/images/videoButton.png";
-import check from "../assets/images/check.png";
 
 const Mingle = () => {
   const [isStrangerAllowed, setIsStrangerAllowed] = useState(false);
