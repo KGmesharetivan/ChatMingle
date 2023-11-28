@@ -233,7 +233,7 @@ body {
   width: 395px;
   height: 75px;
   bottom: 40px;
-  left: calc(50% - 197.5px); 
+  left: calc(50% - 197.5px);
   display: flex;
   justify-content: space-between;
   align-items: center;

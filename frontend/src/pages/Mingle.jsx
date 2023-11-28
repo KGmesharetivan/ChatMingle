@@ -188,27 +188,40 @@ const Mingle = () => {
                     id="local_video"
                   ></video>
                 </div>
-                <div className="call_buttons_container " id="call_buttons">
+                <div className="call_buttons_container" id="call_buttons">
                   <button className="call_button_small" id="mic_button">
-                    <img src={mic} id="mic_button_image" alt="Mic" />
+                    <div className="flex justify-center items-center">
+                      <img src={mic} id="mic_button_image" alt="Mic" />
+                    </div>
                   </button>
                   <button className="call_button_small" id="camera_button">
-                    <img src={camera} id="camera_button_image" alt="Camera" />
+                    <div className="flex justify-center items-center">
+                      <img src={camera} id="camera_button_image" alt="Camera" />
+                    </div>
                   </button>
                   <button className="call_button_large" id="hang_up_button">
-                    <img src={hangUp} alt="Hang Up" />
+                    <div className="flex justify-center items-center">
+                      {" "}
+                      <img src={hangUp} alt="Hang Up" />
+                    </div>
                   </button>
                   <button
                     className="call_button_small"
                     id="screen_sharing_button"
                   >
-                    <img src={switchCam} alt="Screen Sharing" />
+                    <div className="flex justify-center items-center">
+                      {" "}
+                      <img src={switchCam} alt="Screen Sharing" />
+                    </div>
                   </button>
                   <button
                     className="call_button_small"
                     id="start_recording_button"
                   >
-                    <img src={recordingStart} alt="Start Recording" />
+                    <div className="flex justify-center items-center">
+                      {" "}
+                      <img src={recordingStart} alt="Start Recording" />
+                    </div>
                   </button>
                 </div>
                 <div
