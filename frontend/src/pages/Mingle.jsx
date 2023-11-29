@@ -33,11 +33,11 @@ const Mingle = () => {
 
   return (
     <>
-      <section className="hero__section pt-[60px] 2xl:h-[800px]">
+      <section className="pt-[60px] 2xl:h-[800px]">
         <div className="container">
-          <div className="flex flex-col lg:flex-row gap-[30px] items-start justify-start">
+          <div className="flex flex-col lg:flex-row  items-start justify-start">
             {/* ==== Dashboard ===== */}
-            <div className="w-1/4 h-full flex flex-col justify-between relative custom-gradient">
+            <div className="mingle_section w-1/4 h-full flex flex-col justify-between relative custom-gradient">
               <div
                 className="ml-10 flex justify-center items-center"
                 style={{ width: "180px", height: "120px" }}
@@ -100,21 +100,27 @@ const Mingle = () => {
                     className="connecting_button mr-2"
                     id="personal_code_chat_button"
                   >
-                    <img
-                      src={chatButton}
-                      className="connecting_buttons_image"
-                      alt="Chat"
-                    />
+                    <div className="flex justify-center items-center">
+                      {" "}
+                      <img
+                        src={chatButton}
+                        className="connecting_buttons_image"
+                        alt="Chat"
+                      />
+                    </div>
                   </button>
                   <button
                     className="connecting_button"
                     id="personal_code_video_button"
                   >
-                    <img
-                      src={videoButton}
-                      className="connecting_buttons_image"
-                      alt="Video Call"
-                    />
+                    <div className="flex justify-center items-center">
+                      {" "}
+                      <img
+                        src={videoButton}
+                        className="connecting_buttons_image"
+                        alt="Video Call"
+                      />
+                    </div>
                   </button>
                 </div>
               </div>
@@ -127,21 +133,27 @@ const Mingle = () => {
                     className="connecting_button mr-2"
                     id="stranger_chat_button"
                   >
-                    <img
-                      src={chatButton}
-                      className="connecting_buttons_image"
-                      alt="Chat with Stranger"
-                    />
+                    <div className="flex justify-center items-center">
+                      {" "}
+                      <img
+                        src={chatButton}
+                        className="connecting_buttons_image"
+                        alt="Chat"
+                      />
+                    </div>
                   </button>
                   <button
                     className="connecting_button"
                     id="stranger_video_button"
                   >
-                    <img
-                      src={videoButton}
-                      className="connecting_buttons_image"
-                      alt="Video Call with Stranger"
-                    />
+                    <div className="flex justify-center items-center">
+                      {" "}
+                      <img
+                        src={videoButton}
+                        className="connecting_buttons_image"
+                        alt="Video Call"
+                      />
+                    </div>
                   </button>
                 </div>
               </div>
