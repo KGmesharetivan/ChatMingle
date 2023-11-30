@@ -63,11 +63,11 @@
     @apply w-full max-w-md;
   }
   .mingle_section {
-    width: 25%;
-    
+    @apply w-1/4;
   }
+
   .call_container {
-    width: 50%;
+    @apply w-1/2;
   }
   .personal_code_copy {
     @apply flex-col;
