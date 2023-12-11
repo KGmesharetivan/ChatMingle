@@ -202,10 +202,7 @@ const Mingle = () => {
                     id="local_video"
                   ></video>
                 </div>
-                <div
-                  className="call_buttons_container hidden"
-                  id="call_buttons"
-                >
+                <div className="call_buttons_container" id="call_buttons">
                   <button className="call_button_small" id="mic_button">
                     <div className="flex justify-center items-center">
                       <img src={mic} id="mic_button_image" alt="Mic" />
@@ -241,6 +238,7 @@ const Mingle = () => {
                     </div>
                   </button>
                 </div>
+
                 <div
                   className="finish_chat_button_container hidden"
                   id="finish_chat_button_container"
