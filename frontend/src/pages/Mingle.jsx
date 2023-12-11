@@ -191,7 +191,7 @@ const Mingle = () => {
                   <img src={logo} alt="Logo" />
                 </div>
                 <video
-                  className="remote_video hidden "
+                  className="remote_video"
                   autoPlay={true}
                   id="remote_video"
                 ></video>
