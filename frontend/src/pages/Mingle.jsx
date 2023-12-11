@@ -11,6 +11,7 @@ import switchCam from "../assets/images/switchCameraScreenSharing.png";
 import pause from "../assets/images/pause.png";
 import recordingStart from "../assets/images/recordingStart.png";
 import resume from "../assets/images/resume.png";
+import sendMessageButton from "../assets/images/sendMessageButton.png";
 
 const Mingle = () => {
   const [isStrangerAllowed, setIsStrangerAllowed] = useState(false);
@@ -33,11 +34,11 @@ const Mingle = () => {
 
   return (
     <>
-      <section className="hero__section pt-[60px] 2xl:h-[800px]">
+      <section className="pt-[60px] 2xl:h-[800px]">
         <div className="container">
-          <div className="flex flex-col lg:flex-row gap-[30px] items-start justify-start">
+          <div className="flex flex-col lg:flex-row  items-start justify-start">
             {/* ==== Dashboard ===== */}
-            <div className="w-1/4 h-full flex flex-col justify-between relative custom-gradient">
+            <div className="mingle_section w-1/4 h-full flex flex-col justify-between relative custom-gradient">
               <div
                 className="ml-10 flex justify-center items-center"
                 style={{ width: "180px", height: "120px" }}
@@ -97,24 +98,30 @@ const Mingle = () => {
                 </div>
                 <div className="personal_code_connecting_buttons_container ">
                   <button
-                    className="connecting_button mr-2"
+                    className="connecting_button mr-2 "
                     id="personal_code_chat_button"
                   >
-                    <img
-                      src={chatButton}
-                      className="connecting_buttons_image"
-                      alt="Chat"
-                    />
+                    <div className="flex justify-center items-center">
+                      {" "}
+                      <img
+                        src={chatButton}
+                        className="connecting_buttons_image"
+                        alt="Chat"
+                      />
+                    </div>
                   </button>
                   <button
-                    className="connecting_button"
+                    className="connecting_button hidden"
                     id="personal_code_video_button"
                   >
-                    <img
-                      src={videoButton}
-                      className="connecting_buttons_image"
-                      alt="Video Call"
-                    />
+                    <div className="flex justify-center items-center">
+                      {" "}
+                      <img
+                        src={videoButton}
+                        className="connecting_buttons_image"
+                        alt="Video Call"
+                      />
+                    </div>
                   </button>
                 </div>
               </div>
@@ -127,21 +134,28 @@ const Mingle = () => {
                     className="connecting_button mr-2"
                     id="stranger_chat_button"
                   >
-                    <img
-                      src={chatButton}
-                      className="connecting_buttons_image"
-                      alt="Chat with Stranger"
-                    />
+                    <div className="flex justify-center items-center">
+                      {" "}
+                      <img
+                        src={chatButton}
+                        className="connecting_buttons_image"
+                        alt="Chat"
+                      />
+                    </div>
                   </button>
+
                   <button
-                    className="connecting_button"
+                    className="connecting_button hidden"
                     id="stranger_video_button"
                   >
-                    <img
-                      src={videoButton}
-                      className="connecting_buttons_image"
-                      alt="Video Call with Stranger"
-                    />
+                    <div className="flex justify-center items-center">
+                      {" "}
+                      <img
+                        src={videoButton}
+                        className="connecting_buttons_image"
+                        alt="Video Call"
+                      />
+                    </div>
                   </button>
                 </div>
               </div>
@@ -177,7 +191,7 @@ const Mingle = () => {
                   <img src={logo} alt="Logo" />
                 </div>
                 <video
-                  className="remote_video "
+                  className="remote_video hidden "
                   autoPlay={true}
                   id="remote_video"
                 ></video>
@@ -188,7 +202,10 @@ const Mingle = () => {
                     id="local_video"
                   ></video>
                 </div>
-                <div className="call_buttons_container" id="call_buttons">
+                <div
+                  className="call_buttons_container hidden"
+                  id="call_buttons"
+                >
                   <button className="call_button_small" id="mic_button">
                     <div className="flex justify-center items-center">
                       <img src={mic} id="mic_button_image" alt="Mic" />
@@ -249,6 +266,31 @@ const Mingle = () => {
                 </div>
               </div>
             </div>
+
+            {/* ==== Message Container ===== */}
+            <div className="messenger_container">
+              <div className="messages_container" id="messages_container"></div>
+              <div className="new_message_container hidden" id="new_message">
+                <input
+                  className="new_message_input"
+                  id="new_message_input"
+                  type="text"
+                  placeholder="Type your message..."
+                />
+                <button
+                  className="send_message_button"
+                  id="send_message_button"
+                >
+                  <div className="flex justify-center items-center">
+                    <img
+                      className="send_message_button_image"
+                      src={sendMessageButton}
+                    />
+                  </div>
+                </button>
+              </div>
+            </div>
+            <div id="dialog"></div>
           </div>
         </div>
       </section>

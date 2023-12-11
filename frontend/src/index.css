@@ -51,7 +51,6 @@
   section {
     @apply py-[35px];
   }
-  /* More specific targeting of the flex container */
   .hero__section > .container > .flex {
     @apply flex-col gap-[30px];
   }
@@ -60,9 +59,18 @@
     @apply w-full h-auto max-w-xs mx-auto;
   }
 
-  /* Adjust this if there's a specific container for the text */
   .hero__section .text-container {
     @apply w-full max-w-md;
+  }
+  .mingle_section {
+    @apply w-1/4;
+  }
+
+  .call_container {
+    @apply w-1/2;
+  }
+  .personal_code_copy {
+    @apply flex-col;
   }
 }
 

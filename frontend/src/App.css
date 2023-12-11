@@ -86,6 +86,7 @@ body {
   background: #b3ffab;
   background: -webkit-linear-gradient(0deg, #b3ffab 0%, #12fff7 100%);
   background: linear-gradient(0deg, #b3ffab 0%, #12fff7 100%);
+  border-radius: 20px;
 }
 
 .personal_code_connecting_buttons_container {
@@ -253,6 +254,58 @@ body {
   border-radius: 75px;
   background: #fc5d5b;
   transition: 0.3s;
+}
+
+.messenger_container {
+  width: 25%;
+  height: 100%;
+  background: #f4f9fd;
+  display: flex;
+  flex-direction: column;
+}
+
+.messages_container {
+  flex-grow: 1;
+  margin: 40px 30px;
+  overflow-y: scroll;
+}
+
+.new_message_container {
+  position: relative;
+}
+
+.new_message_input {
+  margin: 0 40px;
+  margin-bottom: 30px;
+  width: calc(100% - 80px);
+  height: 60px;
+  color: #676f7a;
+  font-size: 16px;
+  font-weight: 400;
+  border: 1px solid #d5deeb;
+  border-radius: 15px;
+  box-shadow: 0px 2px 20px 5px rgba(10, 145, 219, 0.05);
+  padding: 0 60px 0 20px;
+  z-index: 2;
+}
+
+.send_message_button {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  right: 50px;
+  top: 10px;
+  box-shadow: 0px 2px 20px 5px rgba(10, 145, 219, 0.05);
+  background: linear-gradient(180deg, #ff9519 0%, #ffba6a 100%);
+  border-radius: 8px;
+  transition: 0.5s;
+  border: 0px solid transparent;
+  text-shadow: 0px 0px 0px transparent;
+}
+
+.send_message_button_image {
+  max-width: 100%;
+  max-height: 100%;
 }
 
 @media only screen and (max-width: 768px) {
