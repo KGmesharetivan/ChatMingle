@@ -38,18 +38,18 @@ const Mingle = () => {
         <div className="container">
           <div className="flex flex-col lg:flex-row  items-start justify-start">
             {/* ==== Dashboard ===== */}
-            <div className="mingle_section w-1/4 h-full flex flex-col justify-between relative custom-gradient">
+            <div className="mingle_section w-1/4 h-full flex flex-col justify-between relative custom-gradient dashboard_container">
               <div
-                className="ml-10 flex justify-center items-center"
+                className="ml-10 flex justify-center items-center logo_container"
                 style={{ width: "180px", height: "120px" }}
               >
-                <img src={logo} alt="Logo" className="w-[150px] h-[150px]" />
+                <img src={logo} alt="Logo" className="w-[150px] h-[150px] " />
               </div>
 
               <div>
                 {/* Description Container */}
-                <div className="mx-10 mb-10">
-                  <p className="font-medium text-base text-black">
+                <div className="mx-10 mb-10 description_container">
+                  <p className="font-medium text-base text-black description_container_paragraph">
                     Talk with other user by passing his personal code or talk
                     with strangers!
                   </p>
@@ -57,25 +57,27 @@ const Mingle = () => {
 
                 {/* Personal Code Container */}
                 <div
-                  className="flex flex-col justify-evenly mx-10 rounded-lg"
+                  className="flex flex-col justify-evenly mx-10 rounded-lg personal_code_container"
                   style={{
                     height: "110px",
                     background: "rgba(196, 196, 196, 0.2)",
                     backdropFilter: "blur(80px)",
                   }}
                 >
-                  <div className="px-0 sm:px-25">
-                    <p className="text-base font-medium">Your personal code</p>
+                  <div className="px-0 sm:px-25 personal_code_title_container">
+                    <p className="text-base font-medium personal_code_title_paragraph">
+                      Your personal code
+                    </p>
                   </div>
-                  <div className="flex justify-between items-center mx-4">
+                  <div className="flex justify-between items-center mx-4 personal_code_value_container">
                     <p
-                      className="text-lg font-semibold"
+                      className="text-lg font-semibold personal_code_value_paragraph"
                       id="personal_code_paragraph"
                     >
                       ALWKfq1rkqTIJP5PAAAB
                     </p>
                     <button
-                      className="w-[40px] h-[40px] rounded-md bg-white transition-transform duration-500"
+                      className="w-[40px] h-[40px] rounded-md bg-white transition-transform duration-500 personal_code_copy_button"
                       id="personal_code_copy_button"
                       onClick={handleCopyButtonClick}
                     >
