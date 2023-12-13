@@ -1,18 +1,43 @@
 const express = require("express");
 const http = require("http");
 const path = require("path");
+const indexRouter = require("./routes/index");
+const session = require("express-session");
+const cors = require("cors");
+
+const PORT = process.env.PORT || 3001;
 
 const app = express();
 const server = http.createServer(app);
-const io = require("socket.io")(server);
+const io = require("socket.io")(server, {
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+  },
+});
+
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Replace with your frontend's origin
+  })
+);
+app.use(
+  session({
+    secret: "EWC8ANTIfZKrRrRpHcSIXlI_5QjkAtEZZVkxVBphjk8", // Choose a secret for session encoding
+    resave: false, // Forces the session to be saved back to the session store
+    saveUninitialized: true, // Forces a session that is "uninitialized" to be saved to the store
+  })
+);
+
+// Define your routes here
+app.use("/", indexRouter);
 
 // Middleware for serving your React application
-app.use(express.static(path.join(__dirname, "../frontend/dist")));
-
+app.use(express.static(path.join(__dirname, "frontend/build")));
 app.use("/uploads", express.static("uploads"));
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/dist", "index.html"));
+  res.sendFile(path.join(__dirname, "frontend/build", "index.html"));
 });
 
 let connectedPeers = [];
@@ -135,44 +160,6 @@ io.on("connection", (socket) => {
   });
 });
 
-function normalizePort(val) {
-  const port = parseInt(val, 10);
-
-  if (isNaN(port)) {
-    return val;
-  }
-
-  if (port >= 0) {
-    return port;
-  }
-
-  return false;
-}
-
-const port = normalizePort(process.env.PORT || "3000");
-app.set("port", port);
-
-server.listen(port, () => {
-  console.log(`Server is listening on http://localhost:${port}`);
-});
-
-server.on("error", (error) => {
-  if (error.syscall !== "listen") {
-    throw error;
-  }
-
-  const bind = typeof port === "string" ? "Pipe " + port : "Port " + port;
-
-  switch (error.code) {
-    case "EACCES":
-      console.error(bind + " requires elevated privileges");
-      process.exit(1);
-      break;
-    case "EADDRINUSE":
-      console.error(bind + " is already in use");
-      process.exit(1);
-      break;
-    default:
-      throw error;
-  }
+server.listen(PORT, () => {
+  console.log(`listening on ${PORT}`);
 });

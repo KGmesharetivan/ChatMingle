@@ -38,26 +38,26 @@ const Home = () => {
                       <path
                         d="M11.6801 14.62L14.2401 12.06L11.6801 9.5"
                         stroke="black"
-                        stroke-width="2"
-                        stroke-miterlimit="10"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeWidth={2}
+                        strokeMiterlimit={10}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                       ></path>
                       <path
                         d="M4 12.0601H14.17"
                         stroke="black"
-                        stroke-width="2"
-                        stroke-miterlimit="10"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeWidth={2}
+                        strokeMiterlimit={10}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                       ></path>
                       <path
                         d="M12 4C16.42 4 20 7 20 12C20 17 16.42 20 12 20"
                         stroke="black"
-                        stroke-width="2"
-                        stroke-miterlimit="10"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeWidth={2}
+                        strokeMiterlimit={10}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                       ></path>
                     </svg>
                   </button>

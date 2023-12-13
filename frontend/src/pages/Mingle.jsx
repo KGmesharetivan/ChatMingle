@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "../assets/images/logo.png";
 import copyButton from "../assets/images/copyButton.png";
 import chatButton from "../assets/images/chatButton.png";
@@ -12,24 +12,167 @@ import pause from "../assets/images/pause.png";
 import recordingStart from "../assets/images/recordingStart.png";
 import resume from "../assets/images/resume.png";
 import sendMessageButton from "../assets/images/sendMessageButton.png";
+import io from "socket.io-client";
+import { registerSocketEvents } from "../assets/js/wss";
+import * as ui from "../assets/js/ui";
+import * as store from "../assets/js/store";
+import * as constants from "../assets/js/constants";
+import * as webRTCHandler from "../assets/js/webRTCHandler";
+import * as strangerUtils from "../assets/js/strangerUtils";
 
 const Mingle = () => {
   const [isStrangerAllowed, setIsStrangerAllowed] = useState(false);
+  const [personalCode, setPersonalCode] = useState("");
+  const [localStream, setLocalStream] = useState(null);
+  const [showVideoButtons, setShowVideoButtons] = useState(false);
+  const [isDashboardBlurred, setIsDashboardBlurred] = useState(false);
+  const [showCallButtons, setShowCallButtons] = useState(false);
+  const [showRemoteVideo, setShowRemoteVideo] = useState(false);
+  const [showNewMessageInput, setShowNewMessageInput] = useState(false);
+  const [showPlaceholder, setShowPlaceholder] = useState(true);
+  const [callType, setCallType] = useState(null);
 
   const handleCopyButtonClick = async () => {
-    const personalCode = document.getElementById(
-      "personal_code_paragraph"
-    ).innerText;
     try {
+      const personalCode = store.getState().socketId; // Or use relevant state if you have
       await navigator.clipboard.writeText(personalCode);
       // Optional: Show a notification or update the button to indicate success
     } catch (err) {
+      console.log("Error copying text: ", err);
       // Handle the error (e.g., show an error message)
     }
   };
 
   const toggleStrangerCheckbox = () => {
-    setIsStrangerAllowed(!isStrangerAllowed);
+    const newCheckboxState = !isStrangerAllowed;
+    setIsStrangerAllowed(newCheckboxState);
+
+    // Update UI and store states
+    ui.updateStrangerCheckbox(newCheckboxState);
+    store.setAllowConnectionsFromStrangers(newCheckboxState);
+
+    // Invoke the strangerUtils function
+    strangerUtils.changeStrangerConnectionStatus(newCheckboxState);
+  };
+
+  const updatePersonalCode = (newCode) => {
+    setPersonalCode(newCode);
+  };
+
+  useEffect(() => {
+    const socket = io("http://localhost:3001");
+    registerSocketEvents(socket);
+
+    // Clean up on unmount
+    return () => socket.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const getLocalPreview = () => {
+      navigator.mediaDevices
+        .getUserMedia({ audio: true, video: true })
+        .then((stream) => {
+          setLocalStream(stream);
+          ui.updateLocalVideo(stream);
+          showVideoCallButtons();
+          store.setCallState(constants.callState.CALL_AVAILABLE);
+          store.setLocalStream(stream);
+        })
+        .catch((err) => {
+          console.log(
+            "error occurred when trying to get access to camera",
+            err
+          );
+        });
+    };
+
+    getLocalPreview();
+  }, []); // Empty dependency array ensures this effect runs only once on mount
+
+  const showVideoCallButtons = () => {
+    // Update state to show video call buttons
+    setShowVideoButtons(true);
+  };
+
+  const handlePersonalCodeChatClick = () => {
+    console.log("chat button clicked");
+    const calleePersonalCode = document.getElementById(
+      "personal_code_input"
+    ).value;
+    const callType = constants.callType.CHAT_PERSONAL_CODE;
+
+    webRTCHandler.sendPreOffer(callType, calleePersonalCode);
+    setCallType(constants.callType.CHAT_PERSONAL_CODE);
+  };
+
+  const handlePersonalCodeVideoClick = () => {
+    console.log("video button clicked");
+    const calleePersonalCode = document.getElementById(
+      "personal_code_input"
+    ).value;
+    const callType = constants.callType.VIDEO_PERSONAL_CODE;
+    webRTCHandler.sendPreOffer(callType, calleePersonalCode);
+    setCallType(constants.callType.VIDEO_PERSONAL_CODE);
+  };
+
+  const handleStrangerChatClick = () => {
+    // logic
+    strangerUtils.getStrangerSocketIdAndConnect(
+      constants.callType.CHAT_STRANGER
+    );
+  };
+
+  const handleStrangerVideoClick = () => {
+    // logic
+    strangerUtils.getStrangerSocketIdAndConnect(
+      constants.callType.VIDEO_STRANGER
+    );
+  };
+
+  const enableDashboard = () => {
+    setIsDashboardBlurred(false);
+  };
+
+  const disableDashboard = () => {
+    setIsDashboardBlurred(true);
+  };
+
+  const showVideoCallElements = () => {
+    setShowCallButtons(true);
+    setShowPlaceholder(false);
+    setShowRemoteVideo(true);
+    setShowNewMessageInput(true);
+    disableDashboard();
+  };
+
+  const updateUIAfterHangUp = (callType) => {
+    enableDashboard();
+    setShowCallButtons(false);
+    setShowNewMessageInput(false);
+    setShowRemoteVideo(false);
+    setShowPlaceholder(true);
+  };
+
+  const handleCallConnected = () => {
+    showVideoCallElements();
+    ui.updateUIAfterCallConnected(callType);
+    setShowPlaceholder(false);
+    setShowRemoteVideo(true);
+    setShowCallButtons(true);
+  };
+
+  const handleEndCall = () => {
+    webRTCHandler.handleHangUp(); // This should internally call ui.updateUIAfterHangUp
+    setShowPlaceholder(true);
+    setShowRemoteVideo(false);
+    setShowCallButtons(false);
+
+    // Resetting other UI state to default
+    setIsDashboardBlurred(false);
+    setShowVideoButtons(false);
+    setShowNewMessageInput(false);
+    setShowPlaceholder(true);
+    setCallType(null);
   };
 
   return (
@@ -46,8 +189,8 @@ const Mingle = () => {
                 <img src={logo} alt="Logo" className="w-[150px] h-[150px] " />
               </div>
 
+              {/* Description Container */}
               <div>
-                {/* Description Container */}
                 <div className="mx-10 mb-10 description_container">
                   <p className="font-medium text-base text-black description_container_paragraph">
                     Talk with other user by passing his personal code or talk
@@ -71,10 +214,10 @@ const Mingle = () => {
                   </div>
                   <div className="flex justify-between items-center mx-4 personal_code_value_container">
                     <p
-                      className="text-lg font-semibold personal_code_value_paragraph"
+                      className="font-semibold personal_code_value_paragraph"
                       id="personal_code_paragraph"
                     >
-                      ALWKfq1rkqTIJP5PAAAB
+                      {personalCode}
                     </p>
                     <button
                       className="w-[40px] h-[40px] rounded-md bg-white transition-transform duration-500 personal_code_copy_button"
@@ -100,11 +243,11 @@ const Mingle = () => {
                 </div>
                 <div className="personal_code_connecting_buttons_container ">
                   <button
-                    className="connecting_button mr-2 "
+                    className="connecting_button mr-2"
                     id="personal_code_chat_button"
+                    onClick={handlePersonalCodeChatClick}
                   >
                     <div className="flex justify-center items-center">
-                      {" "}
                       <img
                         src={chatButton}
                         className="connecting_buttons_image"
@@ -112,12 +255,15 @@ const Mingle = () => {
                       />
                     </div>
                   </button>
+
                   <button
-                    className="connecting_button hidden"
+                    className={`connecting_button mr-2 ${
+                      showVideoButtons ? "" : "hidden"
+                    }`}
                     id="personal_code_video_button"
+                    onClick={handlePersonalCodeVideoClick}
                   >
                     <div className="flex justify-center items-center">
-                      {" "}
                       <img
                         src={videoButton}
                         className="connecting_buttons_image"
@@ -135,6 +281,7 @@ const Mingle = () => {
                   <button
                     className="connecting_button mr-2"
                     id="stranger_chat_button"
+                    onClick={handleStrangerChatClick}
                   >
                     <div className="flex justify-center items-center">
                       {" "}
@@ -147,8 +294,11 @@ const Mingle = () => {
                   </button>
 
                   <button
-                    className="connecting_button hidden"
+                    className={`connecting_button mr-2 ${
+                      showVideoButtons ? "" : "hidden"
+                    }`}
                     id="stranger_video_button"
+                    onClick={handleStrangerVideoClick}
                   >
                     <div className="flex justify-center items-center">
                       {" "}
@@ -183,19 +333,29 @@ const Mingle = () => {
               </div>
 
               {/* Dashboard Blur */}
-              <div className="dashboard_blur hidden" id="dashboard_blur"></div>
+              <div
+                className={`dashboard_blur ${
+                  isDashboardBlurred ? "" : "hidden"
+                }`}
+                id="dashboard_blur"
+              ></div>
             </div>
 
             {/* ==== Call Container ===== */}
             <div className="call_container">
               <div className="videos_container">
-                <div id="video_placeholder" className="videos_placeholder">
+                <div
+                  id="video_placeholder"
+                  className="videos_placeholder"
+                  style={{ display: showPlaceholder ? "block" : "none" }}
+                >
                   <img src={logo} alt="Logo" />
                 </div>
                 <video
                   className="remote_video"
                   autoPlay={true}
                   id="remote_video"
+                  style={{ display: showRemoteVideo ? "block" : "none" }}
                 ></video>
                 <div className="local_video_container">
                   <video
@@ -204,7 +364,11 @@ const Mingle = () => {
                     id="local_video"
                   ></video>
                 </div>
-                <div className="call_buttons_container" id="call_buttons">
+                <div
+                  className="call_buttons_container"
+                  id="call_buttons"
+                  style={{ display: showCallButtons ? "block" : "none" }}
+                >
                   <button className="call_button_small" id="mic_button">
                     <div className="flex justify-center items-center">
                       <img src={mic} id="mic_button_image" alt="Mic" />
@@ -248,6 +412,7 @@ const Mingle = () => {
                   <button
                     className="call_button_large"
                     id="finish_chat_call_button"
+                    onClick={handleEndCall}
                   >
                     <img src={hangUp} alt="Hang Up" />
                   </button>
@@ -270,7 +435,11 @@ const Mingle = () => {
             {/* ==== Message Container ===== */}
             <div className="messenger_container">
               <div className="messages_container" id="messages_container"></div>
-              <div className="new_message_container hidden" id="new_message">
+              <div
+                className="new_message_container"
+                id="new_message"
+                style={{ display: showNewMessageInput ? "block" : "none" }}
+              >
                 <input
                   className="new_message_input"
                   id="new_message_input"
