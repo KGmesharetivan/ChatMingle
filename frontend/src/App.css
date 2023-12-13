@@ -185,8 +185,10 @@ body {
 }
 
 .call_container {
-  width: 50%;
+  width: 100%;
   height: 100%;
+  padding: 0;
+  margin: 0;
 }
 
 .videos_container {
@@ -257,9 +259,11 @@ body {
 }
 
 .messenger_container {
-  width: 25%;
+  width: 100%;
   height: 100%;
-  background: #f4f9fd;
+  background: #b3ffab;
+  background: linear-gradient(0deg, #b3ffab 0%, #12fff7 100%);
+  border-radius: 15px;
   display: flex;
   flex-direction: column;
 }
@@ -268,6 +272,7 @@ body {
   flex-grow: 1;
   margin: 40px 30px;
   overflow-y: scroll;
+  height: 450px;
 }
 
 .new_message_container {
@@ -306,6 +311,13 @@ body {
 .send_message_button_image {
   max-width: 100%;
   max-height: 100%;
+}
+
+.dashboard_container {
+  background: #b3ffab;
+  background: linear-gradient(0deg, #b3ffab 0%, #12fff7 100%);
+  border-radius: 15px;
+  height: 625px;
 }
 
 @media only screen and (max-width: 768px) {
