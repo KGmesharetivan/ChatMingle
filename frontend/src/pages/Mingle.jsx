@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
+import io from "socket.io-client";
 import logo from "../assets/images/logo.png";
 import copyButton from "../assets/images/copyButton.png";
 import chatButton from "../assets/images/chatButton.png";
@@ -12,7 +13,7 @@ import pause from "../assets/images/pause.png";
 import recordingStart from "../assets/images/recordingStart.png";
 import resume from "../assets/images/resume.png";
 import sendMessageButton from "../assets/images/sendMessageButton.png";
-import io from "socket.io-client";
+
 import { registerSocketEvents } from "../assets/js/wss";
 import * as ui from "../assets/js/ui";
 import * as store from "../assets/js/store";
@@ -32,13 +33,39 @@ const Mingle = () => {
   const [showPlaceholder, setShowPlaceholder] = useState(true);
   const [callType, setCallType] = useState(null);
 
+  useEffect(() => {
+    const socket = io("http://localhost:3001");
+    registerSocketEvents(socket);
+
+    return () => socket.disconnect(); // Clean up on unmount
+  }, []);
+
+  useEffect(() => {
+    const getLocalPreview = () => {
+      navigator.mediaDevices
+        .getUserMedia({ audio: true, video: true })
+        .then((stream) => {
+          setLocalStream(stream);
+          ui.updateLocalVideo(stream);
+          showVideoCallButtons();
+          store.setCallState(constants.callState.CALL_AVAILABLE);
+          store.setLocalStream(stream);
+        })
+        .catch((err) => {
+          console.error("Error accessing camera:", err);
+        });
+    };
+
+    getLocalPreview();
+  }, []);
+
   const handleCopyButtonClick = async () => {
     try {
       const personalCode = store.getState().socketId; // Or use relevant state if you have
       await navigator.clipboard.writeText(personalCode);
       // Optional: Show a notification or update the button to indicate success
     } catch (err) {
-      console.log("Error copying text: ", err);
+      console.error("Error copying text: ", err);
       // Handle the error (e.g., show an error message)
     }
   };
@@ -59,38 +86,7 @@ const Mingle = () => {
     setPersonalCode(newCode);
   };
 
-  useEffect(() => {
-    const socket = io("http://localhost:3001");
-    registerSocketEvents(socket);
-
-    // Clean up on unmount
-    return () => socket.disconnect();
-  }, []);
-
-  useEffect(() => {
-    const getLocalPreview = () => {
-      navigator.mediaDevices
-        .getUserMedia({ audio: true, video: true })
-        .then((stream) => {
-          setLocalStream(stream);
-          ui.updateLocalVideo(stream);
-          showVideoCallButtons();
-          store.setCallState(constants.callState.CALL_AVAILABLE);
-          store.setLocalStream(stream);
-        })
-        .catch((err) => {
-          console.log(
-            "error occurred when trying to get access to camera",
-            err
-          );
-        });
-    };
-
-    getLocalPreview();
-  }, []); // Empty dependency array ensures this effect runs only once on mount
-
   const showVideoCallButtons = () => {
-    // Update state to show video call buttons
     setShowVideoButtons(true);
   };
 
@@ -154,25 +150,65 @@ const Mingle = () => {
   };
 
   const handleCallConnected = () => {
+    console.log("handleCallConnected function called");
+    console.log("Before updating, showVideoButtons is:", showVideoButtons);
+
     showVideoCallElements();
     ui.updateUIAfterCallConnected(callType);
     setShowPlaceholder(false);
     setShowRemoteVideo(true);
     setShowCallButtons(true);
+    setShowVideoButtons(true);
+
+    console.log("After updating, showVideoButtons is:", showVideoButtons);
+
+    setTimeout(() => {
+      console.log("Updated showVideoButtons state is:", showVideoButtons);
+    }, 0);
+  };
+
+  const handleWebRTCConnection = (webRTCData) => {
+    webRTCHandler.someWebRTCFunction(webRTCData, handleCallConnected);
   };
 
   const handleEndCall = () => {
-    webRTCHandler.handleHangUp(); // This should internally call ui.updateUIAfterHangUp
+    webRTCHandler.handleHangUp();
     setShowPlaceholder(true);
     setShowRemoteVideo(false);
     setShowCallButtons(false);
 
-    // Resetting other UI state to default
     setIsDashboardBlurred(false);
     setShowVideoButtons(false);
     setShowNewMessageInput(false);
     setShowPlaceholder(true);
     setCallType(null);
+  };
+
+  const onCallConnected = () => {
+    console.log("handleCallConnected function called");
+
+    // Update the UI to show that the call is connected
+    const callStatusElement = document.getElementById("callStatus");
+    if (callStatusElement) {
+      callStatusElement.innerText = "Call Connected!";
+    }
+
+    // Enable call-related buttons or controls
+    const hangUpButton = document.getElementById("hang_up_button");
+    const muteButton = document.getElementById("mic_button");
+    const videoButton = document.getElementById("camera_button");
+
+    if (hangUpButton) {
+      hangUpButton.disabled = false;
+    }
+    if (muteButton) {
+      muteButton.disabled = false;
+    }
+    if (videoButton) {
+      videoButton.disabled = false;
+    }
+
+    // You can also start a timer, record the call duration, or perform any other actions
   };
 
   return (
@@ -369,40 +405,51 @@ const Mingle = () => {
                   id="call_buttons"
                   style={{ display: showCallButtons ? "block" : "none" }}
                 >
-                  <button className="call_button_small" id="mic_button">
-                    <div className="flex justify-center items-center">
-                      <img src={mic} id="mic_button_image" alt="Mic" />
-                    </div>
-                  </button>
-                  <button className="call_button_small" id="camera_button">
-                    <div className="flex justify-center items-center">
-                      <img src={camera} id="camera_button_image" alt="Camera" />
-                    </div>
-                  </button>
+                  {showVideoButtons && (
+                    <>
+                      <button className="call_button_small" id="mic_button">
+                        <div className="flex justify-center items-center">
+                          <img src={mic} id="mic_button_image" alt="Mic" />
+                        </div>
+                      </button>
+                      <button className="call_button_small" id="camera_button">
+                        <div className="flex justify-center items-center">
+                          <img
+                            src={camera}
+                            id="camera_button_image"
+                            alt="Camera"
+                          />
+                        </div>
+                      </button>
+                    </>
+                  )}
+
                   <button className="call_button_large" id="hang_up_button">
                     <div className="flex justify-center items-center">
-                      {" "}
                       <img src={hangUp} alt="Hang Up" />
                     </div>
                   </button>
-                  <button
-                    className="call_button_small"
-                    id="screen_sharing_button"
-                  >
-                    <div className="flex justify-center items-center">
-                      {" "}
-                      <img src={switchCam} alt="Screen Sharing" />
-                    </div>
-                  </button>
-                  <button
-                    className="call_button_small"
-                    id="start_recording_button"
-                  >
-                    <div className="flex justify-center items-center">
-                      {" "}
-                      <img src={recordingStart} alt="Start Recording" />
-                    </div>
-                  </button>
+
+                  {showVideoButtons && (
+                    <>
+                      <button
+                        className="call_button_small"
+                        id="screen_sharing_button"
+                      >
+                        <div className="flex justify-center items-center">
+                          <img src={switchCam} alt="Screen Sharing" />
+                        </div>
+                      </button>
+                      <button
+                        className="call_button_small"
+                        id="start_recording_button"
+                      >
+                        <div className="flex justify-center items-center">
+                          <img src={recordingStart} alt="Start Recording" />
+                        </div>
+                      </button>
+                    </>
+                  )}
                 </div>
 
                 <div

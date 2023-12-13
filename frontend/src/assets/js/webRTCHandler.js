@@ -21,6 +21,53 @@ const configuration = {
   ],
 };
 
+// Define the onCallConnected function to handle call connection
+const onCallConnected = () => {
+  console.log("Call is connected!");
+
+  // Update the UI to show that the call is connected
+  ui.showCallConnectedUI();
+
+  // Start a timer to track call duration
+  const startTime = Date.now();
+  const callDurationTimer = setInterval(() => {
+    const elapsedTimeInSeconds = Math.floor((Date.now() - startTime) / 1000);
+    ui.updateCallDuration(elapsedTimeInSeconds); // Update the displayed call duration
+  }, 1000);
+
+  // Add a hang-up button event listener
+  const hangUpButton = document.getElementById("hangUpButton");
+  hangUpButton.addEventListener("click", () => {
+    handleHangUp(); // Implement your hang-up logic here
+    clearInterval(callDurationTimer); // Stop the call duration timer
+    ui.hideCallUI(); // Hide the call UI elements
+  });
+
+  // You can perform additional tasks here when the call is connected
+  // For example, enable screen sharing, record the call, etc.
+
+  // Example: Enable screen sharing
+  // Replace this with your actual logic for enabling screen sharing
+  const startScreenSharingButton = document.getElementById(
+    "startScreenSharingButton"
+  );
+  startScreenSharingButton.addEventListener("click", () => {
+    // Implement your screen sharing logic here
+    // Make sure to handle screen sharing activation and deactivation
+    // You can use the switchBetweenCameraAndScreenSharing function or a similar one.
+  });
+
+  // Example: Start call recording
+  // Replace this with your actual logic for starting call recording
+  const startRecordingButton = document.getElementById("startRecordingButton");
+  startRecordingButton.addEventListener("click", () => {
+    // Implement your call recording logic here
+    // Ensure you have appropriate mechanisms to handle recording start and stop.
+  });
+
+  // Add any other custom logic and event listeners as needed.
+};
+
 export const getLocalPreview = () => {
   navigator.mediaDevices
     .getUserMedia(defaultConstraints)
@@ -70,6 +117,7 @@ const createPeerConnection = () => {
   peerConection.onconnectionstatechange = (event) => {
     if (peerConection.connectionState === "connected") {
       console.log("succesfully connected with other peer");
+      onCallConnected();
     }
   };
 
@@ -137,7 +185,10 @@ export const handlePreOffer = (data) => {
   const { callType, callerSocketId } = data;
 
   if (!checkCallPossibility()) {
-    return sendPreOfferAnswer(constants.preOfferAnswer.CALL_UNAVAILABLE, callerSocketId)
+    return sendPreOfferAnswer(
+      constants.preOfferAnswer.CALL_UNAVAILABLE,
+      callerSocketId
+    );
   }
 
   connectedUserDetails = {
@@ -181,15 +232,15 @@ const rejectCallHandler = () => {
 const callingDialogRejectCallHandler = () => {
   //console.log("rejecting the call");
   const data = {
-    connectedUserSocketId: connectedUserDetails.socketId
-  }
+    connectedUserSocketId: connectedUserDetails.socketId,
+  };
   closePeerConnectionAndResetState();
   wss.sendUserHangedUp(data);
 };
 
 const sendPreOfferAnswer = (preOfferAnswer, callerSocketId = null) => {
-  const socketId = callerSocketId 
-    ? callerSocketId 
+  const socketId = callerSocketId
+    ? callerSocketId
     : connectedUserDetails.socketId;
   const data = {
     callerSocketId: socketId,
@@ -250,9 +301,12 @@ export const handleWebRTCOffer = async (data) => {
   });
 };
 
-export const handleWebRTCAnswer = async (data) => {
+export const handleWebRTCAnswer = async (data, onCallConnected) => {
   console.log("handling webRTC Answer");
   await peerConection.setRemoteDescription(data.answer);
+  if (onCallConnected) {
+    onCallConnected();
+  }
 };
 
 export const handleWebRTCCandidate = async (data) => {
@@ -327,14 +381,13 @@ export const switchBetweenCameraAndScreenSharing = async (
   }
 };
 
-
 // hangup
 
 export const handleHangUp = () => {
   //console.log('finishing the call')
   const data = {
-    connectedUserSocketId: connectedUserDetails.socketId
-  }
+    connectedUserSocketId: connectedUserDetails.socketId,
+  };
 
   wss.sendUserHangedUp(data);
   closePeerConnectionAndResetState();
@@ -353,7 +406,7 @@ const closePeerConnectionAndResetState = () => {
 
   // Active mic and camera
   if (
-    connectedUserDetails.callType === constants.callType.VIDEO_PERSONAL_CODE || 
+    connectedUserDetails.callType === constants.callType.VIDEO_PERSONAL_CODE ||
     connectedUserDetails.callType === constants.callType.VIDEO_STRANGER
   ) {
     store.getState().localStream.getVideoTracks()[0].enabled = true;
@@ -368,25 +421,27 @@ const checkCallPossibility = (callType) => {
   const callState = store.getState().callState;
 
   if (callState === constants.callState.CALL_AVAILABLE) {
-    return true
+    return true;
   }
 
   if (
-    (callType === constants.callType.VIDEO_PERSONAL_CODE || 
-    callType === constants.callType.VIDEO_STRANGER) &&
+    (callType === constants.callType.VIDEO_PERSONAL_CODE ||
+      callType === constants.callType.VIDEO_STRANGER) &&
     callState === constants.callState.CALL_AVAILABLE_ONLY_CHAT
   ) {
-    return false
+    return false;
   }
 
-  return false
+  return false;
 };
 
 const setIncomingCallsAvailable = () => {
   const localStream = store.getState().localStream;
-  if(localStream) {
+  if (localStream) {
     store.setCallState(constants.callState.CALL_AVAILABLE);
   } else {
-    store.setCallState(constants.callState.CALL_AVAILABLE_ONLY_CHAT)
+    store.setCallState(constants.callState.CALL_AVAILABLE_ONLY_CHAT);
   }
 };
+
+

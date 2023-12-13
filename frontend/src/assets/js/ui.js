@@ -24,8 +24,8 @@ export const showVideoCallButtons = () => {
   const strangerVideoButton = document.getElementById("stranger_video_button");
 
   showElement(personalCodeVideoButton);
-  showElement(strangerVideoButton)
-}
+  showElement(strangerVideoButton);
+};
 
 export const updateRemoteVideo = (stream) => {
   const remoteVideo = document.getElementById("remote_video");
@@ -65,7 +65,7 @@ export const showCallingDialog = (rejectCallHandler) => {
 
 export const showNoStrangerAvailableDiolog = () => {
   const infoDialog = elements.getInfoDialog(
-    "No Stranger available", 
+    "No Stranger available",
     "Please try again later"
   );
 
@@ -77,7 +77,7 @@ export const showNoStrangerAvailableDiolog = () => {
       removeAllDialogs();
     }, [4000]);
   }
-}
+};
 
 export const showInfoDialog = (preOfferAnswer) => {
   let infoDialog = null;
@@ -120,7 +120,7 @@ export const removeAllDialogs = () => {
 
 export const showCallElements = (callType) => {
   if (
-    callType === constants.callType.CHAT_PERSONAL_CODE || 
+    callType === constants.callType.CHAT_PERSONAL_CODE ||
     callType === constants.callType.CHAT_STRANGER
   ) {
     showChatCallElements();
@@ -194,7 +194,7 @@ export const clearMessenger = () => {
   messagesContainer.querySelectorAll("*").forEach((n) => n.remove());
 };
 
-// recording 
+// recording
 export const showRecordingPanel = () => {
   const recordingButtons = document.getElementById("video_recording_buttons");
   showElement(recordingButtons);
@@ -217,8 +217,8 @@ export const resetRecordingButtons = () => {
 };
 
 export const switchRecordingButton = (switchResumeButton = false) => {
-  const resumeButton = document.getElementById('resume_recording_button');
-  const pauseButton = document.getElementById('pause_recording_button');
+  const resumeButton = document.getElementById("resume_recording_button");
+  const pauseButton = document.getElementById("pause_recording_button");
 
   if (switchResumeButton) {
     hideElement(pauseButton);
@@ -227,7 +227,7 @@ export const switchRecordingButton = (switchResumeButton = false) => {
     hideElement(resumeButton);
     showElement(pauseButton);
   }
-}
+};
 
 // ui after hanged up
 export const updateUIAfterHangUp = (callType) => {
@@ -235,11 +235,11 @@ export const updateUIAfterHangUp = (callType) => {
 
   //hide the call buttons
   if (
-    callType === constants.callType.VIDEO_PERSONAL_CODE || 
+    callType === constants.callType.VIDEO_PERSONAL_CODE ||
     callType === constants.callType.VIDEO_STRANGER
   ) {
-      const callButtons = document.getElementById('call_buttons');
-      hideElement(callButtons);
+    const callButtons = document.getElementById("call_buttons");
+    hideElement(callButtons);
   } else {
     const chatCallButtons = document.getElementById(
       "finish_chat_button_container"
@@ -266,10 +266,12 @@ export const updateUIAfterHangUp = (callType) => {
 
 // changing status of checkbox
 export const updateStrangerCheckbox = (allowConnections) => {
-  const checkboxCheckImg = document.getElementById("allow_strangers_checkbox_image");
+  const checkboxCheckImg = document.getElementById(
+    "allow_strangers_checkbox_image"
+  );
 
-  allowConnections 
-    ? showElement(checkboxCheckImg) 
+  allowConnections
+    ? showElement(checkboxCheckImg)
     : hideElement(checkboxCheckImg);
 };
 
@@ -301,3 +303,21 @@ const showElement = (element) => {
   }
 };
 
+// Define a function to show the UI for a connected call
+export function showCallConnectedUI() {
+  // Get the elements you want to show when the call is connected
+  const callUIContainer = document.getElementById("callUIContainer");
+  const hangUpButton = document.getElementById("hangUpButton");
+  const callDurationElement = document.getElementById("callDuration");
+
+  // Hide elements that are no longer needed
+  const callDialog = document.getElementById("callDialog");
+  callDialog.style.display = "none";
+
+  // Show the call UI container and buttons
+  callUIContainer.style.display = "block";
+  hangUpButton.style.display = "block";
+
+  // Display the call duration timer (assuming you have an element for it)
+  callDurationElement.style.display = "block";
+}
