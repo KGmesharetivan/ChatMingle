@@ -12,9 +12,9 @@ import resumeImage from "../../assets/images/resume.png";
 
 const CallContainer = () => {
   const [showPlaceholder, setShowPlaceholder] = useState(true);
-  const [showRemoteVideo, setShowRemoteVideo] = useState(true);
-  const [showCallButtons, setShowCallButtons] = useState(true);
-  const [showVideoButtons, setShowVideoButtons] = useState(true);
+  const [showRemoteVideo, setShowRemoteVideo] = useState(false);
+  const [showCallButtons, setShowCallButtons] = useState(false);
+  const [showVideoButtons, setShowVideoButtons] = useState(false);
 
   const handleEndCall = () => {
     // Logic for ending the call

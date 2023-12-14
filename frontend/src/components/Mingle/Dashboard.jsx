@@ -1,13 +1,48 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import io from "socket.io-client";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { registerSocketEvents } from "../../assets/js/wss";
 import logoImage from "../../assets/images/logo.png";
 import copyButtonImage from "../../assets/images/copyButton.png";
 import chatButtonImage from "../../assets/images/chatButton.png";
 import videoButtonImage from "../../assets/images/videoButton.png";
+import {
+  callType,
+  preOfferAnswer,
+  webRTCSignaling,
+  callState,
+} from "../../assets/js/constants";
+import * as strangerUtils from "../../assets/js/strangerUtils";
+import * as webRTCHandler from "../../assets/js/webRTCHandler";
 
 function Dashboard() {
-  const [showVideoButtons, setShowVideoButtons] = useState(false);
+  const [showVideoButton, setShowVideoButton] = useState(false);
   const [isStrangerAllowed, setIsStrangerAllowed] = useState(false);
+  const [personalCode, setPersonalCode] = useState("Your personal code here");
+  const [socket, setSocket] = useState(null);
+
+  useEffect(() => {
+    // Initialize Socket.IO client
+    const newSocket = io("http://localhost:3001"); // Replace with your server URL
+    setSocket(newSocket);
+
+    // Register socket events
+    registerSocketEvents(newSocket);
+
+    try {
+      webRTCHandler.getLocalPreview();
+      setShowVideoButton(true);
+    } catch (err) {
+      console.error("Error accessing the camera: ", err);
+    }
+
+    return () => {
+      // Disconnect socket on unmount
+      newSocket.close();
+    };
+  }, []);
 
   const toggleStrangerCheckbox = () => {
     setIsStrangerAllowed(!isStrangerAllowed);
@@ -27,8 +62,47 @@ function Dashboard() {
       });
   };
 
+  const handleChatButtonClick = () => {
+    console.log("chat button clicked");
+    const calleePersonalCode = document.getElementById(
+      "personal_code_input"
+    ).value;
+    if (calleePersonalCode) {
+      webRTCHandler.sendPreOffer(
+        callType.CHAT_PERSONAL_CODE,
+        calleePersonalCode
+      );
+    } else {
+      toast.error("Personal code is required for chat");
+    }
+  };
+
+  const handleVideoButtonClick = () => {
+    console.log("video button clicked");
+    const calleePersonalCode = document.getElementById(
+      "personal_code_input"
+    ).value;
+    if (calleePersonalCode) {
+      webRTCHandler.sendPreOffer(
+        callType.VIDEO_PERSONAL_CODE,
+        calleePersonalCode
+      );
+    } else {
+      toast.error("Personal code is required for video call");
+    }
+  };
+
+  const handleStrangerChatButtonClick = () => {
+    strangerUtils.getStrangerSocketIdAndConnect(callType.CHAT_STRANGER);
+  };
+
+  const handleStrangerVideoButtonClick = () => {
+    strangerUtils.getStrangerSocketIdAndConnect(callType.VIDEO_STRANGER);
+  };
+
   return (
     <div className="container">
+      <ToastContainer />
       <div className="dashboard_container">
         <div className="flex justify-center items-center logo_container">
           <img src={logoImage} alt="Logo" className="w-[150px] h-[150px]" />
@@ -50,7 +124,7 @@ function Dashboard() {
               className="font-semibold personal_code_value_paragraph"
               id="personal_code_paragraph"
             >
-              DDDDDD
+              {personalCode}
             </p>
             <button
               className="w-[40px] h-[40px] rounded-md bg-white personal_code_copy_button"
@@ -70,6 +144,7 @@ function Dashboard() {
             <button
               className="connecting_button mr-2"
               id="personal_code_chat_button"
+              onClick={handleChatButtonClick}
             >
               <img
                 src={chatButtonImage}
@@ -79,9 +154,9 @@ function Dashboard() {
             </button>
             <button
               className={`connecting_button mr-2 ${
-                showVideoButtons ? "" : "hidden"
+                showVideoButton ? "" : "hidden"
               }`}
-              id="personal_code_video_button"
+              onClick={handleVideoButtonClick}
             >
               <img
                 src={videoButtonImage}
@@ -96,7 +171,7 @@ function Dashboard() {
           <div className="stranger_buttons_container flex">
             <button
               className="connecting_button mr-2"
-              id="stranger_chat_button"
+              onClick={handleStrangerChatButtonClick}
             >
               <img
                 src={chatButtonImage}
@@ -106,9 +181,9 @@ function Dashboard() {
             </button>
             <button
               className={`connecting_button mr-2 ${
-                showVideoButtons ? "" : "hidden"
+                showVideoButton ? "" : "hidden"
               }`}
-              id="stranger_video_button"
+              onClick={handleStrangerVideoButtonClick}
             >
               <img
                 src={videoButtonImage}
@@ -124,7 +199,6 @@ function Dashboard() {
             checked={isStrangerAllowed}
             onChange={toggleStrangerCheckbox}
             id="allow_strangers_checkbox"
-            className="checkbox_connection"
           />
           <label
             htmlFor="allow_strangers_checkbox"
