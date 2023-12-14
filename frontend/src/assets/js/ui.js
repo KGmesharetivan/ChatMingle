@@ -24,8 +24,8 @@ export const showVideoCallButtons = () => {
   const strangerVideoButton = document.getElementById("stranger_video_button");
 
   showElement(personalCodeVideoButton);
-  showElement(strangerVideoButton)
-}
+  showElement(strangerVideoButton);
+};
 
 export const updateRemoteVideo = (stream) => {
   const remoteVideo = document.getElementById("remote_video");
@@ -56,16 +56,23 @@ export const showIncomingCallDialog = (
 export const showCallingDialog = (rejectCallHandler) => {
   const callingDialog = elements.getCallingDialog(rejectCallHandler);
 
-  // removing all dialogs inside HTML dialog element
+  // Check if the dialog element exists in the DOM
   const dialog = document.getElementById("dialog");
-  dialog.querySelectorAll("*").forEach((dialog) => dialog.remove());
 
-  dialog.appendChild(callingDialog);
+  if (dialog) {
+    // If it exists, remove all its child elements
+    dialog.querySelectorAll("*").forEach((dialog) => dialog.remove());
+
+    // Append the callingDialog to the dialog element
+    dialog.appendChild(callingDialog);
+  } else {
+    console.error("Dialog element with ID 'dialog' not found in the DOM.");
+  }
 };
 
 export const showNoStrangerAvailableDiolog = () => {
   const infoDialog = elements.getInfoDialog(
-    "No Stranger available", 
+    "No Stranger available",
     "Please try again later"
   );
 
@@ -77,7 +84,7 @@ export const showNoStrangerAvailableDiolog = () => {
       removeAllDialogs();
     }, [4000]);
   }
-}
+};
 
 export const showInfoDialog = (preOfferAnswer) => {
   let infoDialog = null;
@@ -120,7 +127,7 @@ export const removeAllDialogs = () => {
 
 export const showCallElements = (callType) => {
   if (
-    callType === constants.callType.CHAT_PERSONAL_CODE || 
+    callType === constants.callType.CHAT_PERSONAL_CODE ||
     callType === constants.callType.CHAT_STRANGER
   ) {
     showChatCallElements();
@@ -194,7 +201,7 @@ export const clearMessenger = () => {
   messagesContainer.querySelectorAll("*").forEach((n) => n.remove());
 };
 
-// recording 
+// recording
 export const showRecordingPanel = () => {
   const recordingButtons = document.getElementById("video_recording_buttons");
   showElement(recordingButtons);
@@ -217,8 +224,8 @@ export const resetRecordingButtons = () => {
 };
 
 export const switchRecordingButton = (switchResumeButton = false) => {
-  const resumeButton = document.getElementById('resume_recording_button');
-  const pauseButton = document.getElementById('pause_recording_button');
+  const resumeButton = document.getElementById("resume_recording_button");
+  const pauseButton = document.getElementById("pause_recording_button");
 
   if (switchResumeButton) {
     hideElement(pauseButton);
@@ -227,7 +234,7 @@ export const switchRecordingButton = (switchResumeButton = false) => {
     hideElement(resumeButton);
     showElement(pauseButton);
   }
-}
+};
 
 // ui after hanged up
 export const updateUIAfterHangUp = (callType) => {
@@ -235,11 +242,11 @@ export const updateUIAfterHangUp = (callType) => {
 
   //hide the call buttons
   if (
-    callType === constants.callType.VIDEO_PERSONAL_CODE || 
+    callType === constants.callType.VIDEO_PERSONAL_CODE ||
     callType === constants.callType.VIDEO_STRANGER
   ) {
-      const callButtons = document.getElementById('call_buttons');
-      hideElement(callButtons);
+    const callButtons = document.getElementById("call_buttons");
+    hideElement(callButtons);
   } else {
     const chatCallButtons = document.getElementById(
       "finish_chat_button_container"
@@ -266,10 +273,12 @@ export const updateUIAfterHangUp = (callType) => {
 
 // changing status of checkbox
 export const updateStrangerCheckbox = (allowConnections) => {
-  const checkboxCheckImg = document.getElementById("allow_strangers_checkbox_image");
+  const checkboxCheckImg = document.getElementById(
+    "allow_strangers_checkbox_image"
+  );
 
-  allowConnections 
-    ? showElement(checkboxCheckImg) 
+  allowConnections
+    ? showElement(checkboxCheckImg)
     : hideElement(checkboxCheckImg);
 };
 
@@ -300,4 +309,3 @@ const showElement = (element) => {
     element.classList.remove("display_none");
   }
 };
-

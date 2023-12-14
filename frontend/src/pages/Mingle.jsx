@@ -18,6 +18,7 @@ const Mingle = () => {
           <div className="ml-[-25px]">
             <MessageContainer />
           </div>
+          <div id="dialog"></div>
         </div>
       </div>
     </section>
