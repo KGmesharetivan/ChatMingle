@@ -1,6 +1,8 @@
 import * as constants from "./constants.js";
 import * as elements from "./elements.js";
 
+let showCallButtons = false;
+
 export const updatePersonalCode = (personalCode) => {
   const personalCodeParagraph = document.getElementById(
     "personal_code_paragraph"
@@ -23,13 +25,24 @@ export const showVideoCallButtons = () => {
   );
   const strangerVideoButton = document.getElementById("stranger_video_button");
 
-  showElement(personalCodeVideoButton);
-  showElement(strangerVideoButton);
+  if (personalCodeVideoButton && strangerVideoButton) {
+    showElement(personalCodeVideoButton);
+    showElement(strangerVideoButton);
+
+    // Set showCallButtons to true when video call buttons are shown
+    showCallButtons = true;
+  } else {
+    console.error("One or both of the video buttons are not found.");
+  }
 };
 
 export const updateRemoteVideo = (stream) => {
   const remoteVideo = document.getElementById("remote_video");
-  remoteVideo.srcObject = stream;
+  if (remoteVideo) {
+    remoteVideo.srcObject = stream;
+  } else {
+    console.error("Remote video element not found");
+  }
 };
 
 export const showIncomingCallDialog = (
@@ -141,7 +154,12 @@ export const showCallElements = (callType) => {
   }
 };
 
-const showChatCallElements = () => {
+// Export a function to check if call buttons should be displayed
+export const shouldShowCallButtons = () => {
+  return showCallButtons;
+};
+
+export const showChatCallElements = () => {
   const finishConnectionChatButtonContainer = document.getElementById(
     "finish_chat_button_container"
   );
@@ -171,16 +189,16 @@ const showVideoCallElements = () => {
 
 // ui call buttons
 
-const micOnImgSrc = "./utils/images/mic.png";
-const micOffImgSrc = "./utils/images/micOff.png";
+const micOnImgSrc = "/src/assets/images/mic.png";
+const micOffImgSrc = "/src/assets/images/micOff.png";
 
 export const updateMicButton = (micActive) => {
   const micButtonImage = document.getElementById("mic_button_image");
   micButtonImage.src = micActive ? micOffImgSrc : micOnImgSrc;
 };
 
-const cameraOnImgSrc = "./utils/images/camera.png";
-const cameraOffImgSrc = "./utils/images/cameraOff.png";
+const cameraOnImgSrc = "/src/assets/images/camera.png";
+const cameraOffImgSrc = "/src/assets/images/cameraOff.png";
 
 export const updateCameraButton = (cameraActive) => {
   const cameraButtonImage = document.getElementById("camera_button_image");
@@ -237,33 +255,23 @@ export const switchRecordingButton = (switchResumeButton = false) => {
 };
 
 // ui after hanged up
-export const updateUIAfterHangUp = (callType) => {
+export const updateUIAfterHangUp = () => {
   enableDashboard();
 
-  //hide the call buttons
-  if (
-    callType === constants.callType.VIDEO_PERSONAL_CODE ||
-    callType === constants.callType.VIDEO_STRANGER
-  ) {
-    const callButtons = document.getElementById("call_buttons");
-    hideElement(callButtons);
-  } else {
-    const chatCallButtons = document.getElementById(
-      "finish_chat_button_container"
-    );
-    hideElement(chatCallButtons);
-  }
+  // Hide call buttons
+  const callButtons = document.getElementById("call_buttons");
+  const chatCallButtons = document.getElementById(
+    "finish_chat_button_container"
+  );
 
-  const newMessageInput = document.getElementById("new_message");
-  hideElement(newMessageInput);
+  // Always hide the call buttons
+  hideElement(callButtons);
+
+  // Hide the chat call buttons
+  hideElement(chatCallButtons);
+
+  // Hide other elements as needed
   clearMessenger();
-
-  updateMicButton(false);
-  updateCameraButton(false);
-
-  // hide remote video and show placeholder
-  const remoteVideo = document.getElementById("remote_video");
-  hideElement(remoteVideo);
 
   const placeholder = document.getElementById("video_placeholder");
   showElement(placeholder);
@@ -284,28 +292,28 @@ export const updateStrangerCheckbox = (allowConnections) => {
 
 // ui helper functions
 
-const enableDashboard = () => {
+export const enableDashboard = () => {
   const dashboardBlocker = document.getElementById("dashboard_blur");
-  if (!dashboardBlocker.classList.contains("display_none")) {
+  if (dashboardBlocker) {
     dashboardBlocker.classList.add("display_none");
   }
 };
 
-const disableDashboard = () => {
+export const disableDashboard = () => {
   const dashboardBlocker = document.getElementById("dashboard_blur");
-  if (dashboardBlocker.classList.contains("display_none")) {
+  if (dashboardBlocker) {
     dashboardBlocker.classList.remove("display_none");
   }
 };
 
-const hideElement = (element) => {
-  if (!element.classList.contains("display_none")) {
-    element.classList.add("display_none");
+export function hideElement(element) {
+  if (element) {
+    element.style.display = "none";
   }
-};
+}
 
-const showElement = (element) => {
-  if (element.classList.contains("display_none")) {
-    element.classList.remove("display_none");
+export function showElement(element) {
+  if (element) {
+    element.style.display = "block";
   }
-};
+}

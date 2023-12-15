@@ -5,23 +5,24 @@ import * as ui from "./ui.js";
 let strangerCallType;
 
 export const changeStrangerConnectionStatus = (status) => {
-    const data = { status };
-    wss.changeStrangerConnectionStatus(data);
+  const data = { status };
+  wss.changeStrangerConnectionStatus(data);
 };
 
 export const getStrangerSocketIdAndConnect = (callType) => {
-    strangerCallType = callType;
-    wss.getStrangerSocketId();
+  strangerCallType = callType;
+  wss.getStrangerSocketId();
 };
 
 export const connectWithStranger = (data) => {
-    console.log(data.randomStrangerSocketId);
+  console.log("Data received:", data);
+  console.log("Random Stranger Socket ID:", data.randomStrangerSocketId);
+  console.log(data.randomStrangerSocketId);
 
-    if (data.randomStrangerSocketId) {
-        webRTCHandler.sendPreOffer(strangerCallType, data.randomStrangerSocketId);
-    } else {
-        // no user is available from connection
-        ui.showNoStrangerAvailableDiolog();
-    }
-    
-}
+  if (data.randomStrangerSocketId) {
+    webRTCHandler.sendPreOffer(strangerCallType, data.randomStrangerSocketId);
+  } else {
+    // no user is available from connection
+    ui.showNoStrangerAvailableDiolog();
+  }
+};

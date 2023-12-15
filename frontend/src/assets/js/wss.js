@@ -25,7 +25,7 @@ export const registerSocketEvents = (socket) => {
 
   socket.on("user-hanged-up", () => {
     webRTCHandler.handleConnectedUserHangedUp();
-  })
+  });
 
   socket.on("webRTC-signaling", (data) => {
     switch (data.type) {
@@ -45,7 +45,7 @@ export const registerSocketEvents = (socket) => {
 
   socket.on("stranger-socket-id", (data) => {
     strangerUtils.connectWithStranger(data);
-  })
+  });
 };
 
 export const sendPreOffer = (data) => {
@@ -65,10 +65,11 @@ export const sendUserHangedUp = (data) => {
   socketIO.emit("user-hanged-up", data);
 };
 
-export const changeStrangerConnectionStatus = (data) => {
-  socketIO.emit("stranger-connection-status", data);
+export const changeStrangerConnectionStatus = (status) => {
+  const data = { status };
+  socketIO.emit("stranger-connection-status", data); // Emit the event to the server
 };
 
 export const getStrangerSocketId = () => {
-  socketIO.emit("get-stranger-socket-id")
+  socketIO.emit("get-stranger-socket-id");
 };

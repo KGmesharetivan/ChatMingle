@@ -7,6 +7,7 @@ let connectedUserDetails;
 let peerConection;
 let dataChannel;
 
+
 const defaultConstraints = {
   audio: true,
   video: true,

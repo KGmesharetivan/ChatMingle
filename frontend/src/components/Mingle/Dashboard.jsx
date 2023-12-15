@@ -16,6 +16,8 @@ import {
 } from "../../assets/js/constants";
 import * as strangerUtils from "../../assets/js/strangerUtils";
 import * as webRTCHandler from "../../assets/js/webRTCHandler";
+import { showVideoCallButtons } from "../../assets/js/ui";
+import * as wss from "../../assets/js/wss";
 
 function Dashboard() {
   const [showVideoButton, setShowVideoButton] = useState(false);
@@ -38,14 +40,22 @@ function Dashboard() {
       console.error("Error accessing the camera: ", err);
     }
 
+    showVideoCallButtons();
+
     return () => {
       // Disconnect socket on unmount
       newSocket.close();
     };
   }, []);
 
+  // Toggle the checkbox state
   const toggleStrangerCheckbox = () => {
     setIsStrangerAllowed(!isStrangerAllowed);
+
+    // Emit the event to the server to update the checkbox status
+    wss.changeStrangerConnectionStatus(!isStrangerAllowed);
+
+    console.log("Stranger checkbox triggered");
   };
 
   const handleCopyButtonClick = () => {
@@ -156,6 +166,7 @@ function Dashboard() {
               className={`connecting_button mr-2 ${
                 showVideoButton ? "" : "hidden"
               }`}
+              id="personal_code_video_button"
               onClick={handleVideoButtonClick}
             >
               <img
@@ -183,6 +194,7 @@ function Dashboard() {
               className={`connecting_button mr-2 ${
                 showVideoButton ? "" : "hidden"
               }`}
+              id="stranger_video_button"
               onClick={handleStrangerVideoButtonClick}
             >
               <img
