@@ -511,6 +511,36 @@ body {
   transform: scale(0.8);
 }
 
+.message_left_container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.message_left_paragraph {
+  background: #ffffff;
+  border: 1px solid #d5deeb;
+  border-radius: 8px 8px 8px 0px;
+  padding: 20px 13px;
+  color: #545c68;
+  min-width: 60px;
+}
+
+.message_right_paragraph {
+  background: linear-gradient(168.68deg, #0052c9 1.12%, #0a91db 100%);
+  border: 1px solid #d5deeb;
+  border-radius: 8px 8px 8px 0px;
+  padding: 20px 13px;
+  color: #ffffff;
+  min-width: 60px;
+}
+
+.message_right_container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
 @media only screen and (max-width: 768px) {
   .navigation {
     width: 100%;
