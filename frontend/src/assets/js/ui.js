@@ -1,8 +1,6 @@
 import * as constants from "./constants.js";
 import * as elements from "./elements.js";
 
-let showCallButtons = false;
-
 export const updatePersonalCode = (personalCode) => {
   const personalCodeParagraph = document.getElementById(
     "personal_code_paragraph"
@@ -25,24 +23,13 @@ export const showVideoCallButtons = () => {
   );
   const strangerVideoButton = document.getElementById("stranger_video_button");
 
-  if (personalCodeVideoButton && strangerVideoButton) {
-    showElement(personalCodeVideoButton);
-    showElement(strangerVideoButton);
-
-    // Set showCallButtons to true when video call buttons are shown
-    showCallButtons = true;
-  } else {
-    console.error("One or both of the video buttons are not found.");
-  }
+  showElement(personalCodeVideoButton);
+  showElement(strangerVideoButton);
 };
 
 export const updateRemoteVideo = (stream) => {
   const remoteVideo = document.getElementById("remote_video");
-  if (remoteVideo) {
-    remoteVideo.srcObject = stream;
-  } else {
-    console.error("Remote video element not found");
-  }
+  remoteVideo.srcObject = stream;
 };
 
 export const showIncomingCallDialog = (
@@ -69,18 +56,11 @@ export const showIncomingCallDialog = (
 export const showCallingDialog = (rejectCallHandler) => {
   const callingDialog = elements.getCallingDialog(rejectCallHandler);
 
-  // Check if the dialog element exists in the DOM
+  // removing all dialogs inside HTML dialog element
   const dialog = document.getElementById("dialog");
+  dialog.querySelectorAll("*").forEach((dialog) => dialog.remove());
 
-  if (dialog) {
-    // If it exists, remove all its child elements
-    dialog.querySelectorAll("*").forEach((dialog) => dialog.remove());
-
-    // Append the callingDialog to the dialog element
-    dialog.appendChild(callingDialog);
-  } else {
-    console.error("Dialog element with ID 'dialog' not found in the DOM.");
-  }
+  dialog.appendChild(callingDialog);
 };
 
 export const showNoStrangerAvailableDiolog = () => {
@@ -154,12 +134,7 @@ export const showCallElements = (callType) => {
   }
 };
 
-// Export a function to check if call buttons should be displayed
-export const shouldShowCallButtons = () => {
-  return showCallButtons;
-};
-
-export const showChatCallElements = () => {
+const showChatCallElements = () => {
   const finishConnectionChatButtonContainer = document.getElementById(
     "finish_chat_button_container"
   );
@@ -192,17 +167,21 @@ const showVideoCallElements = () => {
 const micOnImgSrc = "/src/assets/images/mic.png";
 const micOffImgSrc = "/src/assets/images/micOff.png";
 
-export const updateMicButton = (micActive) => {
-  const micButtonImage = document.getElementById("mic_button_image");
-  micButtonImage.src = micActive ? micOffImgSrc : micOnImgSrc;
+export const updateMicButton = (micEnabled) => {
+  const micButton = document.getElementById("mic_button_image");
+  if (micButton) {
+    micButton.src = micEnabled ? micOnImgSrc : micOffImgSrc;
+  }
 };
 
 const cameraOnImgSrc = "/src/assets/images/camera.png";
 const cameraOffImgSrc = "/src/assets/images/cameraOff.png";
 
-export const updateCameraButton = (cameraActive) => {
-  const cameraButtonImage = document.getElementById("camera_button_image");
-  cameraButtonImage.src = cameraActive ? cameraOffImgSrc : cameraOnImgSrc;
+export const updateCameraButton = (cameraEnabled) => {
+  const cameraButton = document.getElementById("camera_button_image");
+  if (cameraButton) {
+    cameraButton.src = cameraEnabled ? cameraOnImgSrc : cameraOffImgSrc;
+  }
 };
 
 // ui messages
@@ -255,23 +234,37 @@ export const switchRecordingButton = (switchResumeButton = false) => {
 };
 
 // ui after hanged up
-export const updateUIAfterHangUp = () => {
+export const updateUIAfterHangUp = (callType) => {
   enableDashboard();
 
-  // Hide call buttons
-  const callButtons = document.getElementById("call_buttons");
-  const chatCallButtons = document.getElementById(
-    "finish_chat_button_container"
-  );
+  // Show the message container
+  const newMessageInput = document.getElementById("new_message");
+  showElement(newMessageInput);
 
-  // Always hide the call buttons
-  hideElement(callButtons);
-
-  // Hide the chat call buttons
-  hideElement(chatCallButtons);
-
-  // Hide other elements as needed
+  // Clear the messenger
   clearMessenger();
+
+  // Hide the call buttons
+  if (
+    callType === constants.callType.VIDEO_PERSONAL_CODE ||
+    callType === constants.callType.VIDEO_STRANGER
+  ) {
+    const callButtons = document.getElementById("call_buttons");
+    hideElement(callButtons);
+  } else {
+    const chatCallButtons = document.getElementById(
+      "finish_chat_button_container"
+    );
+    hideElement(chatCallButtons);
+  }
+
+  // Reset mic and camera buttons
+  updateMicButton(false);
+  updateCameraButton(false);
+
+  // Hide remote video and show the placeholder
+  const remoteVideo = document.getElementById("remote_video");
+  hideElement(remoteVideo);
 
   const placeholder = document.getElementById("video_placeholder");
   showElement(placeholder);
@@ -292,28 +285,28 @@ export const updateStrangerCheckbox = (allowConnections) => {
 
 // ui helper functions
 
-export const enableDashboard = () => {
-  const dashboardBlocker = document.getElementById("dashboard_blur");
-  if (dashboardBlocker) {
-    dashboardBlocker.classList.add("display_none");
+export const enableDashboard = (elementId) => {
+  const dashboard = document.getElementById(elementId);
+  if (dashboard) {
+    dashboard.classList.remove("display_none");
   }
 };
 
-export const disableDashboard = () => {
+const disableDashboard = () => {
   const dashboardBlocker = document.getElementById("dashboard_blur");
-  if (dashboardBlocker) {
+  if (dashboardBlocker && dashboardBlocker.classList.contains("display_none")) {
     dashboardBlocker.classList.remove("display_none");
   }
 };
 
-export function hideElement(element) {
-  if (element) {
-    element.style.display = "none";
+const hideElement = (element) => {
+  if (!element.classList.contains("display_none")) {
+    element.classList.add("display_none");
   }
-}
+};
 
-export function showElement(element) {
-  if (element) {
-    element.style.display = "block";
+const showElement = (element) => {
+  if (element && element.classList.contains("display_none")) {
+    element.classList.remove("display_none");
   }
-}
+};

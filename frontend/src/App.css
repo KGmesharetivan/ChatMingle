@@ -207,12 +207,12 @@ body {
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 230px;
+  height: 600px;
 }
 
 .remote_video {
   width: 100%;
-  height: 100%;
+  height: 600px;
 }
 
 .local_video_container {
@@ -434,7 +434,7 @@ body {
 
 .video_recording_buttons_container {
   position: absolute;
-  width: 180px;
+  width: 250px;
   height: 50px;
   background: rgba(0, 0, 0, 0.2);
   border-radius: 15px;
@@ -448,6 +448,67 @@ body {
 
 .display_none {
   display: none;
+}
+
+.stop_recording {
+  width: 180px;
+  height: 50px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  background: red;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15);
+  background: #e62222;
+  transition: 200ms;
+  position: relative;
+}
+
+.stop_recording span.text {
+  transform: translateX(35px);
+  color: white;
+  font-weight: bold;
+  margin-left: -15px;
+}
+
+.stop_recording span.icon {
+  position: absolute;
+  border-left: 1px solid #c41b1b;
+  transform: translateX(110px);
+  height: 40px;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 30px;
+}
+
+.stop_recording svg {
+  width: 15px;
+  fill: #eee;
+}
+
+.stop_recording:hover {
+  background: #ff3636;
+}
+
+.stop_recording:hover span.text {
+  color: transparent;
+}
+
+.stop_recording:hover span.icon {
+  width: 150px;
+  border-left: none;
+  transform: translateX(0);
+}
+
+.stop_recording:focus {
+  outline: none;
+}
+
+.stop_recording:active span.icon svg {
+  transform: scale(0.8);
 }
 
 @media only screen and (max-width: 768px) {
