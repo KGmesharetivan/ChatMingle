@@ -156,11 +156,14 @@ function Dashboard() {
               id="personal_code_chat_button"
               onClick={handleChatButtonClick}
             >
-              <img
-                src={chatButtonImage}
-                className="connecting_buttons_image"
-                alt="Chat"
-              />
+              <div className="flex justify-center items-center">
+                {" "}
+                <img
+                  src={chatButtonImage}
+                  className="connecting_buttons_image"
+                  alt="Chat"
+                />
+              </div>
             </button>
             <button
               className={`connecting_button mr-2 ${
@@ -169,11 +172,13 @@ function Dashboard() {
               id="personal_code_video_button"
               onClick={handleVideoButtonClick}
             >
-              <img
-                src={videoButtonImage}
-                className="connecting_buttons_image"
-                alt="Video Call"
-              />
+              <div className="flex justify-center items-center">
+                <img
+                  src={videoButtonImage}
+                  className="connecting_buttons_image"
+                  alt="Video Call"
+                />
+              </div>
             </button>
           </div>
         </div>
@@ -184,11 +189,13 @@ function Dashboard() {
               className="connecting_button mr-2"
               onClick={handleStrangerChatButtonClick}
             >
-              <img
-                src={chatButtonImage}
-                className="connecting_buttons_image"
-                alt="Chat"
-              />
+              <div className="flex justify-center items-center">
+                <img
+                  src={chatButtonImage}
+                  className="connecting_buttons_image"
+                  alt="Chat"
+                />
+              </div>
             </button>
             <button
               className={`connecting_button mr-2 ${
@@ -197,11 +204,13 @@ function Dashboard() {
               id="stranger_video_button"
               onClick={handleStrangerVideoButtonClick}
             >
-              <img
-                src={videoButtonImage}
-                className="connecting_buttons_image"
-                alt="Video Call"
-              />
+              <div className="flex justify-center items-center">
+                <img
+                  src={videoButtonImage}
+                  className="connecting_buttons_image"
+                  alt="Video Call"
+                />
+              </div>
             </button>
           </div>
         </div>
