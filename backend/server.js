@@ -1,9 +1,17 @@
+require("dotenv").config();
+
 const express = require("express");
 const http = require("http");
 const path = require("path");
-const indexRouter = require("./routes/index");
 const session = require("express-session");
 const cors = require("cors");
+const passport = require("passport");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
+const mongoose = require("mongoose");
+const MongoStore = require("connect-mongo");
+
+const indexRouter = require("./routes/index");
 
 const PORT = process.env.PORT || 3001;
 
@@ -28,6 +36,47 @@ app.use(
     saveUninitialized: true, // Forces a session that is "uninitialized" to be saved to the store
   })
 );
+
+// MongoDB connection
+
+mongoose.set("strictQuery", false);
+
+mongoose
+  .connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("MongoDB connection successful"))
+  .catch((err) => console.error(err));
+
+// Session store configuration
+const sessionStore = new MongoStore({
+  mongoUrl: process.env.MONGODB_URI,
+  dbName: "ChatMingle",
+  collection: "sessions",
+  mongooseConnection: mongoose.connection,
+  stringify: false,
+});
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    store: sessionStore,
+    cookie: {
+      maxAge: 7 * 1000 * 60 * 60 * 24,
+    },
+  })
+);
+
+require("./auth/passportConfig");
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(logger("dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 // Define your routes here
 app.use("/", indexRouter);
@@ -161,5 +210,5 @@ io.on("connection", (socket) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`listening on ${PORT}`);
+  console.log(`Server is listening on http://localhost:${PORT}`);
 });
