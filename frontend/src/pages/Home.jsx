@@ -25,7 +25,7 @@ const Home = () => {
                 experience seamless and enjoyable.
               </p>
               <div className="flex justify-center items-center mt-4">
-                <Link to="/mingle">
+                <Link to="/login">
                   <button className="customButton">
                     <div>GET STARTED</div>
                     <svg
