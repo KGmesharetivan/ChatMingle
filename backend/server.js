@@ -5,13 +5,14 @@ const http = require("http");
 const path = require("path");
 const session = require("express-session");
 const cors = require("cors");
-const passport = require("passport");
+const passport = require("./auth/passportConfig");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const mongoose = require("mongoose");
 const MongoStore = require("connect-mongo");
 
 const indexRouter = require("./routes/index");
+const authRouter = require("./routes/auth");
 
 const PORT = process.env.PORT || 3001;
 
@@ -24,18 +25,12 @@ const io = require("socket.io")(server, {
   },
 });
 
-app.use(
-  cors({
-    origin: "http://localhost:5173", // Replace with your frontend's origin
-  })
-);
-app.use(
-  session({
-    secret: "EWC8ANTIfZKrRrRpHcSIXlI_5QjkAtEZZVkxVBphjk8", // Choose a secret for session encoding
-    resave: false, // Forces the session to be saved back to the session store
-    saveUninitialized: true, // Forces a session that is "uninitialized" to be saved to the store
-  })
-);
+app.use(logger("dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+
+app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 
 // MongoDB connection
 
@@ -70,16 +65,13 @@ app.use(
   })
 );
 
-require("./auth/passportConfig");
+// Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(logger("dev"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 
 // Define your routes here
 app.use("/", indexRouter);
+app.use("/auth", authRouter);
 
 // Middleware for serving your React application
 app.use(express.static(path.join(__dirname, "frontend/build")));

@@ -44,11 +44,14 @@ const MessageContainer = () => {
               id="send_message_button"
               onClick={handleClick}
             >
-              <img
-                className="send_message_button_image"
-                src={sendMessageButtonImage}
-                alt="Send"
-              />
+              <div className="flex justify-center items-center">
+                {" "}
+                <img
+                  className="send_message_button_image"
+                  src={sendMessageButtonImage}
+                  alt="Send"
+                />
+              </div>
             </button>
           </div>
         )}

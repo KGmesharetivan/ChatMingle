@@ -52,6 +52,37 @@ function ChatMingle() {
     }
   };
 
+  ChatMingle.saveNewUser = async function (newUser) {
+    let client;
+    try {
+      client = new MongoClient(url, { useUnifiedTopology: true });
+      await client.connect();
+      const db = client.db(DB_NAME);
+      const usersCollection = db.collection("users");
+
+      // Check if the user is a Google user
+      if (newUser.googleId) {
+        // If the user is a Google user, check if a user with this Google ID already exists
+        const existingUser = await usersCollection.findOne({
+          googleId: newUser.googleId,
+        });
+        if (existingUser) {
+          // If a user with this Google ID already exists, don't insert a new user
+          return { acknowledged: false };
+        }
+      }
+
+      const result = await usersCollection.insertOne(newUser);
+
+      return result;
+    } catch (error) {
+      console.error("Error saving user:", error);
+      throw error;
+    } finally {
+      client.close();
+    }
+  };
+
   return ChatMingle;
 }
 

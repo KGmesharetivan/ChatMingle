@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useRef } from "react";
+import PropTypes from "prop-types"; // Import PropTypes
 import logo from "../../assets/images/logo.png";
 import { Link, NavLink } from "react-router-dom";
 import userImg from "../../assets/images/avatar-icon.png";
@@ -24,7 +25,7 @@ const navLinks = [
   },
 ];
 
-const Header = () => {
+const Header = ({ user, isLoggedIn }) => {
   const headerRef = useRef(null);
   const menuRef = useRef(null);
 
@@ -47,6 +48,11 @@ const Header = () => {
   });
 
   const toggleMenu = () => menuRef.current.classList.toggle("show__menu");
+
+  const handleLogout = () => {
+    // Implement your logout logic here
+    console.log("User logged out");
+  };
 
   return (
     <header className="header flex items-center  " ref={headerRef}>
@@ -82,19 +88,36 @@ const Header = () => {
           </div>
           {/* ==== nav right ====== */}
           <div className="flex items-center gap-4">
-            <div className="hidden">
-              <Link to="/">
-                <figure className="w-[35px] h-[35px] rounded-full">
-                  <img src={userImg} className="w-full rounded-full" alt="" />
-                </figure>
+            {isLoggedIn ? (
+              <>
+                {/* Render content for logged-in user */}
+                <div className="hidden">
+                  <Link to="/">
+                    <figure className="w-[35px] h-[35px] rounded-full">
+                      <img
+                        src={userImg}
+                        className="w-full rounded-full"
+                        alt=""
+                      />
+                    </figure>
+                  </Link>
+                </div>
+                {/* You can add more content specific to logged-in users here */}
+                <button
+                  className="bg-primaryColor py-2 px-6 text-white font-[600] h-[44px] flex items-center justify-center rounded-[50px]"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              // Render content for users not logged in
+              <Link to="/login">
+                <button className="bg-primaryColor py-2 px-6 text-white font-[600] h-[44px] flex items-center justify-center rounded-[50px]">
+                  Login
+                </button>
               </Link>
-            </div>
-            {/* == Login == */}
-            <Link to="/login">
-              <button className="bg-primaryColor py-2 px-6 text-white font-[600] h-[44px] flex items-center justify-center rounded-[50px]">
-                Login
-              </button>
-            </Link>
+            )}
             <span className="md:hidden" onClick={toggleMenu}>
               <BiMenu className="w-6 h-6 cursor-pointer" />
             </span>
@@ -103,6 +126,11 @@ const Header = () => {
       </div>
     </header>
   );
+};
+
+Header.propTypes = {
+  user: PropTypes.object, // Adjust the type accordingly based on your data structure
+  isLoggedIn: PropTypes.bool.isRequired,
 };
 
 export default Header;
