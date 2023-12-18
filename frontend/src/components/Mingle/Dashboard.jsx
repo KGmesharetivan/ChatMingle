@@ -1,25 +1,19 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import io from "socket.io-client";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { registerSocketEvents } from "../../assets/js/wss";
 import logoImage from "../../assets/images/logo.png";
 import copyButtonImage from "../../assets/images/copyButton.png";
 import chatButtonImage from "../../assets/images/chatButton.png";
 import videoButtonImage from "../../assets/images/videoButton.png";
-import {
-  callType,
-  preOfferAnswer,
-  webRTCSignaling,
-  callState,
-} from "../../assets/js/constants";
+import { callType } from "../../assets/js/constants";
 import * as strangerUtils from "../../assets/js/strangerUtils";
 import * as webRTCHandler from "../../assets/js/webRTCHandler";
 import { showVideoCallButtons } from "../../assets/js/ui";
 import * as wss from "../../assets/js/wss";
+import PropTypes from "prop-types";
 
-function Dashboard() {
+function Dashboard({ toast }) {
   const [showVideoButton, setShowVideoButton] = useState(false);
   const [isStrangerAllowed, setIsStrangerAllowed] = useState(false);
   const [personalCode, setPersonalCode] = useState("Your personal code here");
@@ -66,9 +60,11 @@ function Dashboard() {
       .writeText(personalCode)
       .then(() => {
         console.log("Personal code copied to clipboard");
+        toast.success("Personal code copied to clipboard");
       })
       .catch((err) => {
         console.error("Failed to copy: ", err);
+        toast.error("Failed to copy personal code. Please try again.");
       });
   };
 
@@ -83,6 +79,7 @@ function Dashboard() {
         calleePersonalCode
       );
     } else {
+      console.error("Personal code is required for chat");
       toast.error("Personal code is required for chat");
     }
   };
@@ -98,6 +95,7 @@ function Dashboard() {
         calleePersonalCode
       );
     } else {
+      console.error("Personal code is required for video call");
       toast.error("Personal code is required for video call");
     }
   };
@@ -112,14 +110,13 @@ function Dashboard() {
 
   return (
     <div className="container">
-      <ToastContainer />
       <div className="dashboard_container">
         <div className="flex justify-center items-center logo_container">
           <img src={logoImage} alt="Logo" className="w-[150px] h-[150px]" />
         </div>
         <div className="mx-10 mb-10 description_container">
           <p className="font-medium text-base text-black description_container_paragraph">
-            Talk with other user by passing his personal code or talk with
+            Talk with other users by passing their personal code or talk with
             strangers!
           </p>
         </div>
@@ -232,5 +229,9 @@ function Dashboard() {
     </div>
   );
 }
+
+Dashboard.propTypes = {
+  toast: PropTypes.object.isRequired,
+};
 
 export default Dashboard;

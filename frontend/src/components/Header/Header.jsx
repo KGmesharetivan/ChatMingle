@@ -1,13 +1,12 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useRef } from "react";
-import PropTypes from "prop-types"; // Import PropTypes
+import PropTypes from "prop-types";
 import logo from "../../assets/images/logo.png";
 import { Link, NavLink } from "react-router-dom";
 import userImg from "../../assets/images/avatar-icon.png";
 import { BiMenu } from "react-icons/bi";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const navLinks = [
   {
@@ -28,9 +27,10 @@ const navLinks = [
   },
 ];
 
-const Header = ({ setLoggedIn, isLoggedIn }) => {
+const Header = ({ setLoggedIn, isLoggedIn, setUser, toast }) => {
   const headerRef = useRef(null);
   const menuRef = useRef(null);
+  const { pathname } = useLocation();
 
   const navigate = useNavigate();
 
@@ -56,35 +56,46 @@ const Header = ({ setLoggedIn, isLoggedIn }) => {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch("/logout", {
+      const response = await fetch("http://localhost:3001/auth/logout", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
       });
 
       if (response.ok) {
-        setLoggedIn(false);
-
-        // Introduce a 2-second delay before navigating to "/login"
-        setTimeout(() => {
-          toast.success("Logout successful!");
-          console.log("User logged out");
-          // Navigate to "/login" after the delay using useNavigate
+        const result = await response.json();
+        if (result.logout) {
+          setUser(null);
+          setLoggedIn(false);
+          if (pathname !== "/mingle") {
+            toast.success("Logout successful!"); // Use toast for success message
+          }
           navigate("/login");
-        }, 2000);
+        } else {
+          console.error("Logout failed");
+          toast.error("Logout failed. Please try again."); // Use toast for failure message
+        }
       } else {
         console.error("Logout failed");
-        toast.error("Logout failed. Please try again.");
+        toast.error("Logout failed. Please try again."); // Use toast for failure message
       }
     } catch (error) {
       console.error("Error during logout:", error);
-      toast.error("An error occurred during logout. Please try again later.");
+      toast.error("An error occurred during logout. Please try again later."); // Use toast for error message
+    }
+  };
+
+  const handleMingleClick = () => {
+    if (!isLoggedIn) {
+      // Show Toastify alert
+      toast.error("Please login or register an account.");
     }
   };
 
   return (
-    <header className="header flex items-center  " ref={headerRef}>
+    <header className="header flex items-center" ref={headerRef}>
       <div className="container">
         <div className="flex items-center justify-between">
           {/* ====== logo ======= */}
@@ -103,6 +114,7 @@ const Header = ({ setLoggedIn, isLoggedIn }) => {
                 <li key={index}>
                   <NavLink
                     to={link.path}
+                    onClick={link.path === "/mingle" ? handleMingleClick : null}
                     className={(navClass) =>
                       navClass.isActive
                         ? "text-primaryColor text-[16px] leading-7 font-[600]"
@@ -153,7 +165,6 @@ const Header = ({ setLoggedIn, isLoggedIn }) => {
           </div>
         </div>
       </div>
-      <ToastContainer />
     </header>
   );
 };
@@ -161,6 +172,8 @@ const Header = ({ setLoggedIn, isLoggedIn }) => {
 Header.propTypes = {
   setLoggedIn: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
+  setUser: PropTypes.func.isRequired,
+  toast: PropTypes.object.isRequired,
 };
 
 export default Header;

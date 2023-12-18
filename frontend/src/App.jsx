@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 import Layout from "./layout/Layout";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   // Define state variables
@@ -39,10 +41,12 @@ function App() {
           }
         } else {
           console.error("Server error:", result.statusText);
+          toast.error("Server error. Please try again later.");
         }
       } catch (error) {
         if (!abortController.signal.aborted) {
           console.error("Error fetching authentication status:", error);
+          toast.error("An error occurred. Please try again later.");
         }
       }
     }
@@ -53,7 +57,16 @@ function App() {
   }, []);
 
   return (
-    <Layout user={user} isLoggedIn={isLoggedIn} setLoggedIn={setLoggedIn} />
+    <>
+      <Layout
+        user={user}
+        setUser={setUser}
+        isLoggedIn={isLoggedIn}
+        setLoggedIn={setLoggedIn}
+        toast={toast}
+      />
+      <ToastContainer />
+    </>
   );
 }
 

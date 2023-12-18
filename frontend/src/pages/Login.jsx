@@ -1,15 +1,21 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
-const Login = ({ setLoggedIn }) => {
+const Login = ({ isLoggedIn, setLoggedIn, toast }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if the user is already logged in when the component mounts
+    if (isLoggedIn) {
+      // Redirect to "/mingle" or show a message
+      navigate("/mingle");
+    }
+  }, [isLoggedIn, navigate]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -111,7 +117,6 @@ const Login = ({ setLoggedIn }) => {
           </div>
         </form>
       </div>
-      {/* Toast message */}
     </section>
   );
 };
@@ -119,6 +124,8 @@ const Login = ({ setLoggedIn }) => {
 // Add propTypes to specify the expected props
 Login.propTypes = {
   setLoggedIn: PropTypes.func.isRequired,
+  toast: PropTypes.object.isRequired,
+  isLoggedIn: PropTypes.bool.isRequired,
 };
 
 export default Login;

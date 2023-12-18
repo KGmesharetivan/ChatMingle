@@ -2,20 +2,15 @@
 /* eslint-disable react/no-unescaped-entities */
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import PropTypes from "prop-types";
 
-const Signup = () => {
+const Signup = ({ toast }) => {
   const [fullname, setFullname] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [gender, setGender] = useState("male"); // Default to male
   const navigate = useNavigate();
-
-  const showToast = (message, type = "info") => {
-    toast[type](message);
-  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -41,17 +36,14 @@ const Signup = () => {
       if (data.registered) {
         // Registration successful, redirect to login page or any other desired page
         navigate("/login");
-        showToast("Registration successful. Please log in.", "success");
+        toast.success("Registration successful. Please log in.");
       } else {
         console.log("Registration failed:", data.message);
-        showToast(`Registration failed. ${data.message}`, "error");
+        toast.error(`Registration failed. ${data.message}`);
       }
     } catch (error) {
       console.error("Error during user registration:", error);
-      showToast(
-        "An error occurred during registration. Please try again later.",
-        "error"
-      );
+      toast.error("An error occurred during registration. Please try again later.");
     }
   };
 
@@ -146,10 +138,13 @@ const Signup = () => {
           </div>
         </form>
       </div>
-      {/* Toast container for alerts */}
-      <ToastContainer />
     </section>
   );
+};
+
+// Add propTypes to specify the expected props
+Signup.propTypes = {
+  toast: PropTypes.object.isRequired,
 };
 
 export default Signup;
