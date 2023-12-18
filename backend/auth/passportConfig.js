@@ -16,38 +16,20 @@ const localOptions = {
 
 const localVerify = async (username, password, done) => {
   try {
-    console.log("Verifying user with email:", username);
-
     let user = await ChatMingle.getUserByEmail(username);
-    console.log("User from the database:", user);
 
-    if (!user) {
-      console.log("User not found with email:", username);
-      return done(null, false);
-    }
-
-    if (!user.salt || !user.hash) {
-      console.log(
-        "User does not have a salt or hash. Proceeding without validation."
-      );
+    if (!user || !user.salt || !user.hash) {
       return done(null, false);
     }
 
     const isValid = await bcrypt.compare(password, user.hash);
 
-    console.log("Entered Password:", password);
-    console.log("User Hash:", user.hash);
-    console.log("Is Valid:", isValid);
-
     if (isValid) {
-      console.log("User validated successfully:", user);
       return done(null, user);
     } else {
-      console.log("Invalid password for user:", user);
       return done(null, false);
     }
   } catch (error) {
-    console.error("Error during user verification:", error);
     return done(error);
   }
 };
@@ -62,10 +44,8 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (id, done) => {
   try {
     let entity = await ChatMingle.getUserById(id);
-    console.log("User found:", entity);
     done(null, entity);
   } catch (error) {
-    console.error("Error deserializing user:", error);
     done(error, null);
   }
 });
@@ -79,11 +59,7 @@ const jwtOptions = {
 const jwtVerify = async (payload, done) => {
   try {
     const user = await ChatMingle.getUserById(payload.sub);
-    if (user) {
-      return done(null, user);
-    } else {
-      return done(null, false);
-    }
+    return user ? done(null, user) : done(null, false);
   } catch (error) {
     return done(error, false);
   }

@@ -24,28 +24,29 @@ const Login = ({ setLoggedIn }) => {
         credentials: "include", // Include credentials in the request
       });
 
-      if (response.status === 401) {
-        // Handle unauthorized access (authentication failure)
-        console.error("Unauthorized access. Please check your credentials.");
-        toast.error("Login failed. Please check your credentials.");
+      if (!response.ok) {
+        console.error("Login failed. Server response:", response.statusText);
+        toast.error("Login failed. Please try again.");
         return;
       }
 
       const data = await response.json();
 
       if (data.loginStatus) {
-        // Update the state in the parent component to indicate that the user is logged in
         setLoggedIn(true);
-        // Redirect to the home page or any other desired page
-        navigate("/");
+
+        // Introduce a 2-second delay before navigating to "/mingle"
+        setTimeout(() => {
+          navigate("/mingle");
+        }, 2000);
+
+        toast.success("Login successful!");
       } else {
-        // Use toast.error for displaying other error messages
         console.error("Login failed. Server response:", data);
         toast.error("Login failed. Please try again.");
       }
     } catch (error) {
       console.error("Error during login:", error);
-      // Use toast.error for displaying error messages
       toast.error("An error occurred during login. Please try again later.");
     }
   };
@@ -111,7 +112,6 @@ const Login = ({ setLoggedIn }) => {
         </form>
       </div>
       {/* Toast message */}
-      <ToastContainer />
     </section>
   );
 };

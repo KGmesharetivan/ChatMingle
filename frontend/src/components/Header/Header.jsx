@@ -1,10 +1,13 @@
 /* eslint-disable no-unused-vars */
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import PropTypes from "prop-types"; // Import PropTypes
 import logo from "../../assets/images/logo.png";
 import { Link, NavLink } from "react-router-dom";
 import userImg from "../../assets/images/avatar-icon.png";
 import { BiMenu } from "react-icons/bi";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 const navLinks = [
   {
@@ -25,9 +28,11 @@ const navLinks = [
   },
 ];
 
-const Header = ({ user, isLoggedIn }) => {
+const Header = ({ setLoggedIn, isLoggedIn }) => {
   const headerRef = useRef(null);
   const menuRef = useRef(null);
+
+  const navigate = useNavigate();
 
   const handleStickyHeader = () => {
     window.addEventListener("scroll", () => {
@@ -49,9 +54,33 @@ const Header = ({ user, isLoggedIn }) => {
 
   const toggleMenu = () => menuRef.current.classList.toggle("show__menu");
 
-  const handleLogout = () => {
-    // Implement your logout logic here
-    console.log("User logged out");
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("/logout", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        setLoggedIn(false);
+
+        // Introduce a 2-second delay before navigating to "/login"
+        setTimeout(() => {
+          toast.success("Logout successful!");
+          console.log("User logged out");
+          // Navigate to "/login" after the delay using useNavigate
+          navigate("/login");
+        }, 2000);
+      } else {
+        console.error("Logout failed");
+        toast.error("Logout failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error during logout:", error);
+      toast.error("An error occurred during logout. Please try again later.");
+    }
   };
 
   return (
@@ -124,12 +153,13 @@ const Header = ({ user, isLoggedIn }) => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </header>
   );
 };
 
 Header.propTypes = {
-  user: PropTypes.object, // Adjust the type accordingly based on your data structure
+  setLoggedIn: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
 };
 

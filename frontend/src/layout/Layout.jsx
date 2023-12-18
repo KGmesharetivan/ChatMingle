@@ -9,7 +9,7 @@ import Routers from "../routes/Routers";
 const Layout = ({ user, isLoggedIn, setLoggedIn }) => {
   return (
     <>
-      <Header user={user} isLoggedIn={isLoggedIn} />
+      <Header user={user} isLoggedIn={isLoggedIn}  setLoggedIn={setLoggedIn} />
       <main>
         <Routers
           user={user}
