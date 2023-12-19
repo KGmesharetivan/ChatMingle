@@ -7,7 +7,7 @@ services:
       branch: ChatMingle
     runtime: nodejs16
     buildCommand: npm install
-    startCommand: npm start
+    startCommand: npm run dev # Use npm run dev for development, or npm start for production
     environmentVariables:
       - name: MONGODB_URI
         value: "mongodb+srv://mesharet93:fh1TKG5wWQigURlz@cluster0.osfx5k9.mongodb.net/ChatMingle"
@@ -23,4 +23,4 @@ services:
       branch: ChatMingle
     runtime: nodejs16
     buildCommand: npm run build
-    startCommand: npm run dev
+    startCommand: npm run dev # Use npm run dev for development, or another command for production
