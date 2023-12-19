@@ -15,7 +15,7 @@ import PropTypes from "prop-types";
 
 function Dashboard({ toast }) {
   const [showVideoButton, setShowVideoButton] = useState(false);
-  const [isStrangerAllowed, setIsStrangerAllowed] = useState(true);
+  const [isStrangerAllowed, setIsStrangerAllowed] = useState(false);
   const [personalCode, setPersonalCode] = useState("Your personal code here");
   const [socket, setSocket] = useState(null);
 
@@ -23,35 +23,33 @@ function Dashboard({ toast }) {
     // Initialize Socket.IO client
     const newSocket = io("http://localhost:3001"); // Replace with your server URL
     setSocket(newSocket);
-  
+
     // Register socket events
     registerSocketEvents(newSocket);
-  
+
     try {
       webRTCHandler.getLocalPreview();
       setShowVideoButton(true);
     } catch (err) {
       console.error("Error accessing the camera: ", err);
     }
-  
+
     showVideoCallButtons();
-  
+
     return () => {
-      // Clear any pending toasts on component unmount
-      toast.dismiss();
-      
       // Disconnect socket on unmount
       newSocket.close();
     };
-  }, [toast]); // Include 'toast' in the dependency array
-  
-  
+  }, []); // Include 'toast' in the dependency array
 
   // Toggle the checkbox state
-  useEffect(() => {
-    wss.changeStrangerConnectionStatus(isStrangerAllowed);
-    console.log("Stranger checkbox status updated to", isStrangerAllowed);
-  }, [isStrangerAllowed]);
+  const toggleStrangerCheckbox = () => {
+    setIsStrangerAllowed((prevIsStrangerAllowed) => !prevIsStrangerAllowed);
+
+    // Update the stranger connection status immediately
+    wss.changeStrangerConnectionStatus(!isStrangerAllowed);
+    console.log("Stranger checkbox status updated to", !isStrangerAllowed);
+  };
 
   const handleCopyButtonClick = () => {
     const personalCode = document.getElementById(
@@ -218,7 +216,7 @@ function Dashboard({ toast }) {
             </button>
           </div>
         </div>
-        {/* <div className="checkbox_container">
+        <div className="checkbox_container">
           <input
             type="checkbox"
             checked={isStrangerAllowed}
@@ -231,7 +229,7 @@ function Dashboard({ toast }) {
           >
             Allow connection from strangers
           </label>
-        </div> */}
+        </div>
       </div>
     </div>
   );
