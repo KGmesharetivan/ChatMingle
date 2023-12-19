@@ -4,7 +4,8 @@ const { MongoClient, ObjectId } = require("mongodb");
 function ChatMingle() {
   const ChatMingle = {};
 
-  const url = process.env.MONGODB_URI;
+  const url =
+    "mongodb+srv://mesharet93:fh1TKG5wWQigURlz@cluster0.osfx5k9.mongodb.net/ChatMingle";
   const DB_NAME = "ChatMingle";
 
   ChatMingle.getUserByEmail = async function (email) {

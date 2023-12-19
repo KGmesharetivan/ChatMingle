@@ -42,16 +42,20 @@ app.use(
 mongoose.set("strictQuery", false);
 
 mongoose
-  .connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(
+    "mongodb+srv://mesharet93:fh1TKG5wWQigURlz@cluster0.osfx5k9.mongodb.net/ChatMingle",
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
   .then(() => console.log("MongoDB connection successful"))
   .catch((err) => console.error(err));
 
 // Session store configuration
 const sessionStore = new MongoStore({
-  mongoUrl: process.env.MONGODB_URI,
+  mongoUrl:
+    "mongodb+srv://mesharet93:fh1TKG5wWQigURlz@cluster0.osfx5k9.mongodb.net/ChatMingle",
   dbName: "ChatMingle",
   collection: "sessions",
   mongooseConnection: mongoose.connection,
@@ -60,7 +64,7 @@ const sessionStore = new MongoStore({
 
 app.use(
   session({
-    secret: process.env.SESSION_SECRET,
+    secret: "EWC8ANTIfZKrRrRpHcSIXlI_5QjkAtEZZVkxVBphjk8",
     resave: false,
     saveUninitialized: true,
     store: sessionStore,
