@@ -21,7 +21,7 @@ const Login = ({ setUser, isLoggedIn, setLoggedIn, toast }) => {
     event.preventDefault();
 
     try {
-      const response = await fetch("/.netlify/functions/auth", {
+      const response = await fetch("/.netlify/functions/routes/auth", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
