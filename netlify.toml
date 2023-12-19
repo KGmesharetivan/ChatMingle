@@ -1,9 +1,7 @@
 [build]
-  base = "frontend"
   command = "npm run build"
-  publish = "dist"  # Update this line to the correct path
+  publish = "frontend/dist"
   functions = "backend/functions"
-  node_version = "16.10.0"
 
 [deploy]
   logs = "public"  # Choose between "public" or "private"
