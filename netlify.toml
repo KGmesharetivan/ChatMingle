@@ -1,7 +1,7 @@
 [build]
-  base = "frontend"
+  base = "/"
   command = "npm run build"
-  publish = "dist"
+  publish = "frontend/dist"  # Adjust this path according to your frontend build output
   functions = "backend/functions"
   node_version = "16"
 
