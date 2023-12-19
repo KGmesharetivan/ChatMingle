@@ -1,0 +1,10 @@
+version: 1.0
+services:
+  - name: backend
+    source:
+      type: github
+      repository: https://github.com/KGmesharetivan/ChatMingle
+      branch: ChatMingle
+    runtime: nodejs14
+    buildCommand: npm install
+    startCommand: npm start
