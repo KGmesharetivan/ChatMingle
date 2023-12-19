@@ -6,7 +6,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-  // Define state variables
   const [user, setUser] = useState(null);
   const [isLoggedIn, setLoggedIn] = useState(false);
 
@@ -18,7 +17,7 @@ function App() {
         const result = await fetch("http://localhost:3001/auth/isLoggedIn", {
           method: "GET",
           signal: abortController.signal,
-          credentials: "include", // Ensure credentials are sent (cookies)
+          credentials: "include",
         });
 
         console.log("Server response:", result);
@@ -28,25 +27,14 @@ function App() {
           console.log("Parsed result:", parsedResult);
 
           if (!abortController.signal.aborted) {
-            console.log("Type of isLoggedIn:", typeof parsedResult.isLoggedIn);
-
-            if (parsedResult.isLoggedIn) {
-              setUser(parsedResult.user);
-              setLoggedIn(true);
-              console.log("User is logged in:", parsedResult.user);
-            } else {
-              setLoggedIn(false);
-              console.log("User is not logged in");
-            }
+            handleAuthenticationStatus(parsedResult);
           }
         } else {
-          console.error("Server error:", result.statusText);
-          toast.error("Server error. Please try again later.");
+          handleServerError(result);
         }
       } catch (error) {
         if (!abortController.signal.aborted) {
-          console.error("Error fetching authentication status:", error);
-          toast.error("An error occurred. Please try again later.");
+          handleFetchError(error);
         }
       }
     }
@@ -55,6 +43,29 @@ function App() {
 
     return () => abortController.abort();
   }, []);
+
+  const handleAuthenticationStatus = (parsedResult) => {
+    console.log("Type of isLoggedIn:", typeof parsedResult.isLoggedIn);
+
+    if (parsedResult.isLoggedIn) {
+      setUser(parsedResult.user);
+      setLoggedIn(true);
+      console.log("User is logged in:", parsedResult.user);
+    } else {
+      setLoggedIn(false);
+      console.log("User is not logged in");
+    }
+  };
+
+  const handleServerError = (result) => {
+    console.error("Server error:", result.statusText);
+    toast.error("Server error. Please try again later.");
+  };
+
+  const handleFetchError = (error) => {
+    console.error("Error fetching authentication status:", error);
+    toast.error("An error occurred. Please try again later.");
+  };
 
   return (
     <>

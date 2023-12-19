@@ -58,7 +58,7 @@ const Login = ({ isLoggedIn, setLoggedIn, toast }) => {
   };
 
   return (
-    <section>
+    <section className="hero__section pt-[60px] 2xl:h-[800px]">
       <div className="flex justify-center items-center">
         {" "}
         <form className="form_main" action="">

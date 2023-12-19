@@ -38,7 +38,7 @@
     @apply py-[35px];
   }
   .hero__section > .container > .flex {
-    @apply flex-col gap-[30px];
+    @apply flex-col justify-center items-center gap-[30px];
   }
 
   .hero__section .text-container {
@@ -49,7 +49,7 @@
   }
 
   .call_container {
-    @apply w-1/2;
+    @apply w-full;
   }
   .personal_code_copy {
     @apply flex-col;
@@ -62,5 +62,17 @@
   }
   .text__para {
     @apply text-[16px] leading-7 mt-3;
+  }
+  .dashboard_container {
+    @apply w-[400px];
+  }
+  .videos_placeholder {
+    @apply w-[600px];
+  }
+  .call_container {
+    @apply ml-[23px];
+  }
+  .messenger_container {
+    @apply ml-[15px];
   }
 }

@@ -43,12 +43,14 @@ const Signup = ({ toast }) => {
       }
     } catch (error) {
       console.error("Error during user registration:", error);
-      toast.error("An error occurred during registration. Please try again later.");
+      toast.error(
+        "An error occurred during registration. Please try again later."
+      );
     }
   };
 
   return (
-    <section>
+    <section className="hero__section pt-[60px] 2xl:h-[800px]">
       <div className="flex justify-center items-center">
         <form className="form_main" onSubmit={handleSubmit}>
           <p className="heading">Sign Up</p>
