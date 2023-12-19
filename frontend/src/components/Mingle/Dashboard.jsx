@@ -15,7 +15,7 @@ import PropTypes from "prop-types";
 
 function Dashboard({ toast }) {
   const [showVideoButton, setShowVideoButton] = useState(false);
-  const [isStrangerAllowed, setIsStrangerAllowed] = useState(false);
+  const [isStrangerAllowed, setIsStrangerAllowed] = useState(true);
   const [personalCode, setPersonalCode] = useState("Your personal code here");
   const [socket, setSocket] = useState(null);
 
@@ -43,14 +43,10 @@ function Dashboard({ toast }) {
   }, []);
 
   // Toggle the checkbox state
-  const toggleStrangerCheckbox = () => {
-    setIsStrangerAllowed(!isStrangerAllowed);
-
-    // Emit the event to the server to update the checkbox status
-    wss.changeStrangerConnectionStatus(!isStrangerAllowed);
-
-    console.log("Stranger checkbox triggered");
-  };
+  useEffect(() => {
+    wss.changeStrangerConnectionStatus(isStrangerAllowed);
+    console.log("Stranger checkbox status updated to", isStrangerAllowed);
+  }, [isStrangerAllowed]);
 
   const handleCopyButtonClick = () => {
     const personalCode = document.getElementById(
@@ -101,11 +97,17 @@ function Dashboard({ toast }) {
   };
 
   const handleStrangerChatButtonClick = () => {
-    strangerUtils.getStrangerSocketIdAndConnect(callType.CHAT_STRANGER);
+    strangerUtils.getStrangerSocketIdAndConnect(callType.CHAT_STRANGER, () => {
+      // Callback function to be executed when successfully connected
+      toast.success("Connected to a stranger for chat");
+    });
   };
 
   const handleStrangerVideoButtonClick = () => {
-    strangerUtils.getStrangerSocketIdAndConnect(callType.VIDEO_STRANGER);
+    strangerUtils.getStrangerSocketIdAndConnect(callType.VIDEO_STRANGER, () => {
+      // Callback function to be executed when successfully connected
+      toast.success("Connected to a stranger for video call");
+    });
   };
 
   return (
@@ -211,7 +213,7 @@ function Dashboard({ toast }) {
             </button>
           </div>
         </div>
-        <div className="checkbox_container">
+        {/* <div className="checkbox_container">
           <input
             type="checkbox"
             checked={isStrangerAllowed}
@@ -224,7 +226,7 @@ function Dashboard({ toast }) {
           >
             Allow connection from strangers
           </label>
-        </div>
+        </div> */}
       </div>
     </div>
   );

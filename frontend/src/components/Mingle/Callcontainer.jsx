@@ -61,6 +61,8 @@ const CallContainer = () => {
     webRTCHandler.handleHangUp();
     updateUIAfterHangUp();
     ui.updateUIAfterHangUp(callType);
+    setMicEnabled(true);
+    setCameraEnabled(true);
   };
 
   // Toggle microphone state

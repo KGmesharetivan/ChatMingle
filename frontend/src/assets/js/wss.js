@@ -70,6 +70,15 @@ export const changeStrangerConnectionStatus = (status) => {
   socketIO.emit("stranger-connection-status", data); // Emit the event to the server
 };
 
-export const getStrangerSocketId = () => {
+export const getStrangerSocketId = (callback) => {
   socketIO.emit("get-stranger-socket-id");
+
+  // Socket event listener for receiving stranger socket ID
+  socketIO.on("stranger-socket-id", (strangerSocketId) => {
+    console.log("Received stranger socket ID:", strangerSocketId);
+
+    if (callback) {
+      callback(strangerSocketId);
+    }
+  });
 };

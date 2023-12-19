@@ -9,9 +9,9 @@ export const changeStrangerConnectionStatus = (status) => {
   wss.changeStrangerConnectionStatus(data);
 };
 
-export const getStrangerSocketIdAndConnect = (callType) => {
+export const getStrangerSocketIdAndConnect = (callType, callback) => {
   strangerCallType = callType;
-  wss.getStrangerSocketId();
+  wss.getStrangerSocketId(callback);
 };
 
 export const connectWithStranger = (data) => {

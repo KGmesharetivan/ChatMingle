@@ -668,7 +668,7 @@ body {
     left: 0;
     z-index: 100;
     background: #00000084;
-    display: none;
+    display: block; /* Change display to block initially */
   }
 
   .menu {
@@ -683,6 +683,7 @@ body {
     justify-content: center;
     align-items: center;
     line-height: 30px;
+    display: none; /* Change display to none initially */
   }
 
   .show__menu {
