@@ -11,7 +11,7 @@ const Profile = () => {
       >
         {/* Profile Picture */}
         <div className='h-44 w-44 bg-white rounded-full border-4 border-white absolute -bottom-10 left-36 transform translate-x-1/2 -trnaslate-y-1/2'>
-          {/* You can add an antual profile Picture here */}
+          {/*can add profile Picture here */}
         </div>
       </div>
 
