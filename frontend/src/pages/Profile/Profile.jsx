@@ -18,6 +18,7 @@ const Profile = () => {
       {/* User Information */}
       <div className='max-w-2xl mx-auto px-5 mt-4'>
         <h1 className='text-3xl font-bold text-gray-800'>Jorz Tandog</h1>
+        <p className='text-gray-500'>Web Developer | Kodego | Web Designer</p>
       </div>
     </div>
   )
