@@ -56,7 +56,7 @@ const Header = ({ setLoggedIn, isLoggedIn, setUser, toast }) => {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch("/.netlify/functions/auth/logout", {
+      const response = await fetch("/functions/auth/logout", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
