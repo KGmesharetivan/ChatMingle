@@ -2,7 +2,7 @@
   base = "/frontend"
   command = "npm run build"
   publish = "dist"
-  functions = "backend/functions"
+  functions = "backend/functions"  # Updated path for backend functions
 
 [deploy]
   logs = "public"  # Choose between "public" or "private"
