@@ -1,0 +1,27 @@
+services:
+  - name: backend
+    source:
+      type: github
+      repository: https://github.com/KGmesharetivan/ChatMingle.git
+      branch: ChatMingle
+    sourceDir: backend # Specify the correct directory if needed
+    runtime: nodejs16
+    buildCommand: npm install
+    startCommand: npm start
+    environmentVariables:
+      - name: MONGODB_URI
+        value: "mongodb+srv://mesharet93:fh1TKG5wWQigURlz@cluster0.osfx5k9.mongodb.net/ChatMingle"
+      - name: SESSION_SECRET
+        value: "EWC8ANTIfZKrRrRpHcSIXlI_5QjkAtEZZVkxVBphjk8"
+      - name: JWT_SECRET
+        value: "fb541366046928fd9acfd2bcb1db8bf06d0d124342d136d56e079e27164113d9"
+
+  - name: frontend
+    source:
+      type: github
+      repository: https://github.com/KGmesharetivan/ChatMingle.git
+      branch: ChatMingle
+    sourceDir: frontend # Specify the correct directory if needed
+    runtime: nodejs16
+    buildCommand: npm run build
+    startCommand: npm run dev

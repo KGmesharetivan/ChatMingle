@@ -53,7 +53,8 @@ passport.deserializeUser(async (id, done) => {
 // JWT strategy for handling token-based authentication
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.JWT_SECRET,
+  secretOrKey:
+    "fb541366046928fd9acfd2bcb1db8bf06d0d124342d136d56e079e27164113d9",
 };
 
 const jwtVerify = async (payload, done) => {

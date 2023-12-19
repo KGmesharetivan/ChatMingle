@@ -29,7 +29,11 @@ router.post("/login", async function (req, res, next) {
             return next(err);
           }
 
-          const token = jwt.sign({ sub: user._id }, process.env.JWT_SECRET);
+          const token = jwt.sign(
+            { sub: user._id },
+            "fb541366046928fd9acfd2bcb1db8bf06d0d124342d136d56e079e27164113d9"
+          );
+
           return res.send({ loginStatus: true, user, token });
         });
       } else {
