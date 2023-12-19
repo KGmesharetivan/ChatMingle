@@ -26,7 +26,7 @@ const Routers = ({ isLoggedIn, setLoggedIn, setUser, toast }) => {
         path="/mingle"
         element={<Mingle isLoggedIn={isLoggedIn} toast={toast} />}
       />
-      <Route path="/contact" element={<Contact />} />
+      <Route path="/contact" element={<Contact toast={toast} isLoggedIn={isLoggedIn}/>} />
     </Routes>
   );
 };
