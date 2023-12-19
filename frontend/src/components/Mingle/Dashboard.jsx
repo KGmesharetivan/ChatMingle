@@ -113,18 +113,42 @@ function Dashboard({ toast, user, isLoggedIn }) {
     }
   };
 
-  const handleStrangerChatButtonClick = () => {
-    strangerUtils.getStrangerSocketIdAndConnect(callType.CHAT_STRANGER, () => {
-      // Callback function to be executed when successfully connected
-      toast.success("Connected to a stranger for chat");
-    });
+  const handleStrangerChatButtonClick = async () => {
+    try {
+      const success = await strangerUtils.getStrangerSocketIdAndConnect(
+        callType.CHAT_STRANGER
+      );
+
+      if (success) {
+        // Callback function to be executed when successfully connected
+        toast.success("Connected to a stranger for chat");
+      } else {
+        // Display an appropriate message when no stranger is available
+        toast.error("No stranger available for chat");
+      }
+    } catch (error) {
+      console.error("Error connecting to stranger for chat: ", error);
+      toast.error("Failed to connect to a stranger for chat");
+    }
   };
 
-  const handleStrangerVideoButtonClick = () => {
-    strangerUtils.getStrangerSocketIdAndConnect(callType.VIDEO_STRANGER, () => {
-      // Callback function to be executed when successfully connected
-      toast.success("Connected to a stranger for video call");
-    });
+  const handleStrangerVideoButtonClick = async () => {
+    try {
+      const success = await strangerUtils.getStrangerSocketIdAndConnect(
+        callType.VIDEO_STRANGER
+      );
+
+      if (success) {
+        // Callback function to be executed when successfully connected
+        toast.success("Connected to a stranger for video call");
+      } else {
+        // Display an appropriate message when no stranger is available
+        toast.error("No stranger available for video call");
+      }
+    } catch (error) {
+      console.error("Error connecting to stranger for video call: ", error);
+      toast.error("Failed to connect to a stranger for video call");
+    }
   };
 
   return (
