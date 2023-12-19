@@ -1,7 +1,9 @@
 [build]
-  command = "npm run build"  # Use your Vite build script
-  publish = "dist"           # Adjust this based on your build output directory
+  base = "/"
+  publish = "dist"
+  functions = "netlify/functions"
+  command = "npm run build"
 
-[dev]
-  command = "npm run dev"    # Use your Vite development script
-  publish = "dist"           # Adjust this based on your build output directory
+[deploy]
+  logs = "public"  # Choose between "public" or "private"
+  status = "active"  # Choose between "active" or "stopped"
