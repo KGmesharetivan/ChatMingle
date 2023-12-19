@@ -100,4 +100,13 @@ router.get("/logout", (req, res) => {
   });
 });
 
-module.exports = router;
+module.exports.handler = async (event, context) => {
+  // Netlify function entry point
+  const app = express();
+  app.use(express.json()); // Body parser middleware
+
+  // Your existing routes
+  app.use("/.netlify/functions/auth", router);
+
+  return app(event, context);
+};
