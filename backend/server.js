@@ -5,14 +5,14 @@ const http = require("http");
 const path = require("path");
 const session = require("express-session");
 const cors = require("cors");
-const passport = require("./auth/passportConfig");
+const passport = require("./functions/auth/passportConfig");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const mongoose = require("mongoose");
 const MongoStore = require("connect-mongo");
 
-const indexRouter = require("./routes/index");
-const authRouter = require("./routes/auth");
+const indexRouter = require("./functions/routes/index");
+const authRouter = require("./functions/routes/auth");
 
 const PORT = process.env.PORT || 3001;
 
