@@ -1,0 +1,16 @@
+[build]
+  base = "/frontend"
+  command = "npm run build"
+  publish = "dist"
+  functions = "backend/functions"
+
+[deploy]
+  logs = "public"  # Choose between "public" or "private"
+  status = "active"  # Choose between "active" or "stopped"
+
+[[headers]]
+  for = "/.netlify/functions/*"
+    [headers.values]
+      Access-Control-Allow-Origin = "*"
+      Access-Control-Allow-Headers = "*"
+      Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"

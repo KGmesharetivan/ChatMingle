@@ -1,9 +1,0 @@
-[build]
-  base = "/frontend"
-  command = "npm run build"
-  publish = "dist"
-  functions = "netlify/functions"
-
-[deploy]
-  logs = "public"  # Choose between "public" or "private"
-  status = "active"  # Choose between "active" or "stopped"
