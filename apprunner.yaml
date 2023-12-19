@@ -4,7 +4,7 @@ services:
     source:
       type: github
       repository: https://github.com/KGmesharetivan/ChatMingle.git
-      branch: main
+      branch: ChatMingle
     runtime: nodejs16
     buildCommand: npm install
     startCommand: npm start
@@ -20,7 +20,7 @@ services:
     source:
       type: github
       repository: https://github.com/KGmesharetivan/ChatMingle.git
-      branch: main
+      branch: ChatMingle
     runtime: nodejs16
-    buildCommand: npm install && npm run build
-    startCommand: npm install -g serve && serve -s dist
+    buildCommand: npm run build
+    startCommand: npm run dev
