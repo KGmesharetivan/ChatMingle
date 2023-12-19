@@ -7,18 +7,14 @@ function ChatMingle() {
   const url = process.env.MONGODB_URI;
   const DB_NAME = "ChatMingle";
 
-  // try to find a user given an email
   ChatMingle.getUserByEmail = async function (email) {
     let client;
     try {
       client = new MongoClient(url, { useUnifiedTopology: true });
       await client.connect();
       const db = client.db(DB_NAME);
-      const usersCollections = db.collection("users");
-      const result = await usersCollections.findOne({
-        email: email,
-      });
-      return result;
+      const usersCollection = db.collection("users");
+      return await usersCollection.findOne({ email });
     } finally {
       client.close();
     }
@@ -34,18 +30,11 @@ function ChatMingle() {
 
       if (Array.isArray(query)) {
         const objectIds = query.map((id) => new ObjectId(id));
-
-        const results = await usersCollection
+        return await usersCollection
           .find({ _id: { $in: objectIds } })
           .toArray();
-
-        return results;
       } else {
-        const result = await usersCollection.findOne({
-          _id: new ObjectId(query),
-        });
-
-        return result;
+        return await usersCollection.findOne({ _id: new ObjectId(query) });
       }
     } finally {
       client.close();
@@ -60,21 +49,16 @@ function ChatMingle() {
       const db = client.db(DB_NAME);
       const usersCollection = db.collection("users");
 
-      // Check if the user is a Google user
       if (newUser.googleId) {
-        // If the user is a Google user, check if a user with this Google ID already exists
         const existingUser = await usersCollection.findOne({
           googleId: newUser.googleId,
         });
         if (existingUser) {
-          // If a user with this Google ID already exists, don't insert a new user
           return { acknowledged: false };
         }
       }
 
-      const result = await usersCollection.insertOne(newUser);
-
-      return result;
+      return await usersCollection.insertOne(newUser);
     } catch (error) {
       console.error("Error saving user:", error);
       throw error;
