@@ -1,10 +1,10 @@
-version: 1.0
 services:
   - name: backend
     source:
       type: github
       repository: https://github.com/KGmesharetivan/ChatMingle.git
       branch: ChatMingle
+    sourceDir: backend # Specify the correct directory if needed
     runtime: nodejs16
     buildCommand: npm install
     startCommand: npm start
@@ -21,6 +21,7 @@ services:
       type: github
       repository: https://github.com/KGmesharetivan/ChatMingle.git
       branch: ChatMingle
+    sourceDir: frontend # Specify the correct directory if needed
     runtime: nodejs16
     buildCommand: npm run build
-    startCommand: npm run dev # Use npm run dev for development, or another command for production
+    startCommand: npm run dev
