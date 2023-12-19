@@ -12,19 +12,19 @@ import * as webRTCHandler from "../../assets/js/webRTCHandler";
 import { showVideoCallButtons } from "../../assets/js/ui";
 import * as wss from "../../assets/js/wss";
 import PropTypes from "prop-types";
-import * as ui from "../../assets/js/ui";
 
-function Dashboard({ toast, user, isLoggedIn }) {
+function Dashboard({ toast }) {
   const [showVideoButton, setShowVideoButton] = useState(false);
   const [isStrangerAllowed, setIsStrangerAllowed] = useState(true);
   const [personalCode, setPersonalCode] = useState("Your personal code here");
   const [socket, setSocket] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Initialize Socket.IO client
-    const newSocket = io("http://localhost:3001/");
+    const newSocket = io("http://localhost:3001"); // Replace with your server URL
     setSocket(newSocket);
+
+    // Register socket events
     registerSocketEvents(newSocket);
 
     try {
@@ -36,13 +36,11 @@ function Dashboard({ toast, user, isLoggedIn }) {
 
     showVideoCallButtons();
 
-    // Set loading to false once everything is initialized
-    setIsLoading(false);
-
     return () => {
+      // Disconnect socket on unmount
       newSocket.close();
     };
-  }, [user, isLoggedIn]);
+  }, []);
 
   // Toggle the checkbox state
   useEffect(() => {
@@ -50,35 +48,20 @@ function Dashboard({ toast, user, isLoggedIn }) {
     console.log("Stranger checkbox status updated to", isStrangerAllowed);
   }, [isStrangerAllowed]);
 
-  useEffect(() => {
-    if (user && socket) {
-      ui.updatePersonalCode(socket.id);
-    }
-  }, [user, socket]);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   const handleCopyButtonClick = () => {
-    const personalCodeParagraph = document.getElementById(
+    const personalCode = document.getElementById(
       "personal_code_paragraph"
-    );
-    if (personalCodeParagraph) {
-      const personalCode = personalCodeParagraph.innerText;
-      navigator.clipboard
-        .writeText(personalCode)
-        .then(() => {
-          console.log("Personal code copied to clipboard");
-          toast.success("Personal code copied to clipboard");
-        })
-        .catch((err) => {
-          console.error("Failed to copy: ", err);
-          toast.error("Failed to copy personal code. Please try again.");
-        });
-    } else {
-      console.error("Element with ID 'personal_code_paragraph' not found");
-    }
+    ).innerText;
+    navigator.clipboard
+      .writeText(personalCode)
+      .then(() => {
+        console.log("Personal code copied to clipboard");
+        toast.success("Personal code copied to clipboard");
+      })
+      .catch((err) => {
+        console.error("Failed to copy: ", err);
+        toast.error("Failed to copy personal code. Please try again.");
+      });
   };
 
   const handleChatButtonClick = () => {
@@ -113,38 +96,18 @@ function Dashboard({ toast, user, isLoggedIn }) {
     }
   };
 
-  const handleStrangerChatButtonClick = async () => {
-    try {
-      const success = await strangerUtils.getStrangerSocketIdAndConnect(
-        callType.CHAT_STRANGER
-      );
-
-      if (success) {
-        toast.success("Connected to a stranger for chat");
-      } else {
-        toast.error("No stranger available for chat");
-      }
-    } catch (error) {
-      console.error("Error connecting to stranger for chat: ", error);
-      toast.error("Failed to connect to a stranger for chat");
-    }
+  const handleStrangerChatButtonClick = () => {
+    strangerUtils.getStrangerSocketIdAndConnect(callType.CHAT_STRANGER, () => {
+      // Callback function to be executed when successfully connected
+      toast.success("Connected to a stranger for chat");
+    });
   };
 
-  const handleStrangerVideoButtonClick = async () => {
-    try {
-      const success = await strangerUtils.getStrangerSocketIdAndConnect(
-        callType.VIDEO_STRANGER
-      );
-
-      if (success) {
-        toast.success("Connected to a stranger for video call");
-      } else {
-        toast.error("No stranger available for video call");
-      }
-    } catch (error) {
-      console.error("Error connecting to stranger for video call: ", error);
-      toast.error("Failed to connect to a stranger for video call");
-    }
+  const handleStrangerVideoButtonClick = () => {
+    strangerUtils.getStrangerSocketIdAndConnect(callType.VIDEO_STRANGER, () => {
+      // Callback function to be executed when successfully connected
+      toast.success("Connected to a stranger for video call");
+    });
   };
 
   return (
@@ -152,13 +115,6 @@ function Dashboard({ toast, user, isLoggedIn }) {
       <div className="dashboard_container">
         <div className="flex justify-center items-center logo_container">
           <img src={logoImage} alt="Logo" className="w-[150px] h-[150px]" />
-        </div>
-        <div className="flex justify-center items-center mb-5">
-          {user && (
-            <p className="font-medium text-3xl text-black">
-              Welcome ! {user.fullname.split(" ")[0]}
-            </p>
-          )}
         </div>
         <div className="mx-10 mb-10 description_container">
           <p className="font-medium text-base text-black description_container_paragraph">
@@ -277,9 +233,7 @@ function Dashboard({ toast, user, isLoggedIn }) {
 }
 
 Dashboard.propTypes = {
-  user: PropTypes.object,
   toast: PropTypes.func.isRequired,
-  isLoggedIn: PropTypes.bool.isRequired,
 };
 
 export default Dashboard;
