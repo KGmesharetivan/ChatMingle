@@ -1,0 +1,7 @@
+[build]
+  command = "npm run build"  # Use your Vite build script
+  publish = "dist"           # Adjust this based on your build output directory
+
+[dev]
+  command = "npm run dev"    # Use your Vite development script
+  publish = "dist"           # Adjust this based on your build output directory
