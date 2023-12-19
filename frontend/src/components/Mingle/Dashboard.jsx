@@ -23,7 +23,7 @@ function Dashboard({ toast, user, isLoggedIn }) {
 
   useEffect(() => {
     // Initialize Socket.IO client
-    const newSocket = io("http://localhost:3001");
+    const newSocket = io("/");
     setSocket(newSocket);
     registerSocketEvents(newSocket);
 
@@ -120,10 +120,8 @@ function Dashboard({ toast, user, isLoggedIn }) {
       );
 
       if (success) {
-        // Callback function to be executed when successfully connected
         toast.success("Connected to a stranger for chat");
       } else {
-        // Display an appropriate message when no stranger is available
         toast.error("No stranger available for chat");
       }
     } catch (error) {
@@ -139,10 +137,8 @@ function Dashboard({ toast, user, isLoggedIn }) {
       );
 
       if (success) {
-        // Callback function to be executed when successfully connected
         toast.success("Connected to a stranger for video call");
       } else {
-        // Display an appropriate message when no stranger is available
         toast.error("No stranger available for video call");
       }
     } catch (error) {
