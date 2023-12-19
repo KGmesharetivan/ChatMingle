@@ -16,7 +16,7 @@ const Signup = ({ toast }) => {
     event.preventDefault();
 
     try {
-      const response = await fetch("/.netlify/functions/auth/register", {
+      const response = await fetch("http://localhost:3001/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

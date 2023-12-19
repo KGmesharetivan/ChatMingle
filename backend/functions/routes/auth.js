@@ -3,20 +3,9 @@ require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const passwordUtils = require("../auth/passwordUtils");
-const passport = require("passport");
 const ChatMingle = require("../MongoDB/ChatMingledb");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-
-// CORS middleware
-router.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
 
 const saltRounds = 10;
 
@@ -110,13 +99,4 @@ router.get("/logout", (req, res) => {
   });
 });
 
-module.exports.handler = async (event, context) => {
-  // Netlify function entry point
-  const app = express();
-  app.use(express.json()); // Body parser middleware
-
-  // Your existing routes
-  app.use("/.netlify/functions/auth", router);
-
-  return app(event, context);
-};
+module.exports = router;

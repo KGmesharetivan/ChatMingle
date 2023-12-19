@@ -23,7 +23,7 @@ function Dashboard({ toast, user, isLoggedIn }) {
 
   useEffect(() => {
     // Initialize Socket.IO client
-    const newSocket = io("/");
+    const newSocket = io("http://localhost:3001/");
     setSocket(newSocket);
     registerSocketEvents(newSocket);
 
