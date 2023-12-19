@@ -5,7 +5,7 @@ services:
       type: github
       repository: https://github.com/KGmesharetivan/ChatMingle.git
       branch: main
-    runtime: nodejs14
+    runtime: nodejs16
     buildCommand: npm install
     startCommand: npm start
     environmentVariables:
@@ -21,6 +21,6 @@ services:
       type: github
       repository: https://github.com/KGmesharetivan/ChatMingle.git
       branch: main
-    runtime: nodejs14
+    runtime: nodejs16
     buildCommand: npm install && npm run build
-    startCommand: npm install -g serve && serve -s build
+    startCommand: npm install -g serve && serve -s dist
