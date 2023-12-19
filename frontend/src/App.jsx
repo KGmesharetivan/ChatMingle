@@ -14,7 +14,7 @@ function App() {
 
     async function fetchData() {
       try {
-        const result = await fetch("/.netlify/functions/auth/isLoggedIn", {
+        const result = await fetch("/.netlify/functions/auth", {
           method: "GET",
           signal: abortController.signal,
           credentials: "include",
