@@ -1,8 +1,9 @@
 [build]
-  base = "backend"
+  base = "frontend"
   command = "npm run build"
-  publish = "frontend/dist"
+  publish = "dist"
   functions = "backend/functions"
+  node_version = "16"
 
 [deploy]
   logs = "public"  # Choose between "public" or "private"
@@ -10,7 +11,7 @@
 
 [[headers]]
   for = "/.netlify/functions/*"
-    [headers.values]
-      Access-Control-Allow-Origin = "*"
-      Access-Control-Allow-Headers = "*"
-      Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Headers = "*"
+    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
