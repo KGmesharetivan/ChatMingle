@@ -6,7 +6,7 @@ import Dashboard from "../components/Mingle/Dashboard";
 import CallContainer from "../components/Mingle/Callcontainer";
 import MessageContainer from "../components/Mingle/Messagecontainer";
 
-const Mingle = ({ isLoggedIn, toast }) => {
+const Mingle = ({ isLoggedIn, toast, user }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,7 +27,7 @@ const Mingle = ({ isLoggedIn, toast }) => {
       <div className="container">
         <div className="flex flex-col lg:flex-row items-start justify-start">
           <div className="lg:w-[450px]">
-            <Dashboard toast={toast} />
+            <Dashboard toast={toast} user={user} isLoggedIn={isLoggedIn} />
           </div>
           <div className="lg:w-[750px] ml-[-40px] mt-[-20px]">
             <CallContainer />
@@ -43,6 +43,7 @@ const Mingle = ({ isLoggedIn, toast }) => {
 };
 
 Mingle.propTypes = {
+  user: PropTypes.object,
   isLoggedIn: PropTypes.bool.isRequired,
   toast: PropTypes.func.isRequired,
 };

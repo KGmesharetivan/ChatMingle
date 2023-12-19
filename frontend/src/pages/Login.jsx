@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
-const Login = ({ isLoggedIn, setLoggedIn, toast }) => {
+const Login = ({ setUser, isLoggedIn, setLoggedIn, toast }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -39,7 +39,9 @@ const Login = ({ isLoggedIn, setLoggedIn, toast }) => {
       const data = await response.json();
 
       if (data.loginStatus) {
+        // Assuming the server sends back the user data
         setLoggedIn(true);
+        setUser(data.user); // Update the user state with the received user data
 
         // Introduce a 2-second delay before navigating to "/mingle"
         setTimeout(() => {
@@ -126,6 +128,7 @@ Login.propTypes = {
   setLoggedIn: PropTypes.func.isRequired,
   toast: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
+  setUser: PropTypes.func.isRequired,
 };
 
 export default Login;

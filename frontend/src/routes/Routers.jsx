@@ -10,7 +10,7 @@ import Profile from "../pages/Profile/Profile";
 import ProfileDetails from "../pages/Profile/ProfileDetails";
 import { Routes, Route } from "react-router-dom";
 
-const Routers = ({ isLoggedIn, setLoggedIn, setUser, toast }) => {
+const Routers = ({ isLoggedIn, setLoggedIn, user, setUser, toast }) => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
@@ -19,20 +19,31 @@ const Routers = ({ isLoggedIn, setLoggedIn, setUser, toast }) => {
       <Route path="/profile/:id" element={<ProfileDetails />} />
       <Route
         path="/login"
-        element={<Login setLoggedIn={setLoggedIn} toast={toast} isLoggedIn={isLoggedIn} />}
+        element={
+          <Login
+            setLoggedIn={setLoggedIn}
+            toast={toast}
+            isLoggedIn={isLoggedIn}
+            setUser={setUser}
+          />
+        }
       />
       <Route path="/signup" element={<Signup toast={toast} />} />
       <Route
         path="/mingle"
-        element={<Mingle isLoggedIn={isLoggedIn} toast={toast} />}
+        element={<Mingle isLoggedIn={isLoggedIn} toast={toast} user={user} />}
       />
-      <Route path="/contact" element={<Contact toast={toast} isLoggedIn={isLoggedIn}/>} />
+      <Route
+        path="/contact"
+        element={<Contact toast={toast} isLoggedIn={isLoggedIn} />}
+      />
     </Routes>
   );
 };
 
 // Add propTypes to specify the expected props
 Routers.propTypes = {
+  user: PropTypes.object,
   setLoggedIn: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
   setUser: PropTypes.func.isRequired,

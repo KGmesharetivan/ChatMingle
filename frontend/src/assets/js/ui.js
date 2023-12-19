@@ -5,7 +5,12 @@ export const updatePersonalCode = (personalCode) => {
   const personalCodeParagraph = document.getElementById(
     "personal_code_paragraph"
   );
-  personalCodeParagraph.innerHTML = personalCode;
+
+  if (personalCodeParagraph) {
+    personalCodeParagraph.innerHTML = personalCode;
+  } else {
+    console.error("Element with ID 'personal_code_paragraph' not found.");
+  }
 };
 
 export const updateLocalVideo = (stream) => {
