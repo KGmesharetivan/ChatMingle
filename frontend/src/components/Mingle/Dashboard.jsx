@@ -37,6 +37,8 @@ function Dashboard({ toast }) {
     showVideoCallButtons();
 
     return () => {
+      // Remove the specific event listener on 'newSocket'
+      newSocket.off("stranger-socket-id");
       // Disconnect socket on unmount
       newSocket.close();
     };

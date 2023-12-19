@@ -71,14 +71,21 @@ export const changeStrangerConnectionStatus = (status) => {
 };
 
 export const getStrangerSocketId = (callback) => {
-  socketIO.emit("get-stranger-socket-id");
-
   // Socket event listener for receiving stranger socket ID
-  socketIO.on("stranger-socket-id", (strangerSocketId) => {
+  const onStrangerSocketId = (strangerSocketId) => {
     console.log("Received stranger socket ID:", strangerSocketId);
 
     if (callback) {
       callback(strangerSocketId);
     }
-  });
+
+    // Remove the event listener after receiving the stranger socket ID
+    socketIO.off("stranger-socket-id", onStrangerSocketId);
+  };
+
+  // Add the event listener before emitting the event
+  socketIO.on("stranger-socket-id", onStrangerSocketId);
+
+  // Emit the event to request the stranger socket ID
+  socketIO.emit("get-stranger-socket-id");
 };
