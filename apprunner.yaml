@@ -3,8 +3,8 @@ services:
   - name: backend
     source:
       type: github
-      repository: https://github.com/KGmesharetivan/ChatMingle
-      branch: ChatMingle
+      repository: https://github.com/KGmesharetivan/ChatMingle.git
+      branch: main
     runtime: nodejs14
     buildCommand: npm install
     startCommand: npm start
@@ -15,3 +15,12 @@ services:
         value: "EWC8ANTIfZKrRrRpHcSIXlI_5QjkAtEZZVkxVBphjk8"
       - name: JWT_SECRET
         value: "fb541366046928fd9acfd2bcb1db8bf06d0d124342d136d56e079e27164113d9"
+
+  - name: frontend
+    source:
+      type: github
+      repository: https://github.com/KGmesharetivan/ChatMingle.git
+      branch: main
+    runtime: nodejs14
+    buildCommand: npm install && npm run build
+    startCommand: npm install -g serve && serve -s build
