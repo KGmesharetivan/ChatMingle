@@ -231,7 +231,7 @@ function Dashboard({ toast }) {
 }
 
 Dashboard.propTypes = {
-  toast: PropTypes.object.isRequired,
+  toast: PropTypes.func.isRequired,
 };
 
 export default Dashboard;

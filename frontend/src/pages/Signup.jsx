@@ -144,7 +144,7 @@ const Signup = ({ toast }) => {
 
 // Add propTypes to specify the expected props
 Signup.propTypes = {
-  toast: PropTypes.object.isRequired,
+  toast: PropTypes.func.isRequired,
 };
 
 export default Signup;

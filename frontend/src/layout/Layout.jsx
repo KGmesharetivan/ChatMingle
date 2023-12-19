@@ -34,7 +34,7 @@ Layout.propTypes = {
   setLoggedIn: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
   setUser: PropTypes.func.isRequired,
-  toast: PropTypes.object.isRequired,
+  toast: PropTypes.func.isRequired,
 };
 
 export default Layout;

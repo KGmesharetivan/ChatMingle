@@ -124,7 +124,7 @@ const Login = ({ isLoggedIn, setLoggedIn, toast }) => {
 // Add propTypes to specify the expected props
 Login.propTypes = {
   setLoggedIn: PropTypes.func.isRequired,
-  toast: PropTypes.object.isRequired,
+  toast: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
 };
 

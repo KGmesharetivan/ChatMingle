@@ -69,9 +69,7 @@ const Header = ({ setLoggedIn, isLoggedIn, setUser, toast }) => {
         if (result.logout) {
           setUser(null);
           setLoggedIn(false);
-          if (pathname !== "/mingle") {
-            toast.success("Logout successful!"); // Use toast for success message
-          }
+          toast.success("Logout successful!"); // Use toast for success message
           navigate("/login");
         } else {
           console.error("Logout failed");
@@ -173,7 +171,7 @@ Header.propTypes = {
   setLoggedIn: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
   setUser: PropTypes.func.isRequired,
-  toast: PropTypes.object.isRequired,
+  toast: PropTypes.func.isRequired,
 };
 
 export default Header;

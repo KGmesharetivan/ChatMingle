@@ -44,7 +44,7 @@ const Mingle = ({ isLoggedIn, toast }) => {
 
 Mingle.propTypes = {
   isLoggedIn: PropTypes.bool.isRequired,
-  toast: PropTypes.object.isRequired,
+  toast: PropTypes.func.isRequired,
 };
 
 export default Mingle;
