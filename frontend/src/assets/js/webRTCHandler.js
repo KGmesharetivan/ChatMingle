@@ -341,7 +341,7 @@ export const handleHangUp = () => {
 };
 
 export const handleConnectedUserHangedUp = () => {
-  //console.log('connected peer hanged up');
+  console.log("connected peer hanged up");
   closePeerConnectionAndResetState();
 };
 

@@ -196,13 +196,25 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log(`User disconnected: ${socket.id}`);
 
-    const newConnectedPeers = connectedPeers.filter(
-      (peerSocketId) => peerSocketId !== socket.id
-    );
+    // Notify the other participant about the disconnection
+    const connectedPeerIndex = connectedPeers.indexOf(socket.id);
+    if (connectedPeerIndex !== -1) {
+      const otherParticipantSocketId = connectedPeers[1 - connectedPeerIndex]; // Get the socket ID of the other participant
 
-    console.log("Updated connectedPeers:", newConnectedPeers);
+      if (otherParticipantSocketId) {
+        io.to(otherParticipantSocketId).emit("user-hanged-up");
+      }
 
-    connectedPeers = newConnectedPeers;
+      // Remove the disconnected user from the list
+      connectedPeers = connectedPeers.filter(
+        (peerSocketId) => peerSocketId !== socket.id
+      );
+    }
+
+    // Handle other disconnection logic as needed
+
+    console.log("Updated connectedPeers:", connectedPeers);
+    console.log("Updated connectedPeersStrangers:", connectedPeersStrangers);
 
     const newConnectedPeersStrangers = connectedPeersStrangers.filter(
       (peerSocketId) => peerSocketId !== socket.id

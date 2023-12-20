@@ -24,6 +24,14 @@ export const registerSocketEvents = (socket) => {
   });
 
   socket.on("user-hanged-up", () => {
+    // Handle the case when the other participant hangs up
+    console.log("Other participant hanged up");
+
+    // Close the peer connection and reset the UI
+    webRTCHandler.handleConnectedUserHangedUp();
+  });
+
+  socket.on("disconnect", () => {
     webRTCHandler.handleConnectedUserHangedUp();
   });
 
