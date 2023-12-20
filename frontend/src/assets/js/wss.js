@@ -28,11 +28,7 @@ export const registerSocketEvents = (socket) => {
     console.log("Other participant hanged up");
 
     // Close the peer connection and reset the UI
-    webRTCHandler.handleConnectedUserHangedUp();
-  });
-
-  socket.on("disconnect", () => {
-    webRTCHandler.handleConnectedUserHangedUp();
+    webRTCHandler.handleConnectedUserHangedUp("user");
   });
 
   socket.on("webRTC-signaling", (data) => {

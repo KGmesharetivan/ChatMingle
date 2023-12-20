@@ -340,12 +340,12 @@ export const handleHangUp = () => {
   closePeerConnectionAndResetState();
 };
 
-export const handleConnectedUserHangedUp = () => {
+export const handleConnectedUserHangedUp = (reason) => {
   console.log("connected peer hanged up");
-  closePeerConnectionAndResetState();
+  closePeerConnectionAndResetState(reason);
 };
 
-const closePeerConnectionAndResetState = () => {
+const closePeerConnectionAndResetState = (reason) => {
   // Close the peer connection if it exists
   if (peerConection) {
     peerConection.close();
@@ -374,7 +374,8 @@ const closePeerConnectionAndResetState = () => {
 
   // Update UI and reset state
   ui.updateUIAfterHangUp(
-    connectedUserDetails ? connectedUserDetails.callType : null
+    connectedUserDetails ? connectedUserDetails.callType : null,
+    reason
   );
   setIncomingCallsAvailable();
   connectedUserDetails = null;

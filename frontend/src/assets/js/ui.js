@@ -203,14 +203,7 @@ export const appendMessage = (message, right = false) => {
 
 export const clearMessenger = () => {
   const messagesContainer = document.getElementById("messages_container");
-
-  // Check if the element exists before manipulating it
-  if (messagesContainer) {
-    const dialogs = messagesContainer.querySelectorAll(".dialog");
-    dialogs.forEach((dialog) => {
-      dialog.remove();
-    });
-  }
+  messagesContainer.querySelectorAll("*").forEach((n) => n.remove());
 };
 
 // recording
@@ -277,6 +270,8 @@ export const updateUIAfterHangUp = (callType) => {
 
   const placeholder = document.getElementById("video_placeholder");
   showElement(placeholder);
+
+  removeAllDialogs();
 };
 
 // changing status of checkbox
