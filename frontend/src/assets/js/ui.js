@@ -5,12 +5,7 @@ export const updatePersonalCode = (personalCode) => {
   const personalCodeParagraph = document.getElementById(
     "personal_code_paragraph"
   );
-
-  if (personalCodeParagraph) {
-    personalCodeParagraph.innerHTML = personalCode;
-  } else {
-    console.error("Element with ID 'personal_code_paragraph' not found.");
-  }
+  personalCodeParagraph.innerHTML = personalCode;
 };
 
 export const updateLocalVideo = (stream) => {
@@ -119,8 +114,14 @@ export const showInfoDialog = (preOfferAnswer) => {
 };
 
 export const removeAllDialogs = () => {
-  const dialog = document.getElementById("dialog");
-  dialog.querySelectorAll("*").forEach((dialog) => dialog.remove());
+  // Check if the element or document object exists before using querySelectorAll
+  const dialogs = document ? document.querySelectorAll(".dialog") : null;
+
+  if (dialogs) {
+    dialogs.forEach((dialog) => {
+      dialog.remove();
+    });
+  }
 };
 
 export const showCallElements = (callType) => {
@@ -153,6 +154,7 @@ const showChatCallElements = () => {
 
 const showVideoCallElements = () => {
   const callButtons = document.getElementById("call_buttons");
+  console.log("Call Buttons Element:", callButtons);
   showElement(callButtons);
 
   const placeholder = document.getElementById("video_placeholder");
@@ -169,23 +171,31 @@ const showVideoCallElements = () => {
 
 // ui call buttons
 
-const micOnImgSrc = "/src/assets/images/mic.png";
-const micOffImgSrc = "/src/assets/images/micOff.png";
+const micOnImgSrc = "./utils/images/mic.png";
+const micOffImgSrc = "./utils/images/micOff.png";
 
-export const updateMicButton = (micEnabled) => {
-  const micButton = document.getElementById("mic_button_image");
+export const updateMicButton = (stream) => {
+  const micButton = document.getElementById("mic_button");
+
+  // Check if the element exists before manipulating it
   if (micButton) {
-    micButton.src = micEnabled ? micOnImgSrc : micOffImgSrc;
+    micButton.src = stream.getAudioTracks().some((track) => !track.enabled)
+      ? micOffImgSrc
+      : micOnImgSrc;
   }
 };
 
-const cameraOnImgSrc = "/src/assets/images/camera.png";
-const cameraOffImgSrc = "/src/assets/images/cameraOff.png";
+const cameraOnImgSrc = "./utils/images/camera.png";
+const cameraOffImgSrc = "./utils/images/cameraOff.png";
 
-export const updateCameraButton = (cameraEnabled) => {
-  const cameraButton = document.getElementById("camera_button_image");
+export const updateCameraButton = (stream) => {
+  const cameraButton = document.getElementById("camera_button");
+
+  // Check if the element exists before manipulating it
   if (cameraButton) {
-    cameraButton.src = cameraEnabled ? cameraOnImgSrc : cameraOffImgSrc;
+    cameraButton.src = stream.getVideoTracks().some((track) => !track.enabled)
+      ? cameraOffImgSrc
+      : cameraOnImgSrc;
   }
 };
 
@@ -200,7 +210,11 @@ export const appendMessage = (message, right = false) => {
 
 export const clearMessenger = () => {
   const messagesContainer = document.getElementById("messages_container");
-  messagesContainer.querySelectorAll("*").forEach((n) => n.remove());
+
+  // Check if the element exists before manipulating it
+  if (messagesContainer) {
+    messagesContainer.querySelectorAll("*").forEach((n) => n.remove());
+  }
 };
 
 // recording
@@ -242,14 +256,7 @@ export const switchRecordingButton = (switchResumeButton = false) => {
 export const updateUIAfterHangUp = (callType) => {
   enableDashboard();
 
-  // Show the message container
-  const newMessageInput = document.getElementById("new_message");
-  showElement(newMessageInput);
-
-  // Clear the messenger
-  clearMessenger();
-
-  // Hide the call buttons
+  //hide the call buttons
   if (
     callType === constants.callType.VIDEO_PERSONAL_CODE ||
     callType === constants.callType.VIDEO_STRANGER
@@ -263,11 +270,14 @@ export const updateUIAfterHangUp = (callType) => {
     hideElement(chatCallButtons);
   }
 
-  // Reset mic and camera buttons
+  const newMessageInput = document.getElementById("new_message");
+  hideElement(newMessageInput);
+  clearMessenger();
+
   updateMicButton(false);
   updateCameraButton(false);
 
-  // Hide remote video and show the placeholder
+  // hide remote video and show placeholder
   const remoteVideo = document.getElementById("remote_video");
   hideElement(remoteVideo);
 
@@ -290,27 +300,36 @@ export const updateStrangerCheckbox = (allowConnections) => {
 
 // ui helper functions
 
-export const enableDashboard = (elementId) => {
-  const dashboard = document.getElementById(elementId);
-  if (dashboard) {
-    dashboard.classList.remove("display_none");
+const enableDashboard = () => {
+  const dashboardBlocker = document.getElementById("dashboard_blur");
+
+  // Check if the element exists before manipulating it
+  if (
+    dashboardBlocker &&
+    !dashboardBlocker.classList.contains("display_none")
+  ) {
+    dashboardBlocker.classList.add("display_none");
   }
 };
 
 const disableDashboard = () => {
   const dashboardBlocker = document.getElementById("dashboard_blur");
+
+  // Check if the element exists before manipulating it
   if (dashboardBlocker && dashboardBlocker.classList.contains("display_none")) {
     dashboardBlocker.classList.remove("display_none");
   }
 };
 
 const hideElement = (element) => {
-  if (!element.classList.contains("display_none")) {
+  // Check if the element exists before manipulating it
+  if (element && !element.classList.contains("display_none")) {
     element.classList.add("display_none");
   }
 };
 
 const showElement = (element) => {
+  // Check if the element exists before manipulating it
   if (element && element.classList.contains("display_none")) {
     element.classList.remove("display_none");
   }

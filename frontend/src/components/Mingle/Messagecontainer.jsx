@@ -9,6 +9,14 @@ import * as ui from "../../assets/js/ui";
 const MessageContainer = () => {
   const callType = store.getState().callType;
 
+  useEffect(() => {
+    // Code to run after component is mounted
+    const messagesContainer = document.getElementById("messages_container");
+    if (!messagesContainer) {
+      console.error("Element with id 'messages_container' not found.");
+    }
+  }, []); // Empty dependency array ensures the effect runs once after mount
+
   const handleKeyDown = (event) => {
     const key = event.key;
 
