@@ -10,9 +10,13 @@ export const registerSocketEvents = (socket) => {
   socketIO = socket;
 
   socket.on("connect", () => {
-    console.log("succesfully connected to socket.io server");
+    console.log("Successfully connected to socket.io server");
     store.setSocketId(socket.id);
     ui.updatePersonalCode(socket.id);
+  });
+
+  socketIO.on("disconnect", () => {
+    webRTCHandler.handleDisconnect();
   });
 
   socket.on("pre-offer", (data) => {
@@ -49,7 +53,7 @@ export const registerSocketEvents = (socket) => {
 };
 
 export const sendPreOffer = (data) => {
-  console.log("emmiting to server pre offer event");
+  console.log("Emitting to server pre-offer event");
   socketIO.emit("pre-offer", data);
 };
 

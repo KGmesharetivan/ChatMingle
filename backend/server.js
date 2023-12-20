@@ -194,18 +194,22 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log("user disconnected");
+    console.log(`User disconnected: ${socket.id}`);
 
     const newConnectedPeers = connectedPeers.filter(
       (peerSocketId) => peerSocketId !== socket.id
     );
 
+    console.log("Updated connectedPeers:", newConnectedPeers);
+
     connectedPeers = newConnectedPeers;
-    //console.log(connectedPeers);
 
     const newConnectedPeersStrangers = connectedPeersStrangers.filter(
       (peerSocketId) => peerSocketId !== socket.id
     );
+
+    console.log("Updated connectedPeersStrangers:", newConnectedPeersStrangers);
+
     connectedPeersStrangers = newConnectedPeersStrangers;
   });
 });

@@ -34,7 +34,15 @@ export const showVideoCallButtons = () => {
 
 export const updateRemoteVideo = (stream) => {
   const remoteVideo = document.getElementById("remote_video");
-  remoteVideo.srcObject = stream;
+
+  // Check if the stream is available
+  if (stream) {
+    remoteVideo.srcObject = stream;
+  } else {
+    // If the stream is not available (user disconnected), show the static image
+    remoteVideo.src = "https://giphy.com/embed/l41K3o5TzvmhZwd4A";
+    remoteVideo.poster = "https://giphy.com/embed/l41K3o5TzvmhZwd4A"; // Optional: Set a poster image
+  }
 };
 
 export const showIncomingCallDialog = (
@@ -240,6 +248,7 @@ export const switchRecordingButton = (switchResumeButton = false) => {
 
 // ui after hanged up
 export const updateUIAfterHangUp = (callType) => {
+  console.log("Updating UI after hang-up for callType:", callType);
   enableDashboard();
 
   // Show the message container

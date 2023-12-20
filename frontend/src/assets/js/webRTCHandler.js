@@ -7,7 +7,6 @@ let connectedUserDetails;
 let peerConection;
 let dataChannel;
 
-
 const defaultConstraints = {
   audio: true,
   video: true,
@@ -67,10 +66,23 @@ const createPeerConnection = () => {
   };
 
   peerConection.onconnectionstatechange = () => {
-    if (peerConection.connectionState === "connected") {
-      console.log("successfully connected with other peer");
+    const connectionState = peerConection.connectionState;
+  
+    switch (connectionState) {
+      case "connected":
+        console.log("Successfully connected with other peer");
+        break;
+      case "disconnected":
+      case "failed":
+      case "closed":
+        console.log("Connection state changed:", connectionState);
+        handleDisconnect(); // Call the disconnect handler
+        break;
+      default:
+        break;
     }
   };
+  
 
   // receiving tracks
   const remoteStream = new MediaStream();
@@ -346,22 +358,37 @@ export const handleConnectedUserHangedUp = () => {
   closePeerConnectionAndResetState();
 };
 
+export const handleDisconnect = () => {
+  console.log("Disconnected from the socket.io server");
+  closePeerConnectionAndResetState();
+};
+
 const closePeerConnectionAndResetState = () => {
+  console.log("Closing peer connection and resetting state");
+
   if (peerConection) {
+    console.log("Closing peer connection");
     peerConection.close();
     peerConection = null;
   }
 
   // Active mic and camera
   if (
-    connectedUserDetails.callType === constants.callType.VIDEO_PERSONAL_CODE ||
-    connectedUserDetails.callType === constants.callType.VIDEO_STRANGER
+    connectedUserDetails &&
+    (connectedUserDetails.callType === constants.callType.VIDEO_PERSONAL_CODE ||
+      connectedUserDetails.callType === constants.callType.VIDEO_STRANGER)
   ) {
+    console.log("Enabling mic and camera");
     store.getState().localStream.getVideoTracks()[0].enabled = true;
     store.getState().localStream.getAudioTracks()[0].enabled = true;
   }
-  ui.updateUIAfterHangUp(connectedUserDetails.callType);
+
+  console.log("Updating UI after hang-up");
+  ui.updateUIAfterHangUp(connectedUserDetails?.callType);
+
+  console.log("Setting incoming calls available");
   setIncomingCallsAvailable();
+
   connectedUserDetails = null;
 };
 
