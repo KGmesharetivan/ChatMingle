@@ -203,7 +203,14 @@ export const appendMessage = (message, right = false) => {
 
 export const clearMessenger = () => {
   const messagesContainer = document.getElementById("messages_container");
-  messagesContainer.querySelectorAll("*").forEach((n) => n.remove());
+
+  // Check if the element exists before manipulating it
+  if (messagesContainer) {
+    const dialogs = messagesContainer.querySelectorAll(".dialog");
+    dialogs.forEach((dialog) => {
+      dialog.remove();
+    });
+  }
 };
 
 // recording
@@ -270,8 +277,6 @@ export const updateUIAfterHangUp = (callType) => {
 
   const placeholder = document.getElementById("video_placeholder");
   showElement(placeholder);
-
-  removeAllDialogs();
 };
 
 // changing status of checkbox
@@ -312,13 +317,13 @@ const disableDashboard = () => {
 };
 
 const hideElement = (element) => {
-  if (!element.classList.contains("display_none")) {
+  if (element && !element.classList.contains("display_none")) {
     element.classList.add("display_none");
   }
 };
 
 const showElement = (element) => {
-  if (element.classList.contains("display_none")) {
+  if (element && element.classList.contains("display_none")) {
     element.classList.remove("display_none");
   }
 };
