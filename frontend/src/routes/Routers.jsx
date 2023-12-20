@@ -9,6 +9,9 @@ import Signup from "../pages/Signup";
 import Profile from "../pages/Profile/Profile";
 import ProfileDetails from "../pages/Profile/ProfileDetails";
 import { Routes, Route } from "react-router-dom";
+import ForgotPassword from "../pages/ForgotPassword";
+import ResetPasswordEmail from "../pages/ResetPasswordEmail";
+import ResetPasswordText from "../pages/ResetPasswordText";
 
 const Routers = ({ isLoggedIn, setLoggedIn, user, setUser, toast }) => {
   return (
@@ -37,6 +40,9 @@ const Routers = ({ isLoggedIn, setLoggedIn, user, setUser, toast }) => {
         path="/contact"
         element={<Contact toast={toast} isLoggedIn={isLoggedIn} />}
       />
+      <Route path="/forgotpassword" element={<ForgotPassword />} />
+      <Route path="/resetpasswordemail" element={<ResetPasswordEmail />} />
+      <Route path="/resetpasswordtext" element={<ResetPasswordText />} />
     </Routes>
   );
 };
