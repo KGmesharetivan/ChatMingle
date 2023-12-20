@@ -171,31 +171,47 @@ const showVideoCallElements = () => {
 
 // ui call buttons
 
-const micOnImgSrc = "./utils/images/mic.png";
-const micOffImgSrc = "./utils/images/micOff.png";
+const micOnIcon = "/src/assets/images/mic.png";
+const micOffIcon = "/src/assets/images/micOff.png";
 
 export const updateMicButton = (stream) => {
   const micButton = document.getElementById("mic_button");
 
-  // Check if the element exists before manipulating it
   if (micButton) {
-    micButton.src = stream.getAudioTracks().some((track) => !track.enabled)
-      ? micOffImgSrc
-      : micOnImgSrc;
+    micButton.onclick = () => {
+      if (stream && typeof stream.getAudioTracks === "function") {
+        const tracks = stream.getAudioTracks();
+
+        tracks.forEach((track) => {
+          track.enabled = !track.enabled;
+        });
+
+        const enabled = tracks.length > 0 && tracks[0].enabled;
+        micButton.src = enabled ? micOnIcon : micOffIcon;
+      }
+    };
   }
 };
 
-const cameraOnImgSrc = "./utils/images/camera.png";
-const cameraOffImgSrc = "./utils/images/cameraOff.png";
+const cameraOnImgSrc = "/src/assets/images/camera.png";
+const cameraOffImgSrc = "/src/assets/images/cameraOff.png";
 
 export const updateCameraButton = (stream) => {
   const cameraButton = document.getElementById("camera_button");
 
-  // Check if the element exists before manipulating it
   if (cameraButton) {
-    cameraButton.src = stream.getVideoTracks().some((track) => !track.enabled)
-      ? cameraOffImgSrc
-      : cameraOnImgSrc;
+    cameraButton.onclick = () => {
+      if (stream && typeof stream.getVideoTracks === "function") {
+        const tracks = stream.getVideoTracks();
+
+        tracks.forEach((track) => {
+          track.enabled = !track.enabled;
+        });
+
+        const enabled = tracks.length > 0 && tracks[0].enabled;
+        cameraButton.src = enabled ? cameraOnImgSrc : cameraOffImgSrc;
+      }
+    };
   }
 };
 
@@ -270,8 +286,6 @@ export const updateUIAfterHangUp = (callType) => {
     hideElement(chatCallButtons);
   }
 
-  const newMessageInput = document.getElementById("new_message");
-  hideElement(newMessageInput);
   clearMessenger();
 
   updateMicButton(false);
