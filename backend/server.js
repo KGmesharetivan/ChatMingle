@@ -20,7 +20,10 @@ const app = express();
 const server = http.createServer(app);
 const io = require("socket.io")(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: [
+      "http://localhost:5173",
+      "https://chat-mingle-knsfz9k81-mesharet-ivan-loricas-projects.vercel.app/",
+    ],
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -33,7 +36,10 @@ app.use(cookieParser());
 
 // Updated CORS middleware setup
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:5173");
+  res.header("Access-Control-Allow-Origin", [
+    "http://localhost:5173",
+    "https://chat-mingle-knsfz9k81-mesharet-ivan-loricas-projects.vercel.app/",
+  ]);
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.header(
     "Access-Control-Allow-Headers",
