@@ -12,6 +12,7 @@ import * as webRTCHandler from "../../assets/js/webRTCHandler";
 import { showVideoCallButtons } from "../../assets/js/ui";
 import * as wss from "../../assets/js/wss";
 import PropTypes from "prop-types";
+import * as ui from "../../assets/js/ui";
 
 function Dashboard({ toast }) {
   const [showVideoButton, setShowVideoButton] = useState(false);
@@ -27,32 +28,54 @@ function Dashboard({ toast }) {
     // Initialize Socket.IO client
     const newSocket = io("http://localhost:3001"); // Replace with your server URL
     setSocket(newSocket);
-  
+
     // Register socket events
     registerSocketEvents(newSocket);
-  
+
     try {
       webRTCHandler.getLocalPreview();
       setShowVideoButton(true);
     } catch (err) {
       console.error("Error accessing the camera: ", err);
     }
-  
+
     showVideoCallButtons();
-  
+
     return () => {
       // Disconnect socket on unmount
       newSocket.close();
     };
-  }, [toast]); // Include 'toast' in the dependency array
-  
-  
+  }, []);
 
   // Toggle the checkbox state
   useEffect(() => {
     wss.changeStrangerConnectionStatus(isStrangerAllowed);
     console.log("Stranger checkbox status updated to", isStrangerAllowed);
   }, [isStrangerAllowed]);
+
+  const handleVideoButtonClick = () => {
+    if (isChatActive || isVideoActive) {
+      console.log("Chat or video is already active");
+      toast.error("You are already in a chat or video call");
+      return;
+    }
+
+    console.log("Video button clicked");
+    const calleePersonalCode = document.getElementById(
+      "personal_code_input"
+    ).value;
+
+    if (calleePersonalCode) {
+      setIsVideoActive(true); // Set video as active
+      webRTCHandler.sendPreOffer(
+        callType.VIDEO_PERSONAL_CODE,
+        calleePersonalCode
+      );
+    } else {
+      console.error("Personal code is required for video call");
+      toast.error("Personal code is required for video call");
+    }
+  };
 
   const handleCopyButtonClick = () => {
     const personalCode = document.getElementById(
@@ -77,10 +100,11 @@ function Dashboard({ toast }) {
       return;
     }
 
-    console.log("chat button clicked");
+    console.log("Chat button clicked");
     const calleePersonalCode = document.getElementById(
       "personal_code_input"
     ).value;
+
     if (calleePersonalCode) {
       setIsChatActive(true); // Set chat as active
       webRTCHandler.sendPreOffer(
@@ -93,29 +117,6 @@ function Dashboard({ toast }) {
     }
   };
 
-  const handleVideoButtonClick = () => {
-    if (isChatActive || isVideoActive) {
-      console.log("Chat or video is already active");
-      toast.error("You are already in a chat or video call");
-      return;
-    }
-
-    console.log("video button clicked");
-    const calleePersonalCode = document.getElementById(
-      "personal_code_input"
-    ).value;
-    if (calleePersonalCode) {
-      setIsVideoActive(true); // Set video as active
-      webRTCHandler.sendPreOffer(
-        callType.VIDEO_PERSONAL_CODE,
-        calleePersonalCode
-      );
-    } else {
-      console.error("Personal code is required for video call");
-      toast.error("Personal code is required for video call");
-    }
-  };
-
   const handleStrangerChatButtonClick = () => {
     if (isStrangerChatActive || isStrangerVideoActive) {
       console.log("Stranger chat or video is already active");
@@ -124,6 +125,7 @@ function Dashboard({ toast }) {
     }
 
     console.log("stranger chat button clicked");
+    ui.clearMessenger();
     strangerUtils.getStrangerSocketIdAndConnect(callType.CHAT_STRANGER, () => {
       setIsStrangerChatActive(true); // Set stranger chat as active
       // Callback function to be executed when successfully connected
@@ -139,6 +141,7 @@ function Dashboard({ toast }) {
     }
 
     console.log("stranger video button clicked");
+    ui.clearMessenger();
     strangerUtils.getStrangerSocketIdAndConnect(callType.VIDEO_STRANGER, () => {
       setIsStrangerVideoActive(true); // Set stranger video as active
       // Callback function to be executed when successfully connected
