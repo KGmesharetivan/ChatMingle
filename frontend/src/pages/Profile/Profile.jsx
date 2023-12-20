@@ -13,7 +13,7 @@ const Profile = () => {
   const handlePostSubmit = (event) => {
     event.preventDefault();
 
-    // Save the post with additional details to the array and clear the input
+    // Save the post with additional details arrays
     const newPost = {
       text: postText,
       actor: 'actor',
