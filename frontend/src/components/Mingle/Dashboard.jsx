@@ -75,10 +75,11 @@ function Dashboard({ toast }) {
       return;
     }
 
-    console.log("chat button clicked");
+    console.log("Chat button clicked");
     const calleePersonalCode = document.getElementById(
       "personal_code_input"
     ).value;
+
     if (calleePersonalCode) {
       setIsChatActive(true); // Set chat as active
       webRTCHandler.sendPreOffer(
@@ -98,10 +99,11 @@ function Dashboard({ toast }) {
       return;
     }
 
-    console.log("video button clicked");
+    console.log("Video button clicked");
     const calleePersonalCode = document.getElementById(
       "personal_code_input"
     ).value;
+
     if (calleePersonalCode) {
       setIsVideoActive(true); // Set video as active
       webRTCHandler.sendPreOffer(

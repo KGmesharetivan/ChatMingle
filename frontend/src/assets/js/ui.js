@@ -114,14 +114,8 @@ export const showInfoDialog = (preOfferAnswer) => {
 };
 
 export const removeAllDialogs = () => {
-  // Check if the element or document object exists before using querySelectorAll
-  const dialogs = document ? document.querySelectorAll(".dialog") : null;
-
-  if (dialogs) {
-    dialogs.forEach((dialog) => {
-      dialog.remove();
-    });
-  }
+  const dialog = document.getElementById("dialog");
+  dialog.querySelectorAll("*").forEach((dialog) => dialog.remove());
 };
 
 export const showCallElements = (callType) => {
@@ -154,7 +148,6 @@ const showChatCallElements = () => {
 
 const showVideoCallElements = () => {
   const callButtons = document.getElementById("call_buttons");
-  console.log("Call Buttons Element:", callButtons);
   showElement(callButtons);
 
   const placeholder = document.getElementById("video_placeholder");
@@ -171,47 +164,31 @@ const showVideoCallElements = () => {
 
 // ui call buttons
 
-const micOnIcon = "/src/assets/images/mic.png";
-const micOffIcon = "/src/assets/images/micOff.png";
+const micOnImgSrc = "/src/assets/images/mic.png";
+const micOffImgSrc = "/src/assets/images/micOff.png";
 
-export const updateMicButton = (stream) => {
-  const micButton = document.getElementById("mic_button");
+const updateMicButton = (stream) => {
+  const micButtonImage = document.getElementById("mic_button_image");
 
-  if (micButton) {
-    micButton.onclick = () => {
-      if (stream && typeof stream.getAudioTracks === "function") {
-        const tracks = stream.getAudioTracks();
-
-        tracks.forEach((track) => {
-          track.enabled = !track.enabled;
-        });
-
-        const enabled = tracks.length > 0 && tracks[0].enabled;
-        micButton.src = enabled ? micOnIcon : micOffIcon;
-      }
-    };
+  // Check if the element exists before manipulating it
+  if (micButtonImage) {
+    micButtonImage.src =
+      stream && stream.getAudioTracks().length > 0 ? micOnImgSrc : micOffImgSrc;
   }
 };
 
 const cameraOnImgSrc = "/src/assets/images/camera.png";
 const cameraOffImgSrc = "/src/assets/images/cameraOff.png";
 
-export const updateCameraButton = (stream) => {
-  const cameraButton = document.getElementById("camera_button");
+const updateCameraButton = (stream) => {
+  const cameraButtonImage = document.getElementById("camera_button_image");
 
-  if (cameraButton) {
-    cameraButton.onclick = () => {
-      if (stream && typeof stream.getVideoTracks === "function") {
-        const tracks = stream.getVideoTracks();
-
-        tracks.forEach((track) => {
-          track.enabled = !track.enabled;
-        });
-
-        const enabled = tracks.length > 0 && tracks[0].enabled;
-        cameraButton.src = enabled ? cameraOnImgSrc : cameraOffImgSrc;
-      }
-    };
+  // Check if the element exists before manipulating it
+  if (cameraButtonImage) {
+    cameraButtonImage.src =
+      stream && stream.getVideoTracks().length > 0
+        ? cameraOnImgSrc
+        : cameraOffImgSrc;
   }
 };
 
@@ -226,11 +203,7 @@ export const appendMessage = (message, right = false) => {
 
 export const clearMessenger = () => {
   const messagesContainer = document.getElementById("messages_container");
-
-  // Check if the element exists before manipulating it
-  if (messagesContainer) {
-    messagesContainer.querySelectorAll("*").forEach((n) => n.remove());
-  }
+  messagesContainer.querySelectorAll("*").forEach((n) => n.remove());
 };
 
 // recording
@@ -330,21 +303,22 @@ const disableDashboard = () => {
   const dashboardBlocker = document.getElementById("dashboard_blur");
 
   // Check if the element exists before manipulating it
-  if (dashboardBlocker && dashboardBlocker.classList.contains("display_none")) {
-    dashboardBlocker.classList.remove("display_none");
+  if (
+    dashboardBlocker &&
+    !dashboardBlocker.classList.contains("display_none")
+  ) {
+    dashboardBlocker.classList.add("display_none");
   }
 };
 
 const hideElement = (element) => {
-  // Check if the element exists before manipulating it
-  if (element && !element.classList.contains("display_none")) {
+  if (!element.classList.contains("display_none")) {
     element.classList.add("display_none");
   }
 };
 
 const showElement = (element) => {
-  // Check if the element exists before manipulating it
-  if (element && element.classList.contains("display_none")) {
+  if (element.classList.contains("display_none")) {
     element.classList.remove("display_none");
   }
 };
