@@ -36,10 +36,16 @@ app.use(cookieParser());
 
 // Updated CORS middleware setup
 app.use((req, res, next) => {
-  res.header(
-    "Access-Control-Allow-Origin",
-    "http://localhost:5173, https://chat-mingle-knsfz9k81-mesharet-ivan-loricas-projects.vercel.app/"
-  );
+  const allowedOrigins = [
+    "http://localhost:5173",
+    "https://chat-mingle-kv23nnan7-mesharet-ivan-loricas-projects.vercel.app/",
+  ];
+
+  const origin = req.headers.origin;
+
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
 
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.header(
@@ -47,6 +53,7 @@ app.use((req, res, next) => {
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
   );
   res.header("Access-Control-Allow-Credentials", "true");
+
   next();
 });
 
