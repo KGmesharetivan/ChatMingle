@@ -18,6 +18,10 @@ function Dashboard({ toast }) {
   const [isStrangerAllowed, setIsStrangerAllowed] = useState(false);
   const [personalCode, setPersonalCode] = useState("Your personal code here");
   const [socket, setSocket] = useState(null);
+  const [isChatActive, setIsChatActive] = useState(false);
+  const [isVideoActive, setIsVideoActive] = useState(false);
+  const [isStrangerChatActive, setIsStrangerChatActive] = useState(false);
+  const [isStrangerVideoActive, setIsStrangerVideoActive] = useState(false);
 
   useEffect(() => {
     // Initialize Socket.IO client
@@ -70,11 +74,18 @@ function Dashboard({ toast }) {
   };
 
   const handleChatButtonClick = () => {
+    if (isChatActive || isVideoActive) {
+      console.log("Chat or video is already active");
+      toast.error("You are already in a chat or video call");
+      return;
+    }
+
     console.log("chat button clicked");
     const calleePersonalCode = document.getElementById(
       "personal_code_input"
     ).value;
     if (calleePersonalCode) {
+      setIsChatActive(true); // Set chat as active
       webRTCHandler.sendPreOffer(
         callType.CHAT_PERSONAL_CODE,
         calleePersonalCode
@@ -86,11 +97,18 @@ function Dashboard({ toast }) {
   };
 
   const handleVideoButtonClick = () => {
+    if (isChatActive || isVideoActive) {
+      console.log("Chat or video is already active");
+      toast.error("You are already in a chat or video call");
+      return;
+    }
+
     console.log("video button clicked");
     const calleePersonalCode = document.getElementById(
       "personal_code_input"
     ).value;
     if (calleePersonalCode) {
+      setIsVideoActive(true); // Set video as active
       webRTCHandler.sendPreOffer(
         callType.VIDEO_PERSONAL_CODE,
         calleePersonalCode
@@ -102,14 +120,30 @@ function Dashboard({ toast }) {
   };
 
   const handleStrangerChatButtonClick = () => {
+    if (isStrangerChatActive || isStrangerVideoActive) {
+      console.log("Stranger chat or video is already active");
+      toast.error("You are already connected to a stranger");
+      return;
+    }
+
+    console.log("stranger chat button clicked");
     strangerUtils.getStrangerSocketIdAndConnect(callType.CHAT_STRANGER, () => {
+      setIsStrangerChatActive(true); // Set stranger chat as active
       // Callback function to be executed when successfully connected
       toast.success("Connected to a stranger for chat");
     });
   };
 
   const handleStrangerVideoButtonClick = () => {
+    if (isStrangerChatActive || isStrangerVideoActive) {
+      console.log("Stranger chat or video is already active");
+      toast.error("You are already connected to a stranger");
+      return;
+    }
+
+    console.log("stranger video button clicked");
     strangerUtils.getStrangerSocketIdAndConnect(callType.VIDEO_STRANGER, () => {
+      setIsStrangerVideoActive(true); // Set stranger video as active
       // Callback function to be executed when successfully connected
       toast.success("Connected to a stranger for video call");
     });

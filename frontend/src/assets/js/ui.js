@@ -127,8 +127,11 @@ export const showInfoDialog = (preOfferAnswer) => {
 };
 
 export const removeAllDialogs = () => {
-  const dialog = document.getElementById("dialog");
-  dialog.querySelectorAll("*").forEach((dialog) => dialog.remove());
+  const dialogContainer = document.getElementById("dialog");
+
+  if (dialogContainer) {
+    dialogContainer.querySelectorAll("*").forEach((dialog) => dialog.remove());
+  }
 };
 
 export const showCallElements = (callType) => {
@@ -208,7 +211,11 @@ export const appendMessage = (message, right = false) => {
 
 export const clearMessenger = () => {
   const messagesContainer = document.getElementById("messages_container");
-  messagesContainer.querySelectorAll("*").forEach((n) => n.remove());
+
+  // Check if messagesContainer is not null before querying its children
+  if (messagesContainer) {
+    messagesContainer.querySelectorAll("*").forEach((n) => n.remove());
+  }
 };
 
 // recording
@@ -314,7 +321,7 @@ const disableDashboard = () => {
 };
 
 const hideElement = (element) => {
-  if (!element.classList.contains("display_none")) {
+  if (element && !element.classList.contains("display_none")) {
     element.classList.add("display_none");
   }
 };
