@@ -34,15 +34,7 @@ export const showVideoCallButtons = () => {
 
 export const updateRemoteVideo = (stream) => {
   const remoteVideo = document.getElementById("remote_video");
-
-  // Check if the stream is available
-  if (stream) {
-    remoteVideo.srcObject = stream;
-  } else {
-    // If the stream is not available (user disconnected), show the static image
-    remoteVideo.src = "https://giphy.com/embed/l41K3o5TzvmhZwd4A";
-    remoteVideo.poster = "https://giphy.com/embed/l41K3o5TzvmhZwd4A"; // Optional: Set a poster image
-  }
+  remoteVideo.srcObject = stream;
 };
 
 export const showIncomingCallDialog = (
@@ -127,11 +119,8 @@ export const showInfoDialog = (preOfferAnswer) => {
 };
 
 export const removeAllDialogs = () => {
-  const dialogContainer = document.getElementById("dialog");
-
-  if (dialogContainer) {
-    dialogContainer.querySelectorAll("*").forEach((dialog) => dialog.remove());
-  }
+  const dialog = document.getElementById("dialog");
+  dialog.querySelectorAll("*").forEach((dialog) => dialog.remove());
 };
 
 export const showCallElements = (callType) => {
@@ -211,11 +200,7 @@ export const appendMessage = (message, right = false) => {
 
 export const clearMessenger = () => {
   const messagesContainer = document.getElementById("messages_container");
-
-  // Check if messagesContainer is not null before querying its children
-  if (messagesContainer) {
-    messagesContainer.querySelectorAll("*").forEach((n) => n.remove());
-  }
+  messagesContainer.querySelectorAll("*").forEach((n) => n.remove());
 };
 
 // recording
@@ -255,7 +240,6 @@ export const switchRecordingButton = (switchResumeButton = false) => {
 
 // ui after hanged up
 export const updateUIAfterHangUp = (callType) => {
-  console.log("Updating UI after hang-up for callType:", callType);
   enableDashboard();
 
   // Show the message container
@@ -321,7 +305,7 @@ const disableDashboard = () => {
 };
 
 const hideElement = (element) => {
-  if (element && !element.classList.contains("display_none")) {
+  if (!element.classList.contains("display_none")) {
     element.classList.add("display_none");
   }
 };

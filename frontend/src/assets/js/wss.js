@@ -10,13 +10,9 @@ export const registerSocketEvents = (socket) => {
   socketIO = socket;
 
   socket.on("connect", () => {
-    console.log("Successfully connected to socket.io server");
+    console.log("succesfully connected to socket.io server");
     store.setSocketId(socket.id);
     ui.updatePersonalCode(socket.id);
-  });
-
-  socketIO.on("disconnect", () => {
-    webRTCHandler.handleDisconnect();
   });
 
   socket.on("pre-offer", (data) => {
@@ -53,7 +49,7 @@ export const registerSocketEvents = (socket) => {
 };
 
 export const sendPreOffer = (data) => {
-  console.log("Emitting to server pre-offer event");
+  console.log("emmiting to server pre offer event");
   socketIO.emit("pre-offer", data);
 };
 
@@ -74,22 +70,6 @@ export const changeStrangerConnectionStatus = (status) => {
   socketIO.emit("stranger-connection-status", data); // Emit the event to the server
 };
 
-export const getStrangerSocketId = (callback) => {
-  // Socket event listener for receiving stranger socket ID
-  const onStrangerSocketId = (strangerSocketId) => {
-    console.log("Received stranger socket ID:", strangerSocketId);
-
-    if (callback) {
-      callback(strangerSocketId);
-    }
-
-    // Remove the event listener after receiving the stranger socket ID
-    socketIO.off("stranger-socket-id", onStrangerSocketId);
-  };
-
-  // Add the event listener before emitting the event
-  socketIO.on("stranger-socket-id", onStrangerSocketId);
-
-  // Emit the event to request the stranger socket ID
+export const getStrangerSocketId = () => {
   socketIO.emit("get-stranger-socket-id");
 };
