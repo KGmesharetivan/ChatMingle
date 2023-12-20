@@ -4,7 +4,7 @@ import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutli
 
 const Profile = () => {
   // Example state for user posts
-  const [postText, setPostText] = useState('');
+  const [postText, setPostText] = useState(); // Arrays
   const [posts, setPosts] = useState([]); // Arrays
   const handlePostTextChange = (event) => {
     setPostText(event.target.value);
@@ -16,11 +16,10 @@ const Profile = () => {
     // Save the post with additional details to the array and clear the input
     const newPost = {
       text: postText,
-      actor: 'actor',
       name: 'Kim Da-hyun',
       date: new Date().toLocaleDateString(), // date
       time: new Date().toLocaleTimeString(), // time
-      // Add more details or fields as needed
+      // Add more details (Optional) fields as needed
     };
 
     setPosts([...posts, newPost]);
@@ -33,7 +32,7 @@ const Profile = () => {
       <div
         className='h-80 bg-cover bg-center relative'
         style={{
-          backgroundImage: 'url(https://lh3.googleusercontent.com/ledvgumQmauwI-C2mKr31nAJ4rVLkNz3GAz8fpufS2HdNXVOKVQ1bLOuqYg_kJ8XWiYW9fovz298cBjknYB0sMwpiu6uG8tlpw=w1200-h600-pp-rj-s365)', backgroundSize: 'cover', backgroundPosition: 'center',
+          backgroundImage: 'url(https://lh3.googleusercontent.com/ledvgumQmauwI-C2mKr31nAJ4rVLkNz3GAz8fpufS2HdNXVOKVQ1bLOuqYg_kJ8XWiYW9fovz298cBjknYB0sMwpiu6uG8tlpw=w1200-h600-pp-rj-s365)',
         }}
       >
       <div className='flex justify-end top-4 right-7 relative border-solid font-semibold'>Edit Profile <DriveFileRenameOutlineIcon/></div>
