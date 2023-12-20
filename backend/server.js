@@ -21,7 +21,7 @@ const server = http.createServer(app);
 const io = require("socket.io")(server, {
   cors: {
     origin: "https://bright-cascaron-41cee7.netlify.app/",
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
   },
 });
@@ -31,20 +31,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-// Updated CORS middleware setup
-app.use((req, res, next) => {
-  res.header(
-    "Access-Control-Allow-Origin",
-    "https://bright-cascaron-41cee7.netlify.app/"
-  );
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  res.header("Access-Control-Allow-Credentials", "true");
-  next();
-});
+// Use cors middleware
+app.use(
+  cors({
+    origin: "https://bright-cascaron-41cee7.netlify.app/",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: true,
+  })
+);
 
 // MongoDB connection
 mongoose.set("strictQuery", false);
