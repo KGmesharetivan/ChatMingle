@@ -70,7 +70,7 @@ const Profile = () => {
         {/* Bio */}
         <h1 className='mt-4 text-green-400 font-bold'>BIO</h1>
         <p className='mt-4 text-gray-700'>
-          🌈 Exploring life's wonders | 📸 Amateur Photographer ✨ Embrace the journey, and the
+          🌈 Exploring lifes wonders | 📸 Amateur Photographer ✨ Embrace the journey, and the
           journey will embrace you. I love chocolate, especially choco-pie. Im the most flexible member. I have very pale skin, My nickname Dubu. I can touch my nose with my tongue.
         </p>
 
