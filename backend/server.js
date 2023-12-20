@@ -36,14 +36,12 @@ app.use(cookieParser());
 
 // Updated CORS middleware setup
 app.use((req, res, next) => {
-  const allowedOrigins = [
-    "http://localhost:5173",
-    "https://chat-mingle-kv23nnan7-mesharet-ivan-loricas-projects.vercel.app/",
-  ];
+  const allowedOrigin =
+    "https://chat-mingle-kv23nnan7-mesharet-ivan-loricas-projects.vercel.app";
 
   const origin = req.headers.origin;
 
-  if (allowedOrigins.includes(origin)) {
+  if (origin === allowedOrigin) {
     res.setHeader("Access-Control-Allow-Origin", origin);
   }
 
