@@ -20,10 +20,7 @@ const app = express();
 const server = http.createServer(app);
 const io = require("socket.io")(server, {
   cors: {
-    origin: [
-      "http://localhost:5173",
-      "https://chat-mingle-knsfz9k81-mesharet-ivan-loricas-projects.vercel.app/",
-    ],
+    origin: "https://chat-mingle-omega.vercel.app/",
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -36,22 +33,16 @@ app.use(cookieParser());
 
 // Updated CORS middleware setup
 app.use((req, res, next) => {
-  const allowedOrigin =
-    "https://chat-mingle-kv23nnan7-mesharet-ivan-loricas-projects.vercel.app";
-
-  const origin = req.headers.origin;
-
-  if (origin === allowedOrigin) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-  }
-
+  res.header(
+    "Access-Control-Allow-Origin",
+    "https://chat-mingle-omega.vercel.app/"
+  );
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
   );
   res.header("Access-Control-Allow-Credentials", "true");
-
   next();
 });
 
