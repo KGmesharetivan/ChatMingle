@@ -659,6 +659,32 @@ body {
   border-radius: 20px;
 }
 
+@keyframes staticImageAnimation {
+  0% {
+    background-image: url("./assets/images/static-image.png");
+  }
+  25% {
+    background-image: url("./assets/images/static-image.png");
+  }
+  50% {
+    background-image: url("./assets/images/static-image.png");
+  }
+  75% {
+    background-image: url("./assets/images/static-image.png");
+  }
+  100% {
+    background-image: url("./assets/images/static-image.png");
+  }
+}
+
+.static_image_animation {
+  width: 650px;
+  height: 450px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  animation: staticImageAnimation 5s infinite; /* Adjust duration as needed */
+}
+
 @media only screen and (max-width: 768px) {
   .navigation {
     width: 100%;

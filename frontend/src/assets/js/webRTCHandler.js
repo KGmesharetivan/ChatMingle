@@ -346,20 +346,36 @@ export const handleConnectedUserHangedUp = () => {
 };
 
 const closePeerConnectionAndResetState = () => {
+  // Close the peer connection if it exists
   if (peerConection) {
     peerConection.close();
     peerConection = null;
   }
 
-  // Active mic and camera
+  // Enable mic and camera tracks if they are video calls
   if (
-    connectedUserDetails.callType === constants.callType.VIDEO_PERSONAL_CODE ||
-    connectedUserDetails.callType === constants.callType.VIDEO_STRANGER
+    connectedUserDetails &&
+    (connectedUserDetails.callType === constants.callType.VIDEO_PERSONAL_CODE ||
+      connectedUserDetails.callType === constants.callType.VIDEO_STRANGER)
   ) {
-    store.getState().localStream.getVideoTracks()[0].enabled = true;
-    store.getState().localStream.getAudioTracks()[0].enabled = true;
+    const localStream = store.getState().localStream;
+    if (localStream) {
+      const videoTracks = localStream.getVideoTracks();
+      const audioTracks = localStream.getAudioTracks();
+
+      if (videoTracks.length > 0) {
+        videoTracks[0].enabled = true;
+      }
+      if (audioTracks.length > 0) {
+        audioTracks[0].enabled = true;
+      }
+    }
   }
-  ui.updateUIAfterHangUp(connectedUserDetails.callType);
+
+  // Update UI and reset state
+  ui.updateUIAfterHangUp(
+    connectedUserDetails ? connectedUserDetails.callType : null
+  );
   setIncomingCallsAvailable();
   connectedUserDetails = null;
 };

@@ -22,6 +22,7 @@ import {
 import * as constants from "../../assets/js/constants";
 import * as store from "../../assets/js/store";
 import * as recordingUtils from "../../assets/js/recordingUtils";
+import staticImage from "../../assets/images/static-image.png";
 
 const CallContainer = () => {
   const [micEnabled, setMicEnabled] = useState(true);
@@ -119,8 +120,12 @@ const CallContainer = () => {
     <div className="call_container">
       <div className="videos_container">
         <div className="videos_placeholder" id="video_placeholder">
-          <div className="flex justify-between items-center">
-            <img src={logoImage} alt="Logo" />
+          <div className="flex justify-between items-center mt-[-10px]">
+            <img
+              src={staticImage}
+              alt="Logo"
+              className="static_image_animation"
+            />
           </div>
         </div>
         <video
