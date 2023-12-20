@@ -21,14 +21,17 @@ const Login = ({ setUser, isLoggedIn, setLoggedIn, toast }) => {
     event.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:3001/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userEmail: username, userPassword: password }),
-        credentials: "include", // Include credentials in the request
-      });
+      const response = await fetch(
+        "https://48byhymg2s.ap-southeast-1.awsapprunner.com/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userEmail: username, userPassword: password }),
+          credentials: "include", // Include credentials in the request
+        }
+      );
 
       if (!response.ok) {
         console.error("Login failed. Server response:", response.statusText);
