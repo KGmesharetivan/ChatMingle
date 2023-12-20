@@ -36,7 +36,8 @@ const Profile = () => {
           backgroundImage: 'url(https://lh3.googleusercontent.com/ledvgumQmauwI-C2mKr31nAJ4rVLkNz3GAz8fpufS2HdNXVOKVQ1bLOuqYg_kJ8XWiYW9fovz298cBjknYB0sMwpiu6uG8tlpw=w1200-h600-pp-rj-s365)', backgroundSize: 'cover', backgroundPosition: 'center',
         }}
       >
-      <div className='flex justify-end top-4 right-7 relative border-solid font-semibold'>Edit Profile <DriveFileRenameOutlineIcon/></div>
+      <button className='flex absolute top-4 right-7 border-solid font-semibold bg-blue-500 text-white py-1 px-1 rounded sm:px-2 sm:py-1'>Edit Profile <DriveFileRenameOutlineIcon/></button>
+        
         {/* Profile Picture */}
         <div
           className='h-32 w-32 sm:h-40 sm:w-40 md:h-44 md:w-44 lg:h-48 lg:w-48 xl:h-56 xl:w-56 bg-white rounded-full border-4 border-white absolute -bottom-10 left-1/2 transform -translate-x-1/2 -translate-y-1/2'
@@ -86,7 +87,7 @@ const Profile = () => {
             />
             <button
               type='submit'
-              className='mt-2 bg-blue-500 text-white p-2 rounded hover:bg-blue-600'
+              className='w-20 mt-2 bg-blue-500 text-white p-2 rounded hover:bg-blue-600'
             >
               Post
             </button>
