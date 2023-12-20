@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 
 const Profile = () => {
   // Example state for user posts
@@ -16,7 +17,7 @@ const Profile = () => {
     const newPost = {
       text: postText,
       actor: 'actor',
-      name: 'Kim Da-hyun', 
+      name: 'Kim Da-hyun',
       date: new Date().toLocaleDateString(), // date
       time: new Date().toLocaleTimeString(), // time
       // Add more details or fields as needed
@@ -35,6 +36,7 @@ const Profile = () => {
           backgroundImage: 'url(https://lh3.googleusercontent.com/ledvgumQmauwI-C2mKr31nAJ4rVLkNz3GAz8fpufS2HdNXVOKVQ1bLOuqYg_kJ8XWiYW9fovz298cBjknYB0sMwpiu6uG8tlpw=w1200-h600-pp-rj-s365)', backgroundSize: 'cover', backgroundPosition: 'center',
         }}
       >
+      <div className='flex justify-end top-4 right-7 relative border-solid font-semibold'>Edit Profile <DriveFileRenameOutlineIcon/></div>
         {/* Profile Picture */}
         <div
           className='h-32 w-32 sm:h-40 sm:w-40 md:h-44 md:w-44 lg:h-48 lg:w-48 xl:h-56 xl:w-56 bg-white rounded-full border-4 border-white absolute -bottom-10 left-1/2 transform -translate-x-1/2 -translate-y-1/2'
@@ -125,5 +127,6 @@ const Profile = () => {
     </div>
   );
 };
+
 
 export default Profile;
