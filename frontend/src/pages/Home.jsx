@@ -9,10 +9,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate data fetching or any asynchronous task
     const fetchData = async () => {
-      // Your data fetching logic here
-
       // Simulating a delay of 2 seconds (replace this with your actual data fetching logic)
       setTimeout(() => {
         setLoading(false); // Set loading to false once the data is fetched
@@ -23,10 +20,12 @@ const Home = () => {
   }, []); // Empty dependency array to run the effect only once on mount
 
   return (
-    <>
-      {/* ==== hero section ===== */}
-      <section className="hero__section pt-[60px] 2xl:h-[800px]">
-        <div className="container">
+    /* ==== hero section ===== */
+    <section className="hero__section pt-[60px] 2xl:h-[800px]">
+      <div className="container">
+        {loading ? (
+          <Loader />
+        ) : (
           <div className="flex flex-col lg:flex-row gap-[30px] items-center justify-between">
             {/* ==== hero content ===== */}
             <div className="lg:w-[570px]">
@@ -81,18 +80,17 @@ const Home = () => {
               </div>
             </div>
 
-              {/* Image */}
-              <img
-                src={landing}
-                alt="Landing"
-                className="w-full h-auto lg:max-w-[800px] object-cover lg:object-contain"
-              />
-            </div>
+            {/* Image */}
+            <img
+              src={landing}
+              alt="Landing"
+              className="w-full h-auto lg:max-w-[800px] object-cover lg:object-contain"
+            />
           </div>
-        </section>
-        // ==== hero section End =====
-      )}
-    </div>
+        )}
+      </div>
+    </section>
+    /* ==== hero section End ===== */
   );
 };
 
