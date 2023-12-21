@@ -1,16 +1,31 @@
-/* eslint-disable react/no-unknown-property */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-unused-vars */
-import React from "react";
+import React, { useState, useEffect } from "react";
 import landing from "../assets/images/landing.png";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
+import Loader from "../components/Loader/Loader";
 
 const Home = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      // Simulating a delay of 2 seconds (replace this with your actual data fetching logic)
+      setTimeout(() => {
+        setLoading(false); // Set loading to false once the data is fetched
+      }, 2000);
+    };
+
+    fetchData();
+  }, []); // Empty dependency array to run the effect only once on mount
+
   return (
-    <>
-      {/* ==== hero section ===== */}
-      <section className="hero__section pt-[60px] 2xl:h-[800px]">
-        <div className="container">
+    /* ==== hero section ===== */
+    <section className="hero__section pt-[60px] 2xl:h-[800px]">
+      <div className="container">
+        {loading ? (
+          <Loader />
+        ) : (
           <div className="flex flex-col lg:flex-row gap-[30px] items-center justify-between">
             {/* ==== hero content ===== */}
             <div className="lg:w-[570px]">
@@ -72,11 +87,10 @@ const Home = () => {
               className="w-full h-auto lg:max-w-[800px] object-cover lg:object-contain"
             />
           </div>
-        </div>
-      </section>
-
-      {/* ==== hero section End ===== */}
-    </>
+        )}
+      </div>
+    </section>
+    /* ==== hero section End ===== */
   );
 };
 
