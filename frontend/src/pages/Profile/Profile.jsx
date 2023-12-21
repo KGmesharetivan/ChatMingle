@@ -36,8 +36,7 @@ const Profile = () => {
           backgroundImage: 'url(https://lh3.googleusercontent.com/ledvgumQmauwI-C2mKr31nAJ4rVLkNz3GAz8fpufS2HdNXVOKVQ1bLOuqYg_kJ8XWiYW9fovz298cBjknYB0sMwpiu6uG8tlpw=w1200-h600-pp-rj-s365)', backgroundSize: 'cover', backgroundPosition: 'center',
         }}
       >
-      <button className='flex absolute top-4 right-7 border-solid font-semibold bg-blue-500 text-white py-1 px-1 rounded sm:px-2 sm:py-1'>Edit Profile <DriveFileRenameOutlineIcon/></button>
-        
+      <button className='transition ease-in-out delay-100 bg-blue-500 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-120 flex absolute top-4 right-7 border-solid font-semibold text-white py-1 px-1 rounded sm:px-2 sm:py-1'>Edit Profile <DriveFileRenameOutlineIcon/></button>
         {/* Profile Picture */}
         <div
           className='h-32 w-32 sm:h-40 sm:w-40 md:h-44 md:w-44 lg:h-48 lg:w-48 xl:h-56 xl:w-56 bg-white rounded-full border-4 border-white absolute -bottom-10 left-1/2 transform -translate-x-1/2 -translate-y-1/2'
@@ -72,7 +71,7 @@ const Profile = () => {
         {/* Bio */}
         <h1 className='mt-4 text-green-400 font-bold'>BIO</h1>
         <p className='mt-4 text-gray-700'>
-          🌈 Exploring life's wonders | 📸 Amateur Photographer ✨ Embrace the journey, and the
+          🌈 Exploring lifes wonders | 📸 Amateur Photographer ✨ Embrace the journey, and the
           journey will embrace you. I love chocolate, especially choco-pie. Im the most flexible member. I have very pale skin, My nickname Dubu. I can touch my nose with my tongue.
         </p>
 
@@ -120,8 +119,14 @@ const Profile = () => {
 
         {/* Social Links */}
         <div className='mt-4 flex space-x-4'>
-          <a href='#' className='text-blue-500 hover:underline'>
+          <a href='https://www.facebook.com/facebook' className='text-blue-500 hover:underline'>
             Facebook
+          </a>
+          <a href='https://twitter.com/' className='text-blue-500 hover:underline'>
+            Twitter
+          </a>
+          <a href='https://www.instagram.com/' className='text-blue-500 hover:underline'>
+            Instagram
           </a>
         </div>
       </div>
