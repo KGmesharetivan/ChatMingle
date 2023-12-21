@@ -59,7 +59,7 @@ const Header = ({ setLoggedIn, isLoggedIn, setUser, toast }) => {
   const handleLogout = async () => {
     try {
       setLoadingLogout(true);
-      const response = await fetch("http://localhost:3001/auth/logout", {
+      const response = await fetch("https://48byhymg2s.ap-southeast-1.awsapprunner.com/auth/logout", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

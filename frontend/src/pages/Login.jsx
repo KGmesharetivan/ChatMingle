@@ -23,7 +23,7 @@ const Login = ({ setUser, isLoggedIn, setLoggedIn, toast }) => {
     try {
       setLoading(true); // Set loading to true when submitting
 
-      const response = await fetch("http://localhost:3001/auth/login", {
+      const response = await fetch("https://48byhymg2s.ap-southeast-1.awsapprunner.com/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -30,7 +30,7 @@ const ResetPassword = ({ toast }) => {
     }
 
     try {
-      const response = await fetch("http://localhost:3001/auth/resetpassword", {
+      const response = await fetch("https://48byhymg2s.ap-southeast-1.awsapprunner.com/auth/resetpassword", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
