@@ -780,6 +780,15 @@ body {
   font-weight: 600;
 }
 
+.user-input {
+  padding: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 @media only screen and (max-width: 425px) {
   .navigation {
     width: 100%;

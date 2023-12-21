@@ -3,10 +3,8 @@ const LocalStrategy = require("passport-local").Strategy;
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
 const ChatMingle = require("../MongoDB/ChatMingledb");
-const passwordUtils = require("./passwordUtils");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
 
 // Local strategy for verifying email and password
 const localOptions = {
@@ -24,11 +22,7 @@ const localVerify = async (username, password, done) => {
 
     const isValid = await bcrypt.compare(password, user.hash);
 
-    if (isValid) {
-      return done(null, user);
-    } else {
-      return done(null, false);
-    }
+    return isValid ? done(null, user) : done(null, false);
   } catch (error) {
     return done(error);
   }

@@ -1,25 +1,72 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 
-const ForgotPassword = () => {
+const ForgotPassword = ({ toast }) => {
   const [resetOption, setResetOption] = useState("email");
+  const [userInput, setUserInput] = useState("");
   const navigate = useNavigate();
 
   const handleOptionChange = (event) => {
     setResetOption(event.target.value);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Add your form submission logic here
+  const handleInputChange = (event) => {
+    setUserInput(event.target.value);
+  };
 
-    // Redirect based on the selected reset option
-    if (resetOption === "email") {
-      navigate("/resetpasswordemail");
-    } else if (resetOption === "sms") {
-      navigate("/resetpasswordtext");
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      let apiEndpoint;
+      let requestBody;
+
+      if (resetOption === "email") {
+        apiEndpoint = "http://localhost:3001/auth/sendcode";
+        requestBody = {
+          toEmail: userInput,
+        };
+      } else if (resetOption === "sms") {
+        apiEndpoint = "http://localhost:3001/auth/sendsms";
+        requestBody = {
+          toPhone: userInput,
+        };
+      }
+
+      const response = await fetch(apiEndpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        // Optionally, you can navigate to a success page or show a success message
+        // Navigate to /resetpassword
+        navigate("/resetpassword");
+        // Display success toast
+        toast.success(
+          resetOption === "email"
+            ? "Reset link will be sent to your registered email address"
+            : "Reset link sent to your registered number"
+        );
+      } else {
+        // Handle error case, show an error message, etc.
+        console.error(result.message);
+        // Display error toast
+        toast.error("Error sending reset link");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      // Handle error case, show an error message, etc.
+      // Display error toast
+      toast.error("Error submitting form");
     }
   };
 
@@ -70,20 +117,30 @@ const ForgotPassword = () => {
                 </div>
               </label>
             </div>
+            <div className="user-input">
+              <label className="mr-2">
+                {resetOption === "email" ? "Email:" : "Phone Number:"}
+              </label>
+              <input
+                className="ml-2"
+                type={resetOption === "email" ? "email" : "tel"}
+                value={userInput}
+                onChange={handleInputChange}
+              />
+            </div>
+
             <button type="submit" className="forgot-send-btn">
-              Send Link
+              {resetOption === "email" ? "Send Code" : "Send SMS Code"}
             </button>
-            <p className="sub-title">
-              Didn't receive link?{" "}
-              <span className="resend">
-                Resend<span></span>
-              </span>
-            </p>
           </form>
         </div>
       </div>
     </section>
   );
+};
+
+ForgotPassword.propTypes = {
+  toast: PropTypes.func.isRequired,
 };
 
 export default ForgotPassword;
