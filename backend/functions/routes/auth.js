@@ -44,12 +44,20 @@ console.log("Creation Time:", creationTime);
 
 // Handles login requests
 router.post("/login", async (req, res, next) => {
-  const { userEmail, userPassword } = req.body;
+  const { username, password } = req.body;
 
   try {
-    const user = await ChatMingle.getUserByEmail(userEmail);
+    let user;
 
-    if (!user || !(await bcrypt.compare(userPassword, user.hash))) {
+    // Check if the username is a valid email format
+    if (/^\S+@\S+\.\S+$/.test(username)) {
+      user = await ChatMingle.getUserByEmail(username);
+    } else {
+      // Assume it's a phone number
+      user = await ChatMingle.getUserByPhone(username);
+    }
+
+    if (!user || !(await bcrypt.compare(password, user.hash))) {
       return res.status(401).send({ loginStatus: false });
     }
 
@@ -198,8 +206,8 @@ router.post("/sendsms", async (req, res) => {
     const smsMessage = `You requested a password reset. Here's your token: ${resetToken}`;
     const message = await twilioClient.messages.create({
       body: smsMessage,
-      to: toPhone,  // Replace with the recipient's phone number
-      from: "+12059971071",  // Replace with your Twilio phone number
+      to: toPhone, // Replace with the recipient's phone number
+      from: "+12059971071", // Replace with your Twilio phone number
     });
 
     console.log("Twilio Message SID:", message.sid);
