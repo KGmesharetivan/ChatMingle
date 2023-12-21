@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import logo from "../../assets/images/logo.png";
 import { Link, NavLink } from "react-router-dom";
@@ -7,6 +7,7 @@ import userImg from "../../assets/images/avatar-icon.png";
 import { BiMenu } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import LoginLoader from "../Loader/LoginLoader";
 
 const navLinks = [
   {
@@ -28,6 +29,7 @@ const navLinks = [
 ];
 
 const Header = ({ setLoggedIn, isLoggedIn, setUser, toast }) => {
+  const [loadingLogout, setLoadingLogout] = useState(false);
   const headerRef = useRef(null);
   const menuRef = useRef(null);
   const { pathname } = useLocation();
@@ -56,16 +58,14 @@ const Header = ({ setLoggedIn, isLoggedIn, setUser, toast }) => {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch(
-        "http://localhost:3001/auth/logout",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        }
-      );
+      setLoadingLogout(true);
+      const response = await fetch("http://localhost:3001/auth/logout", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
 
       if (response.ok) {
         const result = await response.json();
@@ -85,6 +85,8 @@ const Header = ({ setLoggedIn, isLoggedIn, setUser, toast }) => {
     } catch (error) {
       console.error("Error during logout:", error);
       toast.error("An error occurred during logout. Please try again later."); // Use toast for error message
+    } finally {
+      setLoadingLogout(false);
     }
   };
 
@@ -148,8 +150,9 @@ const Header = ({ setLoggedIn, isLoggedIn, setUser, toast }) => {
                 <button
                   className="bg-primaryColor py-2 px-6 text-white font-[600] h-[44px] flex items-center justify-center rounded-[50px]"
                   onClick={handleLogout}
+                  disabled={loadingLogout}
                 >
-                  Logout
+                  {loadingLogout ? <LoginLoader /> : "Logout"}
                 </button>
               </>
             ) : (

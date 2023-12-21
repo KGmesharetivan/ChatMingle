@@ -3,11 +3,13 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
+import LoginLoader from "../components/Loader/LoginLoader";
 
 const Login = ({ setUser, isLoggedIn, setLoggedIn, toast }) => {
   const [credentials, setCredentials] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -19,6 +21,8 @@ const Login = ({ setUser, isLoggedIn, setLoggedIn, toast }) => {
     event.preventDefault();
 
     try {
+      setLoading(true); // Set loading to true when submitting
+
       const response = await fetch("http://localhost:3001/auth/login", {
         method: "POST",
         headers: {
@@ -52,13 +56,14 @@ const Login = ({ setUser, isLoggedIn, setLoggedIn, toast }) => {
     } catch (error) {
       console.error("Error during login:", error);
       toast.error("An error occurred during login. Please try again later.");
+    } finally {
+      setLoading(false); // Set loading to false when the operation is complete
     }
   };
 
   return (
     <section className="hero__section pt-[60px] 2xl:h-[800px]">
       <div className="flex justify-center items-center">
-        {" "}
         <form className="form_main" action="">
           <p className="heading">Login</p>
           <div className="inputContainer">
@@ -104,7 +109,7 @@ const Login = ({ setUser, isLoggedIn, setLoggedIn, toast }) => {
           </div>
 
           <button id="button" onClick={handleSubmit}>
-            Submit
+            {loading ? <LoginLoader /> : "Submit"}
           </button>
 
           <div className="signupContainer mb-3">

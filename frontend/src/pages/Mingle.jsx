@@ -1,13 +1,29 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import Dashboard from "../components/Mingle/Dashboard";
 import CallContainer from "../components/Mingle/Callcontainer";
 import MessageContainer from "../components/Mingle/Messagecontainer";
+import Loader from "../components/Loader/Loader";
 
 const Mingle = ({ isLoggedIn, toast, user }) => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate data fetching or any asynchronous task
+    const fetchData = async () => {
+      // Your data fetching logic here
+
+      // Simulating a delay of 2 seconds (replace this with your actual data fetching logic)
+      setTimeout(() => {
+        setLoading(false); // Set loading to false once the data is fetched
+      }, 2000);
+    };
+
+    fetchData();
+  }, []); // Empty dependency array to run the effect only once on mount
 
   useEffect(() => {
     // Check if the user is not logged in
@@ -16,6 +32,10 @@ const Mingle = ({ isLoggedIn, toast, user }) => {
       navigate("/login");
     }
   }, [isLoggedIn, navigate]);
+
+  if (loading) {
+    return <Loader />; // Render the loader when loading is true
+  }
 
   if (!isLoggedIn) {
     // Return null or an alternative component/message if not logged in
