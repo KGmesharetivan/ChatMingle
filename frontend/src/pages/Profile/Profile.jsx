@@ -36,11 +36,13 @@ const Profile = () => {
           backgroundImage: 'url(https://lh3.googleusercontent.com/ledvgumQmauwI-C2mKr31nAJ4rVLkNz3GAz8fpufS2HdNXVOKVQ1bLOuqYg_kJ8XWiYW9fovz298cBjknYB0sMwpiu6uG8tlpw=w1200-h600-pp-rj-s365)', backgroundSize: 'cover', backgroundPosition: 'center',
         }}
       >
-      <button className='transition ease-in-out delay-100 bg-blue-500 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-120 flex absolute top-4 right-7 border-solid font-semibold text-white py-1 px-1 rounded sm:px-2 sm:py-1'>Edit Profile <DriveFileRenameOutlineIcon/></button>
+      
+      <button className='transition ease-in-out delay-100 bg-blue-500 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-120 flex absolute top-4 right-7 border-solid font-semibold text-white py-1 px-1 rounded sm:px-2 sm:py-1'>Edit Cover Photo <DriveFileRenameOutlineIcon/></button>
         {/* Profile Picture */}
         <div
-          className='h-32 w-32 sm:h-40 sm:w-40 md:h-44 md:w-44 lg:h-48 lg:w-48 xl:h-56 xl:w-56 bg-white rounded-full border-4 border-white absolute -bottom-10 left-1/2 transform -translate-x-1/2 -translate-y-1/2'
+          className='text-center h-32 w-32 sm:h-40 sm:w-40 md:h-44 md:w-44 lg:h-48 lg:w-48 xl:h-56 xl:w-56 bg-white rounded-full border-4 border-white absolute -bottom-10 left-1/2 transform -translate-x-1/2 -translate-y-1/2'
           style={{
+            
             backgroundImage:
               'url(https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/20220121%E2%80%94Dahyun_%EB%8B%A4%ED%98%84_Campaign_Film%2C_Pearlygates_x_Twice_2022.jpg/640px-20220121%E2%80%94Dahyun_%EB%8B%A4%ED%98%84_Campaign_Film%2C_Pearlygates_x_Twice_2022.jpg)',
             backgroundSize: 'cover',
@@ -48,8 +50,17 @@ const Profile = () => {
           }}
         >
           {/*can add profile Picture here */}
+          <div 
+            className='opacity-0 hover:opacity-100 absolute bottom-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white'
+            style={{cursor: 'pointer'}}
+            
+            >
+            Edit Profile Picture
+          </div>
         </div>
       </div>
+
+      
 
       {/* User Information */}
       <div className='max-w-xl mx-auto px-5 mt-4'>
