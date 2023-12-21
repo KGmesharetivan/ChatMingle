@@ -24,6 +24,7 @@ const Home = () => {
                 explore new cultures, our platform is designed to make your
                 experience seamless and enjoyable.
               </p>
+              
               <div className="flex justify-center items-center mt-4">
                 <Link to="/login">
                   <button className="customButton">
