@@ -33,7 +33,7 @@ const Profile = () => {
       <div
         className='h-80 bg-cover bg-center relative'
         style={{
-          backgroundImage: 'url(https://lh3.googleusercontent.com/ledvgumQmauwI-C2mKr31nAJ4rVLkNz3GAz8fpufS2HdNXVOKVQ1bLOuqYg_kJ8XWiYW9fovz298cBjknYB0sMwpiu6uG8tlpw=w1200-h600-pp-rj-s365)', backgroundSize: 'cover', backgroundPosition: 'center',
+          backgroundImage: 'url(https://scontent.fwnp1-1.fna.fbcdn.net/v/t39.30808-6/412766910_933175778178170_1496804038733721839_n.jpg?_nc_cat=1&ccb=1-7&_nc_sid=3635dc&_nc_eui2=AeHhyBFHTGmluy8TAwSREwKX6sr8ObL6_i7qyvw5svr-LkVh18gD5ckHo5V9VApPOn9v9dPtTQ6rAe2Vrnpb64rg&_nc_ohc=Pf75o6KanssAX8WYAR1&_nc_ht=scontent.fwnp1-1.fna&oh=00_AfAESnyzBQoBPxsm0hW1FeuwxNSZiR_eJBpI0DHVIAS0Iw&oe=658A88F9)', backgroundSize: 'cover', backgroundPosition: 'center',
         }}
       >
       
