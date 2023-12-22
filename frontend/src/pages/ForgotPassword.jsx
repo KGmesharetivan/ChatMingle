@@ -28,14 +28,12 @@ const ForgotPassword = ({ toast }) => {
       let requestBody;
 
       if (resetOption === "email") {
-        apiEndpoint =
-          "https://48byhymg2s.ap-southeast-1.awsapprunner.com/auth/sendcode";
+        apiEndpoint = "http://localhost:5173/auth/sendcode";
         requestBody = {
           toEmail: userInput,
         };
       } else if (resetOption === "sms") {
-        apiEndpoint =
-          "https://48byhymg2s.ap-southeast-1.awsapprunner.com/auth/sendsms";
+        apiEndpoint = "http://localhost:5173/auth/sendsms";
         requestBody = {
           toPhone: userInput,
         };
