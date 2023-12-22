@@ -14,7 +14,7 @@ function App() {
 
     async function fetchData() {
       try {
-        const result = await fetch("http://localhost:3001/auth/isLoggedIn", {
+        const result = await fetch("http://localhost:5173/auth/isLoggedIn", {
           method: "GET",
           signal: abortController.signal,
           credentials: "include",

@@ -18,9 +18,8 @@ const twilioClient = new twilio(accountSid, authToken);
 
 // Set your Sendinblue API key
 var defaultClient = SibApiV3Sdk.ApiClient.instance;
-var apiKey = defaultClient.authentications["api-key"];
-apiKey.apiKey =
-  "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";
+defaultClient.authentications["api-key"].apiKey =
+  "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";
 
 // Instantiate the EmailCampaignsApi
 const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
@@ -153,21 +152,29 @@ router.post("/sendcode", async (req, res) => {
     let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
 
     sendSmtpEmail.sender = {
-      email: "chatmingle@contact.us", // Replace with your sender email
-      name: "ChatMingle Support", // Replace with your company or application name
+      email: "chatmingle@contact.us",
+      name: "ChatMingle Support",
     };
 
     sendSmtpEmail.to = [
       {
         email: toEmail,
-        name: "Recipient Name", // If you have the name, replace 'Recipient Name' with the actual name.
+        name: "Recipient Name",
       },
     ];
 
     sendSmtpEmail.subject = "Password Reset Request";
     sendSmtpEmail.htmlContent = `<p>You requested a password reset. Here's your token: <strong>${resetToken}</strong></p><p>If you didn't make this request, please ignore this email.</p>`;
 
-    await apiInstance.sendTransacEmail(sendSmtpEmail);
+    // Log request headers before sending
+    console.log(
+      "SendinBlue API Request Headers:",
+      defaultClient._defaultHeaders
+    );
+
+    // Send the email
+    const response = await apiInstance.sendTransacEmail(sendSmtpEmail);
+    console.log("SendinBlue API Response:", response);
 
     res
       .status(200)
