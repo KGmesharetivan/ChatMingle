@@ -23,7 +23,7 @@ const Login = ({ setUser, isLoggedIn, setLoggedIn, toast }) => {
     try {
       setLoading(true); // Set loading to true when submitting
 
-      const response = await fetch("http://localhost:5173/auth/login", {
+      const response = await fetch("http://localhost:3001/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

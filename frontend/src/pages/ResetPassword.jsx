@@ -34,7 +34,7 @@ const ResetPassword = ({ toast }) => {
     try {
       setIsLoading(true);
 
-      const response = await fetch("http://localhost:5173/auth/resetpassword", {
+      const response = await fetch("http://localhost:3001/auth/resetpassword", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

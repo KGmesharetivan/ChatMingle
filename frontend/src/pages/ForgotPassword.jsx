@@ -28,12 +28,12 @@ const ForgotPassword = ({ toast }) => {
       let requestBody;
 
       if (resetOption === "email") {
-        apiEndpoint = "http://localhost:5173/auth/sendcode";
+        apiEndpoint = "http://localhost:3001/auth/sendcode";
         requestBody = {
           toEmail: userInput,
         };
       } else if (resetOption === "sms") {
-        apiEndpoint = "http://localhost:5173/auth/sendsms";
+        apiEndpoint = "http://localhost:3001/auth/sendsms";
         requestBody = {
           toPhone: userInput,
         };
