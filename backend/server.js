@@ -20,7 +20,7 @@ const app = express();
 const server = http.createServer(app);
 const io = require("socket.io")(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: "https://chatmingle--bright-cascaron-41cee7.netlify.app",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
   },
@@ -34,7 +34,7 @@ app.use(cookieParser());
 // Use cors middleware
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://chatmingle--bright-cascaron-41cee7.netlify.app",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
   })
