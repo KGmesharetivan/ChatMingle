@@ -3,11 +3,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
+import LoginLoader from "../components/Loader/LoginLoader";
 
 const ForgotPassword = ({ toast }) => {
   const [resetOption, setResetOption] = useState("email");
   const [userInput, setUserInput] = useState("");
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleOptionChange = (event) => {
     setResetOption(event.target.value);
@@ -21,16 +23,19 @@ const ForgotPassword = ({ toast }) => {
     event.preventDefault();
 
     try {
+      setIsLoading(true);
       let apiEndpoint;
       let requestBody;
 
       if (resetOption === "email") {
-        apiEndpoint = "https://48byhymg2s.ap-southeast-1.awsapprunner.com/auth/sendcode";
+        apiEndpoint =
+          "https://48byhymg2s.ap-southeast-1.awsapprunner.com/auth/sendcode";
         requestBody = {
           toEmail: userInput,
         };
       } else if (resetOption === "sms") {
-        apiEndpoint = "https://48byhymg2s.ap-southeast-1.awsapprunner.com/auth/sendsms";
+        apiEndpoint =
+          "https://48byhymg2s.ap-southeast-1.awsapprunner.com/auth/sendsms";
         requestBody = {
           toPhone: userInput,
         };
@@ -59,11 +64,13 @@ const ForgotPassword = ({ toast }) => {
       } else {
         // Handle error case, show an error message, etc.
         console.error(result.message);
+
         // Display error toast
         toast.error("Error sending reset link");
       }
     } catch (error) {
       console.error("Error submitting form:", error);
+      setIsLoading(false);
       // Handle error case, show an error message, etc.
       // Display error toast
       toast.error("Error submitting form");
@@ -130,7 +137,13 @@ const ForgotPassword = ({ toast }) => {
             </div>
 
             <button type="submit" className="forgot-send-btn">
-              {resetOption === "email" ? "Send Code" : "Send SMS Code"}
+              {isLoading ? (
+                <LoginLoader />
+              ) : resetOption === "email" ? (
+                "Send Code"
+              ) : (
+                "Send SMS Code"
+              )}
             </button>
           </form>
         </div>

@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
+import LoginLoader from "../components/Loader/LoginLoader";
 
 const ResetPassword = ({ toast }) => {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ const ResetPassword = ({ toast }) => {
     confirmPassword: "",
     code: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,17 +32,22 @@ const ResetPassword = ({ toast }) => {
     }
 
     try {
-      const response = await fetch("https://48byhymg2s.ap-southeast-1.awsapprunner.com/auth/resetpassword", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          identifier,
-          newPassword: password,
-          resetToken: code,
-        }),
-      });
+      setIsLoading(true);
+
+      const response = await fetch(
+        "https://48byhymg2s.ap-southeast-1.awsapprunner.com/auth/resetpassword",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            identifier,
+            newPassword: password,
+            resetToken: code,
+          }),
+        }
+      );
 
       const result = await response.json();
 
@@ -60,6 +67,8 @@ const ResetPassword = ({ toast }) => {
       // Handle network error or other exceptions with toast
       toast.error(`Error resetting password: ${error.message}`);
       console.error("Error resetting password:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -131,7 +140,7 @@ const ResetPassword = ({ toast }) => {
                 type="submit"
                 className="items-center justify-center w-full px-6 py-2.5 text-center text-white duration-200 bg-black border-2 border-black rounded-full inline-flex hover:bg-transparent hover:border-black hover:text-black focus:outline-none focus-visible:outline-black text-sm focus-visible:ring-black"
               >
-                Submit your request
+                {isLoading ? <LoginLoader /> : "Submit your request"}
               </button>
             </div>
           </form>
