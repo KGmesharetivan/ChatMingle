@@ -18,6 +18,7 @@ const PORT = process.env.PORT || 3001;
 
 const app = express();
 const server = http.createServer(app);
+
 const io = require("socket.io")(server, {
   cors: {
     origin: "https://chatmingle--bright-cascaron-41cee7.netlify.app",
