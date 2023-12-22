@@ -60,7 +60,7 @@ const Header = ({ setLoggedIn, isLoggedIn, setUser, toast }) => {
     try {
       setLoadingLogout(true);
 
-      const response = await fetch("http://localhost:5173/auth/logout", {
+      const response = await fetch("http://localhost:3001/auth/logout", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

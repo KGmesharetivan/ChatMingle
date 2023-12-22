@@ -26,7 +26,7 @@ function Dashboard({ toast }) {
 
   useEffect(() => {
     // Initialize Socket.IO client
-    const newSocket = io("http://localhost:5173"); // Replace with your server URL
+    const newSocket = io("http://localhost:3001"); // Replace with your server URL
     setSocket(newSocket);
 
     // Register socket events
