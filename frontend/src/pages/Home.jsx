@@ -39,6 +39,27 @@ const Home = () => {
                 explore new cultures, our platform is designed to make your
                 experience seamless and enjoyable.
               </p>
+              {/* Additional Information */}
+              <p className="text__para mt-4">
+                Join us today and experience a vibrant community where you can
+                engage in meaningful conversations, share your interests, and
+                discover like-minded individuals. Our user-friendly interface and
+                advanced features ensure a delightful journey in connecting with
+                people around the globe.
+              </p>
+
+              {/* Key Features */}
+              <div className="mt-6">
+                <h2 className="text-[24px] font-[600] mb-2">Key Features:</h2>
+                <ul className="text__para list-disc ml-6">
+                  <li>Instant Messaging for Quick Connections</li>
+                  <li>Advanced Search to Find Your Perfect Match</li>
+                  <li>Secure and Private Communication</li>
+                  <li>Interest-Based Chat Rooms</li>
+                  <li>Seamless Cross-Platform Experience</li>
+                </ul>
+              </div>
+
               <div className="flex justify-center items-center mt-4">
                 <Link to="/login">
                   <button className="customButton">

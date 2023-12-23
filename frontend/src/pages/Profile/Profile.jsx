@@ -1,14 +1,15 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
-import TwitterIcon from '@mui/icons-material/Twitter'
+import TwitterIcon from '@mui/icons-material/Twitter';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 
 const Profile = () => {
   // Example state for user posts
-  const [postText, setPostText] = useState(''); // Arrays
-  const [posts, setPosts] = useState([]); // Arrays
+  const [postText, setPostText] = useState('');
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true); // Add loading state
   const handlePostTextChange = (event) => {
     setPostText(event.target.value);
   };
@@ -16,22 +17,26 @@ const Profile = () => {
   const handlePostSubmit = (event) => {
     event.preventDefault();
 
-    // Save the post with additional details arrays
+    // Save the post with additional details
     const newPost = {
       text: postText,
       actor: 'actor',
       name: 'Kim Da-hyun',
-      date: new Date().toLocaleDateString(), // date
-      time: new Date().toLocaleTimeString(), // time
-      // Add more details (Optional) fields as needed
+      date: new Date().toLocaleDateString(),
+      time: new Date().toLocaleTimeString(),
     };
-    
+
     setPosts([...posts, newPost]);
     setPostText('');
   };
 
+  // Simulate data loading delay
+  setTimeout(() => {
+    setLoading(false);
+  }, 70);
+
   return (
-    <div className='hero__section bg-gray-100 min-h-min'>
+    <div className={`hero__section bg-gray-100 min-h-min ${loading ? 'opacity-0 transform -translate-y-10' : 'opacity-100 transform translate-y-0'} transition-all duration-1000 ease-in-out`}>
       {/* Cover Photo */}
       <div
         className='h-80 bg-cover bg-center relative'
@@ -39,8 +44,7 @@ const Profile = () => {
           backgroundImage: 'url(https://scontent.fwnp1-1.fna.fbcdn.net/v/t39.30808-6/412766910_933175778178170_1496804038733721839_n.jpg?_nc_cat=1&ccb=1-7&_nc_sid=3635dc&_nc_eui2=AeHhyBFHTGmluy8TAwSREwKX6sr8ObL6_i7qyvw5svr-LkVh18gD5ckHo5V9VApPOn9v9dPtTQ6rAe2Vrnpb64rg&_nc_ohc=Pf75o6KanssAX8WYAR1&_nc_ht=scontent.fwnp1-1.fna&oh=00_AfAESnyzBQoBPxsm0hW1FeuwxNSZiR_eJBpI0DHVIAS0Iw&oe=658A88F9)', backgroundSize: 'cover', backgroundPosition: 'center',
         }}
       >
-      
-      <button className='transition ease-in-out delay-100 bg-blue-500 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-120 flex absolute top-4 right-7 border-solid font-semibold text-white py-1 px-1 rounded sm:px-2 sm:py-1'>Edit Cover Photo <DriveFileRenameOutlineIcon/></button>
+        <button className='transition ease-in-out delay-100 bg-blue-500 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-120 flex absolute top-4 right-7 border-solid font-semibold text-white py-1 px-1 rounded sm:px-2 sm:py-1'>Edit Cover Photo <DriveFileRenameOutlineIcon/></button>
         {/* Profile Picture */}
         <div
           className='text-center h-32 w-32 sm:h-40 sm:w-40 md:h-44 md:w-44 lg:h-48 lg:w-48 xl:h-56 xl:w-56 bg-white rounded-full border-4 border-white absolute -bottom-10 left-1/2 transform -translate-x-1/2 -translate-y-1/2'
@@ -55,14 +59,11 @@ const Profile = () => {
           <div 
             className='opacity-0 hover:opacity-100 absolute bottom-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white'
             style={{cursor: 'pointer'}}
-            
-            >
+          >
             Edit Profile Picture
           </div>
         </div>
       </div>
-
-      
 
       {/* User Information */}
       <div className='max-w-xl mx-auto px-5 mt-4'>
@@ -85,8 +86,7 @@ const Profile = () => {
         {/* Bio */}
         <h1 className='mt-4 text-green-400 font-bold'>BIO</h1>
         <p className='mt-4 text-gray-700'>
-          🌈 Exploring lifes wonders | 📸 Amateur Photographer ✨ Embrace the journey, and the
-          journey will embrace you. I love chocolate, especially choco-pie. Im the most flexible member. I have very pale skin, My nickname Dubu. I can touch my nose with my tongue.
+          I was born on May 28, 1998, I m a South Korean singer and performer known for her vibrant personality and versatility.
         </p>
 
         {/* User Posts */}
@@ -133,14 +133,14 @@ const Profile = () => {
 
         {/* Social Links */}
         <div className='mt-4 flex space-x-5'>
-          <a href='https://www.facebook.com/facebook'  className=' hover:underline'>
-             <FacebookOutlinedIcon/>
+          <a href='https://www.facebook.com/facebook' className='hover:underline transform transition-transform duration-300 hover:scale-110'>
+            <FacebookOutlinedIcon />
           </a>
-          <a href='https://twitter.com/' className=' hover:underline'>
-             <TwitterIcon/>
+          <a href='https://twitter.com/' className='hover:underline transform transition-transform duration-300 hover:scale-110'>
+            <TwitterIcon />
           </a>
-          <a href='https://www.instagram.com/' className=' hover:underline'>
-             <InstagramIcon/>
+          <a href='https://www.instagram.com/' className='hover:underline transform transition-transform duration-300 hover:scale-110'>
+            <InstagramIcon />
           </a>
         </div>
       </div>
@@ -148,5 +148,6 @@ const Profile = () => {
   );
 };
 
-
 export default Profile;
+
+
