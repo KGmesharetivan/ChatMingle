@@ -1,5 +1,8 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
+import TwitterIcon from '@mui/icons-material/Twitter'
+import InstagramIcon from '@mui/icons-material/Instagram';
+import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 
 const Profile = () => {
@@ -22,13 +25,13 @@ const Profile = () => {
       time: new Date().toLocaleTimeString(), // time
       // Add more details (Optional) fields as needed
     };
-
+    
     setPosts([...posts, newPost]);
     setPostText('');
   };
 
   return (
-    <div className='bg-gray-100 min-h-min'>
+    <div className='hero__section bg-gray-100 min-h-min'>
       {/* Cover Photo */}
       <div
         className='h-80 bg-cover bg-center relative'
@@ -71,11 +74,12 @@ const Profile = () => {
         {/* Age and Country */}
         <div className='flex items-center space-x-4 mt-2'>
           <p className='text-gray-700'>
-            <strong>Age:</strong> 25
+            <strong>Age: </strong> 25
           </p>
           <p className='text-gray-700'>
-            <strong>Country:</strong> South Korea
+            <strong>Country: </strong> South Korea
           </p>
+          
         </div>
 
         {/* Bio */}
@@ -128,15 +132,15 @@ const Profile = () => {
         )}
 
         {/* Social Links */}
-        <div className='mt-4 flex space-x-4'>
-          <a href='https://www.facebook.com/facebook' className='text-blue-500 hover:underline'>
-            Facebook
+        <div className='mt-4 flex space-x-5'>
+          <a href='https://www.facebook.com/facebook'  className=' hover:underline'>
+             <FacebookOutlinedIcon/>
           </a>
-          <a href='https://twitter.com/' className='text-blue-500 hover:underline'>
-            Twitter
+          <a href='https://twitter.com/' className=' hover:underline'>
+             <TwitterIcon/>
           </a>
-          <a href='https://www.instagram.com/' className='text-blue-500 hover:underline'>
-            Instagram
+          <a href='https://www.instagram.com/' className=' hover:underline'>
+             <InstagramIcon/>
           </a>
         </div>
       </div>
