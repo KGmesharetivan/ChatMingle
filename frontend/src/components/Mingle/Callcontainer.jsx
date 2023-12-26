@@ -25,7 +25,7 @@ import * as recordingUtils from "../../assets/js/recordingUtils";
 import staticImage from "../../assets/images/static-image.png";
 
 const CallContainer = () => {
-  const [micEnabled, setMicEnabled] = useState(true);
+  const [micEnabled, setMicEnabled] = useState(false);
   const [cameraEnabled, setCameraEnabled] = useState(true);
 
   // Use React Refs to access DOM elements
@@ -62,16 +62,21 @@ const CallContainer = () => {
     webRTCHandler.handleHangUp();
     updateUIAfterHangUp();
     ui.updateUIAfterHangUp(callType);
-    setMicEnabled(true);
+    setMicEnabled(false);
     setCameraEnabled(true);
   };
 
   // Toggle microphone state
   const toggleMic = () => {
     const localStream = store.getState().localStream;
-    if (localStream && localStream.getAudioTracks().length > 0) {
+    if (localStream) {
       const newMicState = !localStream.getAudioTracks()[0].enabled;
-      localStream.getAudioTracks()[0].enabled = newMicState;
+
+      // Set the enabled property for all audio tracks in the stream
+      localStream.getAudioTracks().forEach((track) => {
+        track.enabled = newMicState;
+      });
+
       setMicEnabled(newMicState);
     }
   };

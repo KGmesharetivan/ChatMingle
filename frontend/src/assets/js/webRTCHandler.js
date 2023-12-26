@@ -21,17 +21,32 @@ const configuration = {
 };
 
 export const getLocalPreview = () => {
+  console.log("Getting local preview");
   navigator.mediaDevices
     .getUserMedia(defaultConstraints)
     .then((stream) => {
+      console.log("Got user media");
+      // Mute the microphone
+      muteMicrophone(stream);
+
+      // Update local video and set call state
+      console.log("Updating local video and call state");
       ui.updateLocalVideo(stream);
       store.setCallState(constants.callState.CALL_AVAILABLE);
       store.setLocalStream(stream);
     })
     .catch((err) => {
-      console.log("error occured when trying to get an access to camera");
+      console.log("Error occurred when trying to get access to camera");
       console.log(err);
     });
+};
+
+// Function to mute the microphone in a MediaStream
+const muteMicrophone = (stream) => {
+  console.log("Muting microphone");
+  stream.getAudioTracks().forEach((track) => {
+    track.enabled = false;
+  });
 };
 
 const createPeerConnection = () => {
@@ -331,13 +346,27 @@ export const switchBetweenCameraAndScreenSharing = async (
 // hangup
 
 export const handleHangUp = () => {
-  //console.log('finishing the call')
+  // Mute the microphone before handling hang-up
+  muteLocalMicrophone();
+
   const data = {
     connectedUserSocketId: connectedUserDetails.socketId,
   };
 
   wss.sendUserHangedUp(data);
   closePeerConnectionAndResetState();
+};
+
+// Function to mute the microphone locally
+const muteLocalMicrophone = () => {
+  const localStream = store.getState().localStream;
+  console.log("Local stream before muting:", localStream);
+  if (localStream) {
+    localStream.getAudioTracks().forEach((track) => {
+      track.enabled = false;
+    });
+  }
+  console.log("Local stream after muting:", localStream);
 };
 
 export const handleConnectedUserHangedUp = (reason) => {
