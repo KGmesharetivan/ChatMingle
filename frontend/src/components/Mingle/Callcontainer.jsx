@@ -122,7 +122,11 @@ const CallContainer = () => {
   };
 
   return (
-    <div className="call_container">
+    <div
+      data-aos="fade-down"
+      data-aos-duration="1500"
+      className="call_container"
+    >
       <div className="videos_container">
         <div className="videos_placeholder" id="video_placeholder">
           <div className="flex justify-between items-center mt-[-10px]">

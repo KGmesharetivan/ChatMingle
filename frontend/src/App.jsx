@@ -4,10 +4,18 @@ import "./App.css";
 import Layout from "./layout/Layout";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Aos from "aos";
+
+import "aos/dist/aos.css";
+import "remixicon/fonts/remixicon.css";
 
 function App() {
   const [user, setUser] = useState(null);
   const [isLoggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    Aos.init();
+  }, []);
 
   useEffect(() => {
     const abortController = new AbortController();

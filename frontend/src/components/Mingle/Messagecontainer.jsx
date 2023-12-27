@@ -27,7 +27,11 @@ const MessageContainer = () => {
   };
 
   return (
-    <div className="messenger_container">
+    <div
+      data-aos="fade-left"
+      data-aos-duration="1500"
+      className="messenger_container"
+    >
       <div className="messages_container" id="messages_container"></div>
       {callType !== constants.callType.VIDEO_PERSONAL_CODE &&
         callType !== constants.callType.VIDEO_STRANGER && (
