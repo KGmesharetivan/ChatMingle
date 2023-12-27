@@ -20,25 +20,33 @@ const configuration = {
   ],
 };
 
-export const getLocalPreview = () => {
-  console.log("Getting local preview");
-  navigator.mediaDevices
-    .getUserMedia(defaultConstraints)
-    .then((stream) => {
-      console.log("Got user media");
-      // Mute the microphone
-      muteMicrophone(stream);
+const logError = (error) => {
+  console.error("Error:", error);
+};
 
-      // Update local video and set call state
-      console.log("Updating local video and call state");
-      ui.updateLocalVideo(stream);
-      store.setCallState(constants.callState.CALL_AVAILABLE);
-      store.setLocalStream(stream);
-    })
-    .catch((err) => {
-      console.log("Error occurred when trying to get access to camera");
-      console.log(err);
-    });
+export const getLocalPreview = async () => {
+  try {
+    console.log("Getting local preview");
+    const stream = await navigator.mediaDevices.getUserMedia(
+      defaultConstraints
+    );
+    console.log("Got user media:", stream);
+
+    // Mute the microphone
+    muteMicrophone(stream);
+
+    // Update local video and set call state
+    console.log("Updating local video and call state");
+    ui.updateLocalVideo(stream);
+    store.setCallState(constants.callState.CALL_AVAILABLE);
+    store.setLocalStream(stream);
+  } catch (error) {
+    console.error(
+      "Error occurred when trying to get access to the camera:",
+      error
+    );
+    logError(error);
+  }
 };
 
 // Function to mute the microphone in a MediaStream
@@ -82,7 +90,7 @@ const createPeerConnection = () => {
 
   peerConection.onconnectionstatechange = () => {
     if (peerConection.connectionState === "connected") {
-      console.log("successfully connected with other peer");
+      console.log("succesfully connected with other peer");
     }
   };
 
