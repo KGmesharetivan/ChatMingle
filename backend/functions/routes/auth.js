@@ -19,7 +19,7 @@ const twilioClient = new twilio(accountSid, authToken);
 // Set your Sendinblue API key
 var defaultClient = SibApiV3Sdk.ApiClient.instance;
 defaultClient.authentications["api-key"].apiKey =
-  "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";
+  "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";
 
 // Instantiate the EmailCampaignsApi
 const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
