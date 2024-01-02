@@ -13,7 +13,7 @@ const secretKey =
 
 // Initialize Twilio client
 const accountSid = "AC9e3dd6e20a92ebeb8014b25f1bfe7e25";
-const authToken = "bcdcfea62e15b95c4c10a8bdb9ada23d";
+const authToken = "d57c245364d9113056025e2497cacb68";
 const twilioClient = new twilio(accountSid, authToken);
 
 // Set your Sendinblue API key
