@@ -34,17 +34,20 @@ const ResetPassword = ({ toast }) => {
     try {
       setIsLoading(true);
 
-      const response = await fetch("http://localhost:3001/auth/resetpassword", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          identifier,
-          newPassword: password,
-          resetToken: code,
-        }),
-      });
+      const response = await fetch(
+        "https://48byhymg2s.ap-southeast-1.awsapprunner.com/auth/resetpassword",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            identifier,
+            newPassword: password,
+            resetToken: code,
+          }),
+        }
+      );
 
       const result = await response.json();
 
