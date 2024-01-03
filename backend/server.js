@@ -22,7 +22,7 @@ const server = http.createServer(app);
 // Socket.IO configuration
 const io = require("socket.io")(server, {
   cors: {
-    origin: "http://localhost:3000", // Update this to the IP address of your frontend Docker container
+    origin: "http://localhost:5173", // Update this to the IP address of your frontend Docker container
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
   },
@@ -36,7 +36,7 @@ app.use(cookieParser());
 // Use cors middleware
 app.use(
   cors({
-    origin: "http://localhost:3000", // Update this to the IP address of your frontend Docker container
+    origin: "http://localhost:5173", // Update this to the IP address of your frontend Docker container
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
   })

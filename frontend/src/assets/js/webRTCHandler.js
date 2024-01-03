@@ -389,7 +389,7 @@ const closePeerConnectionAndResetState = (reason) => {
     peerConection = null;
   }
 
-  // Enable mic and camera tracks if they are video calls
+  // Disable mic and camera tracks if they are video calls
   if (
     connectedUserDetails &&
     (connectedUserDetails.callType === constants.callType.VIDEO_PERSONAL_CODE ||
@@ -401,10 +401,11 @@ const closePeerConnectionAndResetState = (reason) => {
       const audioTracks = localStream.getAudioTracks();
 
       if (videoTracks.length > 0) {
-        videoTracks[0].enabled = true;
+        // Optionally, you can enable video track if needed
+        // videoTracks[0].enabled = true;
       }
       if (audioTracks.length > 0) {
-        audioTracks[0].enabled = true;
+        audioTracks[0].enabled = false; // Set to false to disable the microphone
       }
     }
   }
