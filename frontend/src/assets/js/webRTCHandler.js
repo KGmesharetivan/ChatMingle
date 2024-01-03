@@ -8,7 +8,9 @@ let peerConection;
 let dataChannel;
 
 const defaultConstraints = {
-  audio: true,
+  audio: {
+    echoCancellation: true,
+  },
   video: true,
 };
 
@@ -43,6 +45,13 @@ export const getLocalPreview = async () => {
     const stream = await navigator.mediaDevices.getUserMedia(
       defaultConstraints
     );
+
+    // Log the constraints of the obtained MediaStream
+    console.log(
+      "MediaStream constraints:",
+      stream.getTracks()[0].getConstraints()
+    );
+
     console.log("Got user media:", stream);
 
     // Mute the microphone
