@@ -15,7 +15,20 @@ const defaultConstraints = {
 const configuration = {
   iceServers: [
     {
-      urls: "stun:stun.l.google.com:13902",
+      urls: "stun:freestun.net:3479",
+    },
+    {
+      urls: "turn:freestun.net:3479",
+      username: "free",
+      credential: "free",
+    },
+    {
+      urls: "stun:freestun.net:5350",
+    },
+    {
+      urls: "turns:freestun.net:5350",
+      username: "free",
+      credential: "free",
     },
   ],
 };
