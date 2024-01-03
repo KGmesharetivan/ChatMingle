@@ -20,18 +20,41 @@ const configuration = {
   ],
 };
 
-export const getLocalPreview = () => {
-  navigator.mediaDevices
-    .getUserMedia(defaultConstraints)
-    .then((stream) => {
-      ui.updateLocalVideo(stream);
-      store.setCallState(constants.callState.CALL_AVAILABLE);
-      store.setLocalStream(stream);
-    })
-    .catch((err) => {
-      console.log("error occured when trying to get an access to camera");
-      console.log(err);
-    });
+const logError = (error) => {
+  console.error("Error:", error);
+};
+
+export const getLocalPreview = async () => {
+  try {
+    console.log("Getting local preview");
+    const stream = await navigator.mediaDevices.getUserMedia(
+      defaultConstraints
+    );
+    console.log("Got user media:", stream);
+
+    // Mute the microphone
+    muteMicrophone(stream);
+
+    // Update local video and set call state
+    console.log("Updating local video and call state");
+    ui.updateLocalVideo(stream);
+    store.setCallState(constants.callState.CALL_AVAILABLE);
+    store.setLocalStream(stream);
+  } catch (error) {
+    console.error(
+      "Error occurred when trying to get access to the camera:",
+      error
+    );
+    logError(error);
+  }
+};
+
+// Function to mute the microphone in a MediaStream
+const muteMicrophone = (stream) => {
+  console.log("Muting microphone");
+  stream.getAudioTracks().forEach((track) => {
+    track.enabled = false;
+  });
 };
 
 const createPeerConnection = () => {
@@ -67,7 +90,7 @@ const createPeerConnection = () => {
 
   peerConection.onconnectionstatechange = () => {
     if (peerConection.connectionState === "connected") {
-      console.log("successfully connected with other peer");
+      console.log("succesfully connected with other peer");
     }
   };
 
@@ -331,13 +354,27 @@ export const switchBetweenCameraAndScreenSharing = async (
 // hangup
 
 export const handleHangUp = () => {
-  //console.log('finishing the call')
+  // Mute the microphone before handling hang-up
+  muteLocalMicrophone();
+
   const data = {
     connectedUserSocketId: connectedUserDetails.socketId,
   };
 
   wss.sendUserHangedUp(data);
   closePeerConnectionAndResetState();
+};
+
+// Function to mute the microphone locally
+const muteLocalMicrophone = () => {
+  const localStream = store.getState().localStream;
+  console.log("Local stream before muting:", localStream);
+  if (localStream) {
+    localStream.getAudioTracks().forEach((track) => {
+      track.enabled = false;
+    });
+  }
+  console.log("Local stream after muting:", localStream);
 };
 
 export const handleConnectedUserHangedUp = (reason) => {
@@ -352,7 +389,7 @@ const closePeerConnectionAndResetState = (reason) => {
     peerConection = null;
   }
 
-  // Enable mic and camera tracks if they are video calls
+  // Disable mic and camera tracks if they are video calls
   if (
     connectedUserDetails &&
     (connectedUserDetails.callType === constants.callType.VIDEO_PERSONAL_CODE ||
@@ -364,10 +401,11 @@ const closePeerConnectionAndResetState = (reason) => {
       const audioTracks = localStream.getAudioTracks();
 
       if (videoTracks.length > 0) {
-        videoTracks[0].enabled = true;
+        // Optionally, you can enable video track if needed
+        // videoTracks[0].enabled = true;
       }
       if (audioTracks.length > 0) {
-        audioTracks[0].enabled = true;
+        audioTracks[0].enabled = false; // Set to false to disable the microphone
       }
     }
   }

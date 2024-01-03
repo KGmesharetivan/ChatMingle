@@ -10,10 +10,24 @@ export const updatePersonalCode = (personalCode) => {
 
 export const updateLocalVideo = (stream) => {
   const localVideo = document.getElementById("local_video");
+
+  if (!localVideo) {
+    console.error("Local video element not found");
+    return;
+  }
+
   localVideo.srcObject = stream;
 
   localVideo.addEventListener("loadedmetadata", () => {
-    localVideo.play();
+    console.log("Local video metadata loaded");
+    localVideo
+      .play()
+      .then(() => {
+        console.log("Local video playback started successfully");
+      })
+      .catch((error) => {
+        console.error("Error starting local video playback:", error);
+      });
   });
 };
 
@@ -29,6 +43,12 @@ export const showVideoCallButtons = () => {
 
 export const updateRemoteVideo = (stream) => {
   const remoteVideo = document.getElementById("remote_video");
+
+  if (!remoteVideo) {
+    console.error("Remote video element not found");
+    return;
+  }
+
   remoteVideo.srcObject = stream;
 };
 

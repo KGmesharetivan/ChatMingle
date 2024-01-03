@@ -150,7 +150,7 @@ function Dashboard({ toast }) {
   };
 
   return (
-    <div className="container">
+    <div data-aos="fade-right" data-aos-duration="1500" className="container">
       <div className="dashboard_container">
         <div className="flex justify-center items-center logo_container">
           <img src={logoImage} alt="Logo" className="w-[150px] h-[150px]" />

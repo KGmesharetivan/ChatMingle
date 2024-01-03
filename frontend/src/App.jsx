@@ -4,21 +4,32 @@ import "./App.css";
 import Layout from "./layout/Layout";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Aos from "aos";
+
+import "aos/dist/aos.css";
+import "remixicon/fonts/remixicon.css";
 
 function App() {
   const [user, setUser] = useState(null);
   const [isLoggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
+    Aos.init();
+  }, []);
+
+  useEffect(() => {
     const abortController = new AbortController();
 
     async function fetchData() {
       try {
-        const result = await fetch("https://48byhymg2s.ap-southeast-1.awsapprunner.com/auth/isLoggedIn", {
-          method: "GET",
-          signal: abortController.signal,
-          credentials: "include",
-        });
+        const result = await fetch(
+          "https://48byhymg2s.ap-southeast-1.awsapprunner.com/auth/isLoggedIn",
+          {
+            method: "GET",
+            signal: abortController.signal,
+            credentials: "include",
+          }
+        );
 
         console.log("Server response:", result);
 

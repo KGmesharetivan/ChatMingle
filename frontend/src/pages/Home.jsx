@@ -29,16 +29,53 @@ const Home = () => {
           <div className="flex flex-col lg:flex-row gap-[30px] items-center justify-between">
             {/* ==== hero content ===== */}
             <div className="lg:w-[570px]">
-              <h1 className="text-[36px] leading-[46px] text-headingColor font-[800] md:text-[60px] md:leading-[70px]">
+              <h1
+                data-aos="fade-right"
+                data-aos-duration="1500"
+                className="text-[36px] leading-[46px] text-headingColor font-[800] md:text-[60px] md:leading-[70px]"
+              >
                 Welcome to Chatmingle.net
               </h1>
-              <p className="text__para ">
+              <p
+                data-aos="fade-right"
+                data-aos-duration="1500"
+                className="text__para "
+              >
                 At Chatmingle.net, we believe in the power of communication to
                 bring people together from all corners of the world. Whether
                 you're looking to make new friends, find a study buddy, or
                 explore new cultures, our platform is designed to make your
                 experience seamless and enjoyable.
               </p>
+              {/* Additional Information */}
+              <p
+                data-aos="fade-right"
+                data-aos-duration="1500"
+                className="text__para mt-4"
+              >
+                Join us today and experience a vibrant community where you can
+                engage in meaningful conversations, share your interests, and
+                discover like-minded individuals. Our user-friendly interface
+                and advanced features ensure a delightful journey in connecting
+                with people around the globe.
+              </p>
+
+              {/* Key Features */}
+              <div
+                data-aos="fade-right"
+                data-aos-duration="1800"
+                className="mt-6"
+              >
+                <h2 className="text-[24px] font-[600] mb-2">Key Features:</h2>
+                <ul className="text__para list-disc ml-6">
+                  <li>Instant Messaging for Quick Connections</li>
+                  <li>Advanced Search to Find Your Perfect Match</li>
+                  <li>Secure and Private Communication</li>
+                  <li>Interest-Based Chat Rooms</li>
+                  <li>Seamless Cross-Platform Experience</li>
+                </ul>
+              </div>
+
               <div className="flex justify-center items-center mt-4">
                 <Link to="/login">
                   <button className="customButton">
@@ -82,6 +119,8 @@ const Home = () => {
 
             {/* Image */}
             <img
+              data-aos="fade-left"
+              data-aos-duration="1500"
               src={landing}
               alt="Landing"
               className="w-full h-auto lg:max-w-[800px] object-cover lg:object-contain"
