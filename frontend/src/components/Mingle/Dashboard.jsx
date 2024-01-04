@@ -26,11 +26,11 @@ function Dashboard({ toast }) {
 
   useEffect(() => {
     // Initialize Socket.IO client
-    const newSocket = io("https://z9p25hfp8q.ap-southeast-1.awsapprunner.com/"); // Replace with your server URL
+    const newSocket = io("https://z9p25hfp8q.ap-southeast-1.awsapprunner.com"); // Replace with your server URL
     setSocket(newSocket);
 
     // Register socket events
-    registerSocketEvents(newSocket);
+    wss.registerSocketEvents(newSocket);
 
     try {
       webRTCHandler.getLocalPreview();
