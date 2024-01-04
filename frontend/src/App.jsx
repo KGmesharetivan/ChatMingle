@@ -19,6 +19,10 @@ function App() {
   }, []);
 
   useEffect(() => {
+    Aos.init();
+  }, []);
+
+  useEffect(() => {
     const abortController = new AbortController();
 
     async function fetchData() {
