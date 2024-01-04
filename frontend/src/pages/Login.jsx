@@ -24,7 +24,7 @@ const Login = ({ setUser, isLoggedIn, setLoggedIn, toast }) => {
       setLoading(true); // Set loading to true when submitting
 
       const response = await fetch(
-        "https://48byhymg2s.ap-southeast-1.awsapprunner.com/auth/login",
+        "https://z9p25hfp8q.ap-southeast-1.awsapprunner.com/auth/login",
         {
           method: "POST",
           headers: {

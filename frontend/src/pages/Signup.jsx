@@ -17,7 +17,7 @@ const Signup = ({ toast }) => {
 
     try {
       const response = await fetch(
-        "https://48byhymg2s.ap-southeast-1.awsapprunner.com/auth/register",
+        "https://z9p25hfp8q.ap-southeast-1.awsapprunner.com/auth/register",
         {
           method: "POST",
           headers: {
