@@ -7,13 +7,6 @@ let connectedUserDetails;
 let peerConection;
 let dataChannel;
 
-const defaultConstraints = {
-  audio: {
-    echoCancellation: true,
-  },
-  video: true,
-};
-
 const configuration = {
   iceServers: [
     {
@@ -42,9 +35,15 @@ const logError = (error) => {
 export const getLocalPreview = async () => {
   try {
     console.log("Getting local preview");
-    const stream = await navigator.mediaDevices.getUserMedia(
-      defaultConstraints
-    );
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: true,
+      audio: true,
+    });
+
+    const vid = document.getElementById("local_video");
+    vid.autoplay = true;
+    vid.muted = true;
+    vid.srcObject = stream;
 
     // Log the constraints of the obtained MediaStream
     console.log(
