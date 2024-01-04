@@ -23,14 +23,17 @@ const Login = ({ setUser, isLoggedIn, setLoggedIn, toast }) => {
     try {
       setLoading(true); // Set loading to true when submitting
 
-      const response = await fetch("http://localhost:3001/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username: credentials, password }),
-        credentials: "include",
-      });
+      const response = await fetch(
+        "https://z9p25hfp8q.ap-southeast-1.awsapprunner.com//auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username: credentials, password }),
+          credentials: "include",
+        }
+      );
 
       if (!response.ok) {
         console.error("Login failed. Server response:", response.statusText);

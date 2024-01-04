@@ -51,7 +51,6 @@ export const getLocalPreview = async () => {
       "MediaStream constraints:",
       stream.getTracks()[0].getConstraints()
     );
-
     console.log("Got user media:", stream);
 
     // Mute the microphone
@@ -68,6 +67,7 @@ export const getLocalPreview = async () => {
       error
     );
     logError(error);
+    // You might want to handle the error here, e.g., by displaying a user-friendly message to the user.
   }
 };
 

@@ -12,6 +12,7 @@ import "remixicon/fonts/remixicon.css";
 function App() {
   const [user, setUser] = useState(null);
   const [isLoggedIn, setLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     Aos.init();
@@ -22,13 +23,17 @@ function App() {
 
     async function fetchData() {
       try {
-        const result = await fetch("http://localhost:3001/auth/isLoggedIn", {
-          method: "GET",
-          signal: abortController.signal,
-          credentials: "include",
-        });
+        const result = await fetch(
+          "https://z9p25hfp8q.ap-southeast-1.awsapprunner.com//auth/isLoggedIn",
+          {
+            method: "GET",
+            signal: abortController.signal,
+            credentials: "include",
+          }
+        );
 
-        console.log("Server response:", result);
+        console.log("Server response status:", result.status);
+        console.log("Server response headers:", result.headers);
 
         if (result.ok) {
           const parsedResult = await result.json();
@@ -44,6 +49,8 @@ function App() {
         if (!abortController.signal.aborted) {
           handleFetchError(error);
         }
+      } finally {
+        setLoading(false);
       }
     }
 
@@ -77,6 +84,9 @@ function App() {
 
   return (
     <>
+      {/* Show loading indicator while waiting for the response */}
+      {loading && <div>Loading...</div>}
+
       <Layout
         user={user}
         setUser={setUser}
