@@ -852,6 +852,27 @@ body {
   transform: translate(-150%, -150%);
 }
 
+.custom-footer {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.custom-footer-bg {
+  background-image: url(/src/assets/images/mask.png);
+}
+
+.logo-footer {
+  width: 250px;
+  height: 250px;
+  margin-top: -130px;
+  margin-bottom: -70px;
+  margin-left: -20px;
+  padding: 0;
+}
+
 @keyframes rotation_35 {
   0% {
     transform: rotate(0deg);
