@@ -61,7 +61,7 @@ const Header = ({ setLoggedIn, isLoggedIn, setUser, toast }) => {
       setLoadingLogout(true);
 
       const response = await fetch(
-        "https://z9p25hfp8q.ap-southeast-1.awsapprunner.com/auth/logout",
+        "https://48byhymg2s.ap-southeast-1.awsapprunner.com/auth/logout",
         {
           method: "GET",
           headers: {
