@@ -12,6 +12,11 @@ const Signup = ({ toast }) => {
   const [gender, setGender] = useState("male"); // Default to male
   const navigate = useNavigate();
 
+  const handlePhoneChange = (e) => {
+    const numericValue = e.target.value.replace(/[^\d+]/g, "");
+    setPhone(numericValue);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -88,9 +93,10 @@ const Signup = ({ toast }) => {
               id="phone"
               className="inputField"
               type="tel"
+              pattern="[0-9+]*"
               required
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              onChange={handlePhoneChange}
             />
           </div>
 
