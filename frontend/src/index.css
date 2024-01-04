@@ -33,12 +33,15 @@
 @media only screen and (max-width: 1024px) {
   .container {
     @apply w-full;
+    width: 90%;
+    margin-left: -5px;
   }
   section {
     @apply py-[35px];
   }
   .hero__section > .container > .flex {
     @apply flex-col justify-center items-center gap-[30px];
+    margin-left: 50px;
   }
 
   .hero__section .text-container {
@@ -53,6 +56,9 @@
   }
   .personal_code_copy {
     @apply flex-col;
+  }
+  .header {
+    @apply w-full;
   }
 }
 
