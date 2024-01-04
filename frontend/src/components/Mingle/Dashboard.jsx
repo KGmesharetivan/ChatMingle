@@ -30,7 +30,7 @@ function Dashboard({ toast }) {
     setSocket(newSocket);
 
     // Register socket events
-    registerSocketEvents(newSocket);
+    wss.registerSocketEvents(newSocket);
 
     try {
       webRTCHandler.getLocalPreview();
