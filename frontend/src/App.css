@@ -22,7 +22,9 @@ body {
 
 .customButton {
   --color: #3dd5f3;
-  position: relative;
+  position: absolute;
+  left: 67%;
+  bottom: -5%;
   display: flex;
   justify-content: center;
   align-items: center;

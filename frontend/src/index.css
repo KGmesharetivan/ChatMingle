@@ -30,12 +30,14 @@
   }
 }
 
-@media only screen and (max-width: 1024px) {
-  .container {
-    @apply w-full;
-    width: 90%;
-    margin-left: -5px;
+@media only screen and (max-width: 1440px) {
+  .customButton {
+    top: 20%;
+    bottom: -40%;
   }
+}
+
+@media only screen and (max-width: 1024px) {
   section {
     @apply py-[35px];
   }
@@ -57,8 +59,9 @@
   .personal_code_copy {
     @apply flex-col;
   }
-  .header {
-    @apply w-full;
+  .customButton {
+    position: relative;
+    left: 20%;
   }
 }
 
