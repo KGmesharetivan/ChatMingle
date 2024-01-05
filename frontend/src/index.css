@@ -34,10 +34,15 @@
   .customButton {
     top: 20%;
     bottom: -40%;
+    left: 20%; /* Add left property directly */
+    position: relative;
   }
 }
 
 @media only screen and (max-width: 1024px) {
+  .container {
+    @apply max-w-full w-[1024px] px-5 mx-auto;
+  }
   section {
     @apply py-[35px];
   }
@@ -59,10 +64,6 @@
   .personal_code_copy {
     @apply flex-col;
   }
-  .customButton {
-    position: relative;
-    left: 20%;
-  }
 }
 
 @media only screen and (max-width: 768px) {
@@ -73,10 +74,10 @@
     @apply text-[16px] leading-7 mt-3;
   }
   .dashboard_container {
-    @apply w-[400px];
+    @apply w-full;
   }
   .videos_placeholder {
-    @apply w-[600px];
+    @apply w-full sm:w-[400px] md:w-[600px];
   }
   .call_container {
     @apply ml-[23px];
