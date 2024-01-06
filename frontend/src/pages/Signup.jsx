@@ -21,23 +21,20 @@ const Signup = ({ toast }) => {
     event.preventDefault();
 
     try {
-      const response = await fetch(
-        "https://48byhymg2s.ap-southeast-1.awsapprunner.com/auth/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            fullname,
-            email,
-            phone,
-            role: "user", // Assuming a default role for new users
-            gender,
-            password,
-          }),
-        }
-      );
+      const response = await fetch("http://localhost:3001/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fullname,
+          email,
+          phone,
+          role: "user", // Assuming a default role for new users
+          gender,
+          password,
+        }),
+      });
 
       const data = await response.json();
 
