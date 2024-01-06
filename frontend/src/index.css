@@ -34,8 +34,6 @@
   .customButton {
     top: 20%;
     bottom: -40%;
-    left: 20%; /* Add left property directly */
-    position: relative;
   }
 }
 
