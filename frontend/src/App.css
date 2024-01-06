@@ -21,8 +21,10 @@ body {
 }
 
 .customButton {
-  --color: #3dd5f3;
-  position: relative;
+  --color: #00ebc7;
+  position: absolute;
+  left: 67%;
+  bottom: -5%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -547,7 +549,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(0deg, #b3ffab 0%, #12fff7 100%);
+  background: linear-gradient(318deg, #b3ffab 0%, #bae8e8 50%, #e3f6f5 100%);
   padding: 30px 30px 30px 30px;
   border-radius: 30px;
   box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.062);
@@ -602,8 +604,8 @@ body {
 #button {
   position: relative;
   width: 100%;
-  border: 2px solid #8000ff;
-  background-color: #8000ff;
+  border: 2px solid #00ebc7;
+  background-color: #00ebc7;
   height: 40px;
   color: white;
   font-size: 0.8em;
@@ -652,7 +654,7 @@ body {
 .signupContainer button {
   font-size: 0.7em;
   font-weight: 500;
-  background-color: #2e2e2e;
+  background-color: #00ebc7;
   color: white;
   text-decoration: none;
   padding: 8px 15px;

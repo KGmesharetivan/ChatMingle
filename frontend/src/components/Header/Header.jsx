@@ -124,8 +124,8 @@ const Header = ({ setLoggedIn, isLoggedIn, setUser, toast }) => {
                     onClick={link.path === "/mingle" ? handleMingleClick : null}
                     className={(navClass) =>
                       navClass.isActive
-                        ? "text-primaryColor text-[16px] leading-7 font-[600]"
-                        : "text-textColor text-[16px] leading-7 font-[500] hover:text-primaryColor"
+                        ? "text-[#00ebc7] text-[16px] leading-7 font-[600]"
+                        : "text-textColor text-[16px] leading-7 font-[500] hover:text-[#00ebc7]"
                     }
                   >
                     {link.display}
@@ -152,7 +152,8 @@ const Header = ({ setLoggedIn, isLoggedIn, setUser, toast }) => {
                 </div>
                 {/* You can add more content specific to logged-in users here */}
                 <button
-                  className="bg-primaryColor py-2 px-6 text-white font-[600] h-[44px] flex items-center justify-center rounded-[50px]"
+                  className="py-2 px-6 text-white font-[600] h-[44px] flex items-center justify-center rounded-[50px]"
+                  style={{ backgroundColor: "#00ebc7" }}
                   onClick={handleLogout}
                   disabled={loadingLogout}
                 >
@@ -162,7 +163,10 @@ const Header = ({ setLoggedIn, isLoggedIn, setUser, toast }) => {
             ) : (
               // Render content for users not logged in
               <Link to="/login">
-                <button className="bg-primaryColor py-2 px-6 text-white font-[600] h-[44px] flex items-center justify-center rounded-[50px]">
+                <button
+                  className="py-2 px-6 text-white font-[600] h-[44px] flex items-center justify-center rounded-[50px]"
+                  style={{ backgroundColor: "#00ebc7" }}
+                >
                   Login
                 </button>
               </Link>

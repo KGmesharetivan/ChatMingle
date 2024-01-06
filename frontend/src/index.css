@@ -30,15 +30,23 @@
   }
 }
 
+@media only screen and (max-width: 1440px) {
+  .customButton {
+    top: 20%;
+    bottom: -40%;
+  }
+}
+
 @media only screen and (max-width: 1024px) {
   .container {
-    @apply w-full;
+    @apply max-w-full w-[1024px] px-5 mx-auto;
   }
   section {
     @apply py-[35px];
   }
   .hero__section > .container > .flex {
     @apply flex-col justify-center items-center gap-[30px];
+    margin-left: 50px;
   }
 
   .hero__section .text-container {
@@ -64,10 +72,10 @@
     @apply text-[16px] leading-7 mt-3;
   }
   .dashboard_container {
-    @apply w-[400px];
+    @apply w-full;
   }
   .videos_placeholder {
-    @apply w-[600px];
+    @apply w-full sm:w-[400px] md:w-[600px];
   }
   .call_container {
     @apply ml-[23px];
