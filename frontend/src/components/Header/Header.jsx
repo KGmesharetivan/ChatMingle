@@ -149,7 +149,8 @@ const Header = ({ setLoggedIn, isLoggedIn, setUser, toast }) => {
                 </div>
                 {/* You can add more content specific to logged-in users here */}
                 <button
-                  className="bg-primaryColor py-2 px-6 text-white font-[600] h-[44px] flex items-center justify-center rounded-[50px]"
+                  className="py-2 px-6 text-white font-[600] h-[44px] flex items-center justify-center rounded-[50px]"
+                  style={{ backgroundColor: "#00ebc7" }}
                   onClick={handleLogout}
                   disabled={loadingLogout}
                 >
