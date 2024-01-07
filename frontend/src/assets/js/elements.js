@@ -17,7 +17,8 @@ export const getIncomingCallDialog = (
   const imageContainer = document.createElement("div");
   imageContainer.classList.add("dialog_image_container");
   const image = document.createElement("img");
-  const avatarImagePath = "/src/assets/images/dialogAvatar.png";
+  const avatarImagePath =
+    "https://chatmingle-bucket.s3.ap-southeast-1.amazonaws.com/images/659ae6eb95913b7ac50f6fab/dialogAvatar.png";
   image.src = avatarImagePath;
   imageContainer.appendChild(image);
 
@@ -28,7 +29,8 @@ export const getIncomingCallDialog = (
   acceptCallButton.classList.add("dialog_accept_call_button");
   const acceptCallImg = document.createElement("img");
   acceptCallImg.classList.add("dialog_button_image");
-  const acceptCallImgPath = "/src/assets/images/acceptCall.png";
+  const acceptCallImgPath =
+    "https://chatmingle-bucket.s3.ap-southeast-1.amazonaws.com/images/659ae6eb95913b7ac50f6fab/acceptCall.png";
   acceptCallImg.src = acceptCallImgPath;
   acceptCallButton.append(acceptCallImg);
   buttonContainer.appendChild(acceptCallButton);
@@ -37,7 +39,8 @@ export const getIncomingCallDialog = (
   rejectCallButton.classList.add("dialog_reject_call_button");
   const rejectCallImg = document.createElement("img");
   rejectCallImg.classList.add("dialog_button_image");
-  const rejectCallImgPath = "/src/assets/images/rejectCall.png";
+  const rejectCallImgPath =
+    "https://chatmingle-bucket.s3.ap-southeast-1.amazonaws.com/images/659ae6eb95913b7ac50f6fab/rejectCall.png";
   rejectCallImg.src = rejectCallImgPath;
   rejectCallButton.append(rejectCallImg);
   buttonContainer.appendChild(rejectCallButton);
@@ -76,7 +79,8 @@ export const getCallingDialog = (rejectCallHandler) => {
   const imageContainer = document.createElement("div");
   imageContainer.classList.add("dialog_image_container");
   const image = document.createElement("img");
-  const avatarImagePath = "/src/assets/images/dialogAvatar.png";
+  const avatarImagePath =
+    "https://chatmingle-bucket.s3.ap-southeast-1.amazonaws.com/images/659ae6eb95913b7ac50f6fab/dialogAvatar.png";
   image.src = avatarImagePath;
   imageContainer.appendChild(image);
 
@@ -87,7 +91,8 @@ export const getCallingDialog = (rejectCallHandler) => {
   hangUpCallButton.classList.add("dialog_reject_call_button");
   const hangUpCallImg = document.createElement("img");
   hangUpCallImg.classList.add("dialog_button_image");
-  const rejectCallImgPath = "/src/assets/images/rejectCall.png";
+  const rejectCallImgPath =
+    "https://chatmingle-bucket.s3.ap-southeast-1.amazonaws.com/images/659ae6eb95913b7ac50f6fab/rejectCall.png";
   hangUpCallImg.src = rejectCallImgPath;
   hangUpCallButton.append(hangUpCallImg);
   buttonContainer.appendChild(hangUpCallButton);
@@ -122,7 +127,8 @@ export const getInfoDialog = (dialogTitle, dialogDescription) => {
   const imageContainer = document.createElement("div");
   imageContainer.classList.add("dialog_image_container");
   const image = document.createElement("img");
-  const avatarImagePath = "/src/assets/images/dialogAvatar.png";
+  const avatarImagePath =
+    "https://chatmingle-bucket.s3.ap-southeast-1.amazonaws.com/images/659ae6eb95913b7ac50f6fab/dialogAvatar.png";
   image.src = avatarImagePath;
   imageContainer.appendChild(image);
 
