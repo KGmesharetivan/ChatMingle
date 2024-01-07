@@ -22,7 +22,7 @@ const server = http.createServer(app);
 // Socket.IO configuration
 const io = require("socket.io")(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: process.env.SOCKET_IO_ORIGIN,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
   },
@@ -46,16 +46,13 @@ app.use(
 mongoose.set("strictQuery", false);
 
 mongoose
-  .connect(
-    "mongodb+srv://mesharet93:fh1TKG5wWQigURlz@cluster0.osfx5k9.mongodb.net/ChatMingle"
-  )
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connection successful"))
   .catch((err) => console.error(err));
 
 // Session store configuration
 const sessionStore = new MongoStore({
-  mongoUrl:
-    "mongodb+srv://mesharet93:fh1TKG5wWQigURlz@cluster0.osfx5k9.mongodb.net/ChatMingle",
+  mongoUrl: process.env.MONGO_URI,
   dbName: "ChatMingle",
   collection: "sessions",
   mongooseConnection: mongoose.connection,
@@ -64,7 +61,7 @@ const sessionStore = new MongoStore({
 
 app.use(
   session({
-    secret: "EWC8ANTIfZKrRrRpHcSIXlI_5QjkAtEZZVkxVBphjk8",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     store: sessionStore,

@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
@@ -8,18 +10,16 @@ const SibApiV3Sdk = require("sib-api-v3-sdk");
 const moment = require("moment");
 
 const saltRounds = 10;
-const secretKey =
-  "fb541366046928fd9acfd2bcb1db8bf06d0d124342d136d56e079e27164113d9";
 
 // Initialize Twilio client
-const accountSid = "AC9e3dd6e20a92ebeb8014b25f1bfe7e25";
-const authToken = "63666ae5e82bfbeda25062aa381b859f";
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilioClient = new twilio(accountSid, authToken);
 
 // Set your Sendinblue API key
 var defaultClient = SibApiV3Sdk.ApiClient.instance;
 defaultClient.authentications["api-key"].apiKey =
-  "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";
+  process.env.SENDINBLUE_API_KEY;
 
 // Instantiate the EmailCampaignsApi
 const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
@@ -65,7 +65,7 @@ router.post("/login", async (req, res, next) => {
         return next(err);
       }
 
-      const token = jwt.sign({ sub: user._id }, secretKey);
+      const token = jwt.sign({ sub: user._id }, process.env.JWT_SECRET_KEY);
 
       res.send({ loginStatus: true, user, token });
     });
