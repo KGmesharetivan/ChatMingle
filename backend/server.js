@@ -45,13 +45,16 @@ app.use(cookieParser());
 mongoose.set("strictQuery", false);
 
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(
+    "mongodb+srv://mesharet93:fh1TKG5wWQigURlz@cluster0.osfx5k9.mongodb.net/ChatMingle"
+  )
   .then(() => console.log("MongoDB connection successful"))
   .catch((err) => console.error(err));
 
 // Session store configuration
 const sessionStore = new MongoStore({
-  mongoUrl: process.env.MONGO_URI,
+  mongoUrl:
+    "mongodb+srv://mesharet93:fh1TKG5wWQigURlz@cluster0.osfx5k9.mongodb.net/ChatMingle",
   dbName: "ChatMingle",
   collection: "sessions",
   mongooseConnection: mongoose.connection,
@@ -60,7 +63,7 @@ const sessionStore = new MongoStore({
 
 app.use(
   session({
-    secret: process.env.SESSION_SECRET,
+    secret: "EWC8ANTIfZKrRrRpHcSIXlI_5QjkAtEZZVkxVBphjk8",
     resave: false,
     saveUninitialized: true,
     store: sessionStore,

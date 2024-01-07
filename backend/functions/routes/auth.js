@@ -31,13 +31,13 @@ const upload = multer({ storage, fileFilter });
 
 const saltRounds = 10;
 
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
+const accountSid = "AC9e3dd6e20a92ebeb8014b25f1bfe7e25";
+const authToken = "63666ae5e82bfbeda25062aa381b859f";
 const twilioClient = new twilio(accountSid, authToken);
 
 var defaultClient = SibApiV3Sdk.ApiClient.instance;
 defaultClient.authentications["api-key"].apiKey =
-  process.env.SENDINBLUE_API_KEY;
+  "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";
 
 const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 
@@ -79,7 +79,10 @@ router.post("/login", async (req, res, next) => {
         return next(err);
       }
 
-      const token = jwt.sign({ sub: user._id }, process.env.JWT_SECRET_KEY);
+      const token = jwt.sign(
+        { sub: user._id },
+        "fb541366046928fd9acfd2bcb1db8bf06d0d124342d136d56e079e27164113d9"
+      );
 
       res.send({ loginStatus: true, user, token });
     });
@@ -304,7 +307,10 @@ router.post(
       }
 
       const authToken = req.headers.authorization.split(" ")[1];
-      const decodedToken = jwt.verify(authToken, process.env.JWT_SECRET_KEY);
+      const decodedToken = jwt.verify(
+        authToken,
+        "fb541366046928fd9acfd2bcb1db8bf06d0d124342d136d56e079e27164113d9"
+      );
       const userId = decodedToken.sub;
 
       if (!userId) {
