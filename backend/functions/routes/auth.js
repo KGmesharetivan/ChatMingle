@@ -93,6 +93,8 @@ router.post("/register", async (req, res) => {
       phone: req.body.phone,
       role: req.body.role,
       gender: req.body.gender,
+      age: req.body.age,
+      country: req.body.country,
       hash: hash,
     };
 

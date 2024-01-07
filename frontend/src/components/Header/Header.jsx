@@ -98,6 +98,13 @@ const Header = ({ setLoggedIn, isLoggedIn, setUser, toast }) => {
     }
   };
 
+  const handleProfileClick = () => {
+    if (!isLoggedIn) {
+      // Show Toastify alert
+      toast.error("Please login or register an account.");
+    }
+  };
+
   return (
     <header className="header flex items-center" ref={headerRef}>
       <div className="container">
@@ -118,7 +125,13 @@ const Header = ({ setLoggedIn, isLoggedIn, setUser, toast }) => {
                 <li key={index}>
                   <NavLink
                     to={link.path}
-                    onClick={link.path === "/mingle" ? handleMingleClick : null}
+                    onClick={
+                      link.path === "/mingle"
+                        ? handleMingleClick
+                        : link.path === "/profile"
+                        ? handleProfileClick
+                        : null
+                    }
                     className={(navClass) =>
                       navClass.isActive
                         ? "text-[#00ebc7] text-[16px] leading-7 font-[600]"
