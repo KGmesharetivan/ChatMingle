@@ -41,14 +41,11 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
     const fetchData = async () => {
       try {
         const authToken = localStorage.getItem("authToken");
-        const response = await fetch(
-          "https://48byhymg2s.ap-southeast-1.awsapprunner.com/auth/isLoggedIn",
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }
-        );
+        const response = await fetch("http://localhost:3001/auth/isLoggedIn", {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        });
 
         if (response.ok) {
           const result = await response.json();
@@ -79,7 +76,7 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
       try {
         const imageUrl = new URL(
           user.profileImage.path,
-          "https://48byhymg2s.ap-southeast-1.awsapprunner.com"
+          "http://localhost:3001"
         ).href;
 
         // Append a timestamp as a query parameter to the image URL
@@ -118,17 +115,14 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
       const formData = new FormData();
       formData.append("image", profileImage);
 
-      const response = await fetch(
-        "https://48byhymg2s.ap-southeast-1.awsapprunner.com/auth/uploadimg",
-        {
-          method: "POST",
-          body: formData,
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-          credentials: "include",
-        }
-      );
+      const response = await fetch("http://localhost:3001/auth/uploadimg", {
+        method: "POST",
+        body: formData,
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        credentials: "include",
+      });
 
       if (response.ok) {
         toast("Profile image uploaded successfully", { type: "success" });
