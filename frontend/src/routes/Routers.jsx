@@ -19,7 +19,7 @@ const Routers = ({ isLoggedIn, setLoggedIn, user, setUser, toast }) => {
       <Route path="home" element={<Home />} />
       <Route
         path="/profile"
-        element={<Profile isLoggedIn={isLoggedIn} toast={toast} user={user} />}
+        element={<Profile isLoggedIn={isLoggedIn} toast={toast} user={user} setUser={setUser} />}
       />
       <Route path="/profile/:id" element={<ProfileDetails />} />
       <Route

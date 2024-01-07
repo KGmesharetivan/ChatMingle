@@ -1,58 +1,72 @@
 require("dotenv").config();
 
 const express = require("express");
+const fs = require("fs").promises;
 const router = express.Router();
+const multer = require("multer");
+const path = require("path");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const twilio = require("twilio");
 const ChatMingle = require("../MongoDB/ChatMingledb");
 const SibApiV3Sdk = require("sib-api-v3-sdk");
 const moment = require("moment");
+const { promisify } = require("util");
+const winston = require("winston");
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+
+// Create an S3 client instance with the specified region
+const s3 = new S3Client({ region: "ap-southeast-1" });
+
+// Multer setup for file upload
+const storage = multer.memoryStorage();
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith("image/")) {
+    cb(null, true);
+  } else {
+    cb(new Error("Invalid file type. Only images are allowed."), false);
+  }
+};
+const upload = multer({ storage, fileFilter });
 
 const saltRounds = 10;
 
-// Initialize Twilio client
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilioClient = new twilio(accountSid, authToken);
 
-// Set your Sendinblue API key
 var defaultClient = SibApiV3Sdk.ApiClient.instance;
 defaultClient.authentications["api-key"].apiKey =
   process.env.SENDINBLUE_API_KEY;
 
-// Instantiate the EmailCampaignsApi
 const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 
-// Helper function to generate a 6-digit reset token and store creation time
 const generateResetTokenWithExpiry = () => {
-  const min = 100000; // Minimum 6-digit number
-  const max = 999999; // Maximum 6-digit number
+  const min = 100000;
+  const max = 999999;
   const resetToken = Math.floor(Math.random() * (max - min + 1)) + min;
 
-  // Store the current date and time along with the token
   const creationTime = new Date();
 
   return { resetToken, creationTime };
 };
 
-// Example of how to use the modified function
-const { resetToken, creationTime } = generateResetTokenWithExpiry();
-console.log("Generated Reset Token:", resetToken);
-console.log("Creation Time:", creationTime);
+const isLoggedIn = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.status(401).json({ success: false, message: "Unauthorized" });
+};
 
-// Handles login requests
 router.post("/login", async (req, res, next) => {
   const { username, password } = req.body;
 
   try {
     let user;
 
-    // Check if the username is a valid email format
     if (/^\S+@\S+\.\S+$/.test(username)) {
       user = await ChatMingle.getUserByEmail(username);
     } else {
-      // Assume it's a phone number
       user = await ChatMingle.getUserByPhone(username);
     }
 
@@ -74,7 +88,6 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
-// Handles user registration
 router.post("/register", async (req, res) => {
   try {
     const duplicateEmail = await ChatMingle.getUserByEmail(req.body.email);
@@ -115,7 +128,6 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// Checks if the user is logged in
 router.get("/isLoggedIn", (req, res) => {
   res.send({
     isLoggedIn: req.isAuthenticated(),
@@ -123,19 +135,16 @@ router.get("/isLoggedIn", (req, res) => {
   });
 });
 
-// Logs out the user
 router.get("/logout", (req, res) => {
   req.logout((err) => {
     res.send({ logout: !err });
   });
 });
 
-// Sends reset link via Twilio (SMS)
 router.post("/sendcode", async (req, res) => {
   try {
     const { toEmail } = req.body;
 
-    // Generate a 6-digit reset token and save it in the database
     const { resetToken, creationTime } = generateResetTokenWithExpiry();
     const saveTokenResult = await ChatMingle.saveResetToken(
       toEmail,
@@ -144,13 +153,11 @@ router.post("/sendcode", async (req, res) => {
     );
 
     if (!saveTokenResult.success) {
-      console.error("Error saving reset token:", saveTokenResult.message);
       return res
         .status(500)
         .json({ success: false, message: "Error saving reset token." });
     }
 
-    // Use SendinBlue to send the email
     let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
 
     sendSmtpEmail.sender = {
@@ -168,21 +175,12 @@ router.post("/sendcode", async (req, res) => {
     sendSmtpEmail.subject = "Password Reset Request";
     sendSmtpEmail.htmlContent = `<p>You requested a password reset. Here's your token: <strong>${resetToken}</strong></p><p>If you didn't make this request, please ignore this email.</p>`;
 
-    // Log request headers before sending
-    console.log(
-      "SendinBlue API Request Headers:",
-      defaultClient._defaultHeaders
-    );
-
-    // Send the email
     const response = await apiInstance.sendTransacEmail(sendSmtpEmail);
-    console.log("SendinBlue API Response:", response);
 
     res
       .status(200)
       .json({ success: true, message: "Email sent successfully." });
   } catch (error) {
-    console.error("Error sending email:", error.message);
     res.status(500).json({
       success: false,
       message: "Error sending email.",
@@ -191,12 +189,10 @@ router.post("/sendcode", async (req, res) => {
   }
 });
 
-// Define the Brevo campaign settings
 router.post("/sendsms", async (req, res) => {
   try {
     const { toPhone } = req.body;
 
-    // Generate a 6-digit reset token and save it in the database
     const { resetToken, creationTime } = generateResetTokenWithExpiry();
     const saveTokenResult = await ChatMingle.saveResetToken(
       toPhone,
@@ -205,25 +201,20 @@ router.post("/sendsms", async (req, res) => {
     );
 
     if (!saveTokenResult.success) {
-      console.error("Error saving reset token:", saveTokenResult.message);
       return res
         .status(500)
         .json({ success: false, message: "Error saving reset token." });
     }
 
-    // Use Twilio to send the SMS with the reset token
     const smsMessage = `You requested a password reset. Here's your token: ${resetToken}`;
     const message = await twilioClient.messages.create({
       body: smsMessage,
-      to: toPhone, // Replace with the recipient's phone number
-      from: "+12059971071", // Replace with your Twilio phone number
+      to: toPhone,
+      from: "+12059971071",
     });
-
-    console.log("Twilio Message SID:", message.sid);
 
     res.status(200).json({ success: true, message: "SMS sent successfully." });
   } catch (error) {
-    console.error("Error sending SMS:", error.message);
     res.status(500).json({
       success: false,
       message: "Error sending SMS.",
@@ -232,7 +223,6 @@ router.post("/sendsms", async (req, res) => {
   }
 });
 
-// Handles password reset
 router.post("/resetpassword", async (req, res) => {
   try {
     const { identifier, resetToken, newPassword } = req.body;
@@ -243,7 +233,6 @@ router.post("/resetpassword", async (req, res) => {
       newPassword,
     });
 
-    // Get the reset token for the user
     const storedResetToken = await ChatMingle.getResetToken(identifier);
 
     if (!storedResetToken) {
@@ -253,10 +242,8 @@ router.post("/resetpassword", async (req, res) => {
       });
     }
 
-    // Parse the received reset token as an integer for comparison
     const parsedResetToken = parseInt(resetToken, 10);
 
-    // Check if the reset token matches the one stored in the database
     if (parsedResetToken !== storedResetToken) {
       return res.status(401).json({
         success: false,
@@ -264,7 +251,6 @@ router.post("/resetpassword", async (req, res) => {
       });
     }
 
-    // Proceed with password update
     const user = await ChatMingle.getUserByIdentifier(identifier);
 
     if (!user) {
@@ -276,12 +262,11 @@ router.post("/resetpassword", async (req, res) => {
 
     const hash = await bcrypt.hash(newPassword, 10);
     const updatePasswordResult = await ChatMingle.updateUserPassword(
-      user.phone, // Assuming you're using phone as the identifier
+      user.phone,
       hash
     );
 
     if (updatePasswordResult.success) {
-      // Invalidate the reset token after password reset
       await ChatMingle.invalidateResetToken(user.phone);
 
       return res.status(200).json({
@@ -295,7 +280,6 @@ router.post("/resetpassword", async (req, res) => {
       });
     }
   } catch (error) {
-    console.error("Error resetting password:", error.message);
     return res.status(500).json({
       success: false,
       message: "Error resetting password.",
@@ -303,5 +287,110 @@ router.post("/resetpassword", async (req, res) => {
     });
   }
 });
+
+router.post(
+  "/uploadimg",
+  isLoggedIn,
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      console.log("Received image upload request.");
+
+      if (!req.file) {
+        console.log("No file uploaded.");
+        return res
+          .status(400)
+          .json({ success: false, message: "No file uploaded." });
+      }
+
+      const authToken = req.headers.authorization.split(" ")[1];
+      const decodedToken = jwt.verify(authToken, process.env.JWT_SECRET_KEY);
+      const userId = decodedToken.sub;
+
+      if (!userId) {
+        console.log("Unauthorized request.");
+        return res
+          .status(401)
+          .json({ success: false, message: "Unauthorized." });
+      }
+
+      const { buffer, originalname } = req.file;
+
+      const uploadParams = {
+        Bucket: "chatmingle-bucket", // Replace with your S3 bucket name
+        Key: `images/${userId}/${originalname}`,
+        Body: buffer,
+      };
+
+      console.log("Uploading image to S3...");
+
+      try {
+        const uploadResult = await s3.send(new PutObjectCommand(uploadParams));
+
+        // Log the entire uploadResult object
+        console.log("Image uploaded successfully to S3:", uploadResult);
+
+        // Extract Bucket and Key from uploadParams
+        const { Bucket, Key } = uploadParams;
+
+        // Check if Bucket and Key are defined before using them
+        if (Bucket && Key) {
+          const s3URL = `https://${Bucket}.s3.amazonaws.com/${Key}`;
+          console.log("Constructed S3 URL:", s3URL);
+
+          // Update user document with S3 image details
+          const updateUserResult = await ChatMingle.updateUserImage(
+            userId,
+            originalname,
+            s3URL
+          );
+
+          if (updateUserResult.success) {
+            console.log("User document updated successfully.");
+            res.status(200).json({
+              success: true,
+              message: "Image uploaded successfully",
+              filename: originalname,
+              filePath: updateUserResult.path,
+            });
+          } else {
+            console.error(
+              "Error updating user with image details:",
+              updateUserResult.message
+            );
+            res.status(500).json({
+              success: false,
+              message: "Error updating user with image details.",
+              error: updateUserResult.message,
+            });
+          }
+        } else {
+          console.error(
+            "Bucket or Key is undefined in uploadParams:",
+            uploadParams
+          );
+          res.status(500).json({
+            success: false,
+            message: "Error uploading image. Bucket or Key is undefined.",
+          });
+        }
+      } catch (uploadError) {
+        console.error("Error uploading image to S3:", uploadError);
+        res.status(500).json({
+          success: false,
+          message: "Error uploading image to S3.",
+          error: uploadError.message,
+        });
+      }
+    } catch (error) {
+      console.error("Error processing image upload request:", error);
+      res.status(500).json({
+        success: false,
+        message: "Error processing image upload request.",
+        error: error.message,
+      });
+    }
+  }
+);
 
 module.exports = router;
