@@ -13,7 +13,7 @@ runtime:
     MONGO_URI: "mongodb+srv://mesharet93:fh1TKG5wWQigURlz@cluster0.osfx5k9.mongodb.net/ChatMingle"
     SESSION_SECRET: "EWC8ANTIfZKrRrRpHcSIXlI_5QjkAtEZZVkxVBphjk8"
     SOCKET_IO_ORIGIN: "https://chatmingle--bright-cascaron-41cee7.netlify.app"
-    PORT: "3001"
+    PORT: "8080"
     TWILIO_ACCOUNT_SID: "AC9e3dd6e20a92ebeb8014b25f1bfe7e25"
     TWILIO_AUTH_TOKEN: "63666ae5e82bfbeda25062aa381b859f"
     TWILIO_PHONE_NUMBER: "+12059971071"
