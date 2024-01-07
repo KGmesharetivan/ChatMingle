@@ -17,7 +17,8 @@ export const getIncomingCallDialog = (
   const imageContainer = document.createElement("div");
   imageContainer.classList.add("dialog_image_container");
   const image = document.createElement("img");
-  const avatarImagePath = "/src/assets/images/dialogAvatar.png";
+  const avatarImagePath =
+    "https://chatmingle-bucket.s3.ap-southeast-1.amazonaws.com/images/659ae6eb95913b7ac50f6fab/dialogAvatar.png";
   image.src = avatarImagePath;
   imageContainer.appendChild(image);
 
@@ -76,7 +77,8 @@ export const getCallingDialog = (rejectCallHandler) => {
   const imageContainer = document.createElement("div");
   imageContainer.classList.add("dialog_image_container");
   const image = document.createElement("img");
-  const avatarImagePath = "/src/assets/images/dialogAvatar.png";
+  const avatarImagePath =
+    "https://chatmingle-bucket.s3.ap-southeast-1.amazonaws.com/images/659ae6eb95913b7ac50f6fab/dialogAvatar.png";
   image.src = avatarImagePath;
   imageContainer.appendChild(image);
 
@@ -122,7 +124,8 @@ export const getInfoDialog = (dialogTitle, dialogDescription) => {
   const imageContainer = document.createElement("div");
   imageContainer.classList.add("dialog_image_container");
   const image = document.createElement("img");
-  const avatarImagePath = "/src/assets/images/dialogAvatar.png";
+  const avatarImagePath =
+    "https://chatmingle-bucket.s3.ap-southeast-1.amazonaws.com/images/659ae6eb95913b7ac50f6fab/dialogAvatar.png";
   image.src = avatarImagePath;
   imageContainer.appendChild(image);
 
