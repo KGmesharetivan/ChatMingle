@@ -5,18 +5,15 @@ import Layout from "./layout/Layout";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Aos from "aos";
-
 import "aos/dist/aos.css";
 import "remixicon/fonts/remixicon.css";
+import Spinner from "react-spinners/ClipLoader";
 
 function App() {
   const [user, setUser] = useState(null);
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    Aos.init();
-  }, []);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     Aos.init();
@@ -27,14 +24,13 @@ function App() {
 
     async function fetchData() {
       try {
-        const result = await fetch(
-          "https://48byhymg2s.ap-southeast-1.awsapprunner.com/auth/isLoggedIn",
-          {
-            method: "GET",
-            signal: abortController.signal,
-            credentials: "include",
-          }
-        );
+        const AUTH_STATUS_URL =
+          "https://48byhymg2s.ap-southeast-1.awsapprunner.com/auth/isLoggedIn";
+        const result = await fetch(AUTH_STATUS_URL, {
+          method: "GET",
+          signal: abortController.signal,
+          credentials: "include",
+        });
 
         console.log("Server response status:", result.status);
         console.log("Server response headers:", result.headers);
@@ -42,17 +38,12 @@ function App() {
         if (result.ok) {
           const parsedResult = await result.json();
           console.log("Parsed result:", parsedResult);
-
-          if (!abortController.signal.aborted) {
-            handleAuthenticationStatus(parsedResult);
-          }
+          handleAuthenticationStatus(parsedResult);
         } else {
           handleServerError(result);
         }
       } catch (error) {
-        if (!abortController.signal.aborted) {
-          handleFetchError(error);
-        }
+        handleFetchError(error);
       } finally {
         setLoading(false);
       }
@@ -78,18 +69,31 @@ function App() {
 
   const handleServerError = (result) => {
     console.error("Server error:", result.statusText);
+    setError(result.statusText);
     toast.error("Server error. Please try again later.");
   };
 
   const handleFetchError = (error) => {
+    if (error.name === "AbortError") {
+      // Handle abort error
+      console.warn("Fetch request was aborted:", error.message);
+      return;
+    }
+
     console.error("Error fetching authentication status:", error);
+    setError("An error occurred. Please try again later.");
     toast.error("An error occurred. Please try again later.");
   };
 
   return (
     <>
-      {/* Show loading indicator while waiting for the response */}
-      {loading && <div>Loading...</div>}
+      {/* Show loading indicator or error message */}
+      {loading && (
+        <div>
+          Loading <Spinner />
+        </div>
+      )}
+      {error && <div>Error: {error}</div>}
 
       <Layout
         user={user}

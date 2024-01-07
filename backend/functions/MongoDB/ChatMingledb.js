@@ -23,7 +23,6 @@ function ChatMingle() {
     }
   };
 
-  // Function to get a user by ID or an array of IDs
   ChatMingle.getUserById = async function (query) {
     let client;
     try {
@@ -38,7 +37,14 @@ function ChatMingle() {
           .find({ _id: { $in: objectIds } })
           .toArray();
       } else {
-        return await usersCollection.findOne({ _id: new ObjectId(query) });
+        const userId = new ObjectId(query);
+        const user = await usersCollection.findOne({ _id: userId });
+
+        if (!user) {
+          console.error(`User with ID ${userId} not found.`);
+        }
+
+        return user;
       }
     } finally {
       client.close();
@@ -316,6 +322,90 @@ function ChatMingle() {
         await client.close();
         console.log("Closed MongoDB connection");
       }
+    }
+  };
+
+  // Add this function to the ChatMingle module
+  ChatMingle.updateUserImage = async function (userId, filename, path) {
+    let client;
+    try {
+      console.log("Updating user image:", userId, filename, path);
+
+      client = new MongoClient(url, { useUnifiedTopology: true });
+      await client.connect();
+      const db = client.db(DB_NAME);
+      const usersCollection = db.collection("users");
+
+      // Ensure userId is converted to ObjectId
+      const userIdObj = new ObjectId(userId);
+
+      console.log("Searching for user:", userIdObj);
+
+      // Check if the user exists before updating
+      const userExists = await usersCollection.findOne({ _id: userIdObj });
+
+      if (!userExists) {
+        console.error("User not found");
+        return {
+          success: false,
+          message: "User not found",
+          path: path,
+        };
+      }
+
+      // Update the user document with image details
+      const result = await usersCollection.updateOne(
+        { _id: userIdObj },
+        { $set: { profileImage: { filename, path } } }
+      );
+
+      console.log("Update result:", result);
+
+      return {
+        success: result.modifiedCount > 0,
+        message:
+          result.modifiedCount > 0
+            ? "User image updated successfully"
+            : "Image not updated",
+        path: path,
+      };
+    } catch (error) {
+      console.error("Error updating user image:", error.message);
+      throw error;
+    } finally {
+      if (client) {
+        await client.close();
+      }
+    }
+  };
+
+  // Function to remove user's profile image
+  ChatMingle.removeUserImage = async function (userId) {
+    let client;
+    try {
+      client = new MongoClient(url, { useUnifiedTopology: true });
+      await client.connect();
+      const db = client.db(DB_NAME);
+      const usersCollection = db.collection("users");
+
+      const updateResult = await usersCollection.updateOne(
+        { _id: new ObjectId(userId) },
+        { $unset: { profileImage: "" } }
+      );
+
+      if (updateResult.modifiedCount === 1) {
+        return { success: true };
+      } else {
+        return {
+          success: false,
+          message: "User not found or profileImage field already removed.",
+        };
+      }
+    } catch (error) {
+      console.error("Error removing user image:", error);
+      return { success: false, message: "Error removing user image." };
+    } finally {
+      client.close();
     }
   };
 

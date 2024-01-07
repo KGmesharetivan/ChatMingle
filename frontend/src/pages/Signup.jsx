@@ -10,6 +10,8 @@ const Signup = ({ toast }) => {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [gender, setGender] = useState("male"); // Default to male
+  const [age, setAge] = useState("");
+  const [country, setCountry] = useState("");
   const navigate = useNavigate();
 
   const handlePhoneChange = (e) => {
@@ -34,6 +36,8 @@ const Signup = ({ toast }) => {
             phone,
             role: "user", // Assuming a default role for new users
             gender,
+            age,
+            country,
             password,
           }),
         }
@@ -109,6 +113,30 @@ const Signup = ({ toast }) => {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+
+          <div className="inputContainer">
+            <input
+              placeholder="Age"
+              id="age"
+              className="inputField"
+              type="number"
+              required
+              value={age}
+              onChange={(e) => setAge(e.target.value)}
+            />
+          </div>
+
+          <div className="inputContainer">
+            <input
+              placeholder="Country"
+              id="country"
+              className="inputField"
+              type="text"
+              required
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
             />
           </div>
 

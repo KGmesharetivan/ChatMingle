@@ -22,16 +22,10 @@ const server = http.createServer(app);
 // Socket.IO configuration
 const io = require("socket.io")(server, {
   cors: {
-    origin: "https://chatmingle--bright-cascaron-41cee7.netlify.app",
+    origin: process.env.SOCKET_IO_ORIGIN,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    credentials: true,
   },
 });
-
-app.use(logger("dev"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 
 // Use cors middleware
 app.use(
@@ -42,20 +36,22 @@ app.use(
   })
 );
 
+app.use(logger("dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+
 // MongoDB connection
 mongoose.set("strictQuery", false);
 
 mongoose
-  .connect(
-    "mongodb+srv://mesharet93:fh1TKG5wWQigURlz@cluster0.osfx5k9.mongodb.net/ChatMingle"
-  )
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connection successful"))
   .catch((err) => console.error(err));
 
 // Session store configuration
 const sessionStore = new MongoStore({
-  mongoUrl:
-    "mongodb+srv://mesharet93:fh1TKG5wWQigURlz@cluster0.osfx5k9.mongodb.net/ChatMingle",
+  mongoUrl: process.env.MONGO_URI,
   dbName: "ChatMingle",
   collection: "sessions",
   mongooseConnection: mongoose.connection,
@@ -64,7 +60,7 @@ const sessionStore = new MongoStore({
 
 app.use(
   session({
-    secret: "EWC8ANTIfZKrRrRpHcSIXlI_5QjkAtEZZVkxVBphjk8",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     store: sessionStore,
@@ -78,16 +74,22 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Custom middleware for handling OPTIONS request
+app.use((req, res, next) => {
+  if (req.method === "OPTIONS") {
+    res.header("Access-Control-Allow-Headers", "Authorization");
+    return res.status(200).json({});
+  }
+  next();
+});
+
 // Define your routes here
 app.use("/", indexRouter);
 app.use("/auth", authRouter);
 
 // Middleware for serving your React application
 app.use(express.static(path.join(__dirname, "frontend/build")));
-app.use("/uploads", express.static("uploads"));
-
-// Handle CORS preflight OPTIONS request
-app.options("*", cors());
+app.use("/functions/uploads", express.static("functions/uploads"));
 
 let connectedPeers = [];
 let connectedPeersStrangers = [];

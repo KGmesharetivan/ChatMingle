@@ -21,7 +21,7 @@ const Login = ({ setUser, isLoggedIn, setLoggedIn, toast }) => {
     event.preventDefault();
 
     try {
-      setLoading(true); // Set loading to true when submitting
+      setLoading(true);
 
       const response = await fetch(
         "https://48byhymg2s.ap-southeast-1.awsapprunner.com/auth/login",
@@ -44,6 +44,9 @@ const Login = ({ setUser, isLoggedIn, setLoggedIn, toast }) => {
       const data = await response.json();
 
       if (data.loginStatus) {
+        // Store token in localStorage
+        localStorage.setItem("authToken", data.token);
+
         setLoggedIn(true);
         setUser(data.user);
 
@@ -60,7 +63,7 @@ const Login = ({ setUser, isLoggedIn, setLoggedIn, toast }) => {
       console.error("Error during login:", error);
       toast.error("An error occurred during login. Please try again later.");
     } finally {
-      setLoading(false); // Set loading to false when the operation is complete
+      setLoading(false);
     }
   };
 
