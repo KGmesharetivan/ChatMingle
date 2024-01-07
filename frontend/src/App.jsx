@@ -25,7 +25,7 @@ function App() {
     async function fetchData() {
       try {
         const AUTH_STATUS_URL =
-          "https://48byhymg2s.ap-southeast-1.awsapprunner.com/auth/isLoggedIn";
+          "https://6xv23cspdt.ap-southeast-1.awsapprunner.com/auth/isLoggedIn";
         const result = await fetch(AUTH_STATUS_URL, {
           method: "GET",
           signal: abortController.signal,
