@@ -302,8 +302,8 @@ router.post("/resetpassword", async (req, res) => {
 
 router.post(
   "/uploadimg",
-  isLoggedIn,
   upload.single("image"),
+  isLoggedIn,
   async (req, res) => {
     try {
       console.log("Request Headers:", req.headers);
@@ -331,6 +331,19 @@ router.post(
             .status(401)
             .json({ success: false, message: "Unauthorized." });
         }
+
+        // Log the token's creation time and expiration time
+        // Log the token's creation time and expiration time
+        console.log(
+          "Token Creation Time:",
+          moment.unix(decodedToken.iat).format("YYYY-MM-DD HH:mm:ss")
+        );
+        console.log(
+          "Token Expiration Time:",
+          moment.unix(decodedToken.exp).isValid()
+            ? moment.unix(decodedToken.exp).format("YYYY-MM-DD HH:mm:ss")
+            : "Invalid Date"
+        );
 
         const { buffer, originalname } = req.file;
         console.log("File Buffer and Original Name:", buffer, originalname);
