@@ -121,9 +121,15 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
         return;
       }
 
+      // Log the authToken to the console
+      console.log("Auth Token:", authToken);
+
       // Create FormData and append the image
       const formData = new FormData();
       formData.append("image", profileImage);
+
+      // Log the FormData to the console for debugging
+      console.log("FormData:", formData);
 
       // Make the fetch request
       const response = await fetch(
@@ -137,6 +143,9 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
           credentials: "include",
         }
       );
+
+      // Log the response to the console for debugging
+      console.log("Response:", response);
 
       // Check if the response is successful
       if (response.ok) {
