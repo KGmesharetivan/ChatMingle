@@ -128,6 +128,8 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
       const formData = new FormData();
       formData.append("image", profileImage);
 
+      console.log("FormData:", formData);
+
       const response = await fetch(
         "https://wihwxepmb2.ap-southeast-1.awsapprunner.com/auth/uploadimg",
         {
@@ -144,7 +146,6 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
 
       if (response.ok) {
         const result = await response.json();
-
         console.log("Image uploaded successfully. Result:", result);
 
         // Update the user data immediately without a page refresh
