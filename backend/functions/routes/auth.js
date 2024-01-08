@@ -336,6 +336,7 @@ router.post(
       }
 
       const { buffer, originalname } = req.file;
+      console.log("File Buffer and Original Name:", buffer, originalname);
 
       const uploadParams = {
         Bucket: "chatmingle-bucket", // Replace with your S3 bucket name
@@ -344,12 +345,16 @@ router.post(
       };
 
       try {
+        console.log("Uploading to S3 with params:", uploadParams);
         const uploadResult = await s3.send(new PutObjectCommand(uploadParams));
+        console.log("S3 Upload Result:", uploadResult);
 
         const { Bucket, Key } = uploadParams;
 
         if (Bucket && Key) {
           const s3URL = `https://${Bucket}.s3.amazonaws.com/${Key}`;
+
+          console.log("S3 Image URL:", s3URL);
 
           const updateUserResult = await ChatMingle.updateUserImage(
             userId,
