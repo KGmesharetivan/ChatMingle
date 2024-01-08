@@ -15,3 +15,9 @@
     Access-Control-Allow-Origin = "*"
     Access-Control-Allow-Headers = "*"
     Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
+
+[[redirects]]
+  from = "/auth/uploadimg"
+  to = "/.netlify/functions/uploadimg"
+  status = 200
+  force = true
