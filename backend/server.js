@@ -58,17 +58,17 @@ const sessionStore = new MongoStore({
   stringify: false,
 });
 
-// app.use(
-//   session({
-//     secret: process.env.SESSION_SECRET,
-//     resave: false,
-//     saveUninitialized: true,
-//     store: sessionStore,
-//     cookie: {
-//       maxAge: 7 * 1000 * 60 * 60 * 24,
-//     },
-//   })
-// );
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    store: sessionStore,
+    cookie: {
+      maxAge: 7 * 1000 * 60 * 60 * 24,
+    },
+  })
+);
 
 // Passport middleware
 app.use(passport.initialize());
