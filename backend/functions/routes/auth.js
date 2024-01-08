@@ -16,7 +16,13 @@ const winston = require("winston");
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 
 // Create an S3 client instance with the specified region
-const s3 = new S3Client({ region: "ap-southeast-1" });
+const s3 = new S3Client({
+  region: "ap-southeast-1",
+  credentials: {
+    accessKeyId: "AKIAXHGY5UR5JUJE5D6Z",
+    secretAccessKey: "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",
+  },
+});
 
 // Multer setup for file upload
 const storage = multer.memoryStorage();
