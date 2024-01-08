@@ -41,6 +41,10 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
     const fetchData = async () => {
       try {
         const authToken = localStorage.getItem("authToken");
+
+        // Log the authToken to the console
+        console.log("Auth Token:", authToken);
+
         const response = await fetch(
           "https://wihwxepmb2.ap-southeast-1.awsapprunner.com/auth/isLoggedIn",
           {
@@ -82,8 +86,12 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
           "https://wihwxepmb2.ap-southeast-1.awsapprunner.com"
         ).href;
 
+        console.log("Constructed Image URL:", imageUrl);
+
         // Append a timestamp as a query parameter to the image URL
         const cacheBustedImageUrl = `${imageUrl}?t=${Date.now()}`;
+        console.log("Cache Busted Image URL:", cacheBustedImageUrl);
+
         setProfileImageUrl(cacheBustedImageUrl);
       } catch (error) {
         console.error("Error constructing URL:", error);
@@ -92,7 +100,7 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
     } else {
       setProfileImageUrl(null);
     }
-  }, []);
+  }, [user]); // Include 'user' in the dependency array to trigger the effect when 'user' changes
 
   const handlePostTextChange = (event) => {
     setPostText(event.target.value);
@@ -100,10 +108,12 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
-    console.log("File:", file);
+    console.log("Selected profile image file:", file);
+
     setProfileImage(file);
 
     const previewURL = URL.createObjectURL(file);
+    console.log("Image preview URL:", previewURL);
     setImagePreview(() => previewURL);
     setProfileImageUrl(previewURL);
   };
@@ -112,30 +122,12 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
     try {
       setImageUploadLoading(true);
 
-      // Retrieve the authToken from localStorage
       const authToken = localStorage.getItem("authToken");
-
-      // Check if authToken is missing or expired
-      if (!authToken) {
-        console.error("Auth Token is missing or expired.");
-        toast("Authentication error. Please login again.", { type: "error" });
-        return;
-      }
-
-      // Log the authToken to the console
       console.log("Auth Token:", authToken);
 
-      // Create FormData and append the image
       const formData = new FormData();
       formData.append("image", profileImage);
 
-      // Log the FormData to the console for debugging
-      console.log("FormData:", formData);
-
-      // Log the profileImage to the console for debugging
-      console.log("Profile Image:", profileImage);
-
-      // Make the fetch request
       const response = await fetch(
         "https://wihwxepmb2.ap-southeast-1.awsapprunner.com/auth/uploadimg",
         {
@@ -148,16 +140,12 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
         }
       );
 
-      // Log the response to the console for debugging
-      console.log("Response:", response);
-
-      // Check if the response is successful
       if (response.ok) {
         toast("Profile image uploaded successfully", { type: "success" });
 
         const result = await response.json();
 
-        // Update user data without a page refresh
+        // Update the user data immediately without a page refresh
         setUser((prevUser) => ({
           ...prevUser,
           profileImage: { path: result.filePath },
@@ -166,7 +154,6 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
         setImagePreview(null);
         setProfileImage(null);
       } else {
-        // Handle error response
         const errorData = await response.json();
         console.error("Error uploading image:", errorData);
         toast(`Error uploading profile image: ${errorData.message}`, {
@@ -174,7 +161,6 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
         });
       }
     } catch (error) {
-      // Handle general error
       console.error("Error uploading profile image:", error);
       toast("Error uploading profile image", { type: "error" });
     } finally {
