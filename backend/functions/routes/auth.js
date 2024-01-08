@@ -302,8 +302,8 @@ router.post("/resetpassword", async (req, res) => {
 
 router.post(
   "/uploadimg",
-  isLoggedIn,
   upload.single("image"),
+  isLoggedIn,
   async (req, res) => {
     try {
       console.log("Request Headers:", req.headers);
