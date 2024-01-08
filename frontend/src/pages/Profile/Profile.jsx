@@ -113,7 +113,8 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
 
       const authToken = localStorage.getItem("authToken");
 
-      // You may want to add additional checks on the authToken if necessary
+      // Log the authToken to the console
+      console.log("Auth Token:", authToken);
 
       const formData = new FormData();
       formData.append("image", profileImage);
