@@ -318,84 +318,95 @@ router.post(
       const authToken = req.headers.authorization.split(" ")[1];
       console.log("Received Auth Token:", authToken);
 
-      const decodedToken = jwt.verify(authToken, process.env.JWT_SECRET_KEY);
-      console.log("Decoded Token:", decodedToken);
-
-      const userId = decodedToken.sub;
-      console.log("User ID:", userId);
-
-      if (!userId) {
-        console.error("User ID not found in the decoded token.");
-        return res
-          .status(401)
-          .json({ success: false, message: "Unauthorized." });
-      }
-
-      const { buffer, originalname } = req.file;
-      console.log("File Buffer and Original Name:", buffer, originalname);
-
-      const uploadParams = {
-        Bucket: "chatmingle-bucket", // Replace with your S3 bucket name
-        Key: `images/${userId}/${originalname}`,
-        Body: buffer,
-      };
-
       try {
-        console.log("Uploading to S3 with params:", uploadParams);
-        const uploadResult = await s3.send(new PutObjectCommand(uploadParams));
-        console.log("S3 Upload Result:", uploadResult);
+        const decodedToken = jwt.verify(authToken, process.env.JWT_SECRET_KEY);
+        console.log("Decoded Token:", decodedToken);
 
-        const { Bucket, Key } = uploadParams;
+        const userId = decodedToken.sub;
+        console.log("User ID:", userId);
 
-        if (Bucket && Key) {
-          const s3URL = `https://${Bucket}.s3.amazonaws.com/${Key}`;
+        if (!userId) {
+          console.error("User ID not found in the decoded token.");
+          return res
+            .status(401)
+            .json({ success: false, message: "Unauthorized." });
+        }
 
-          console.log("S3 Image URL:", s3URL);
+        const { buffer, originalname } = req.file;
+        console.log("File Buffer and Original Name:", buffer, originalname);
 
-          const updateUserResult = await ChatMingle.updateUserImage(
-            userId,
-            originalname,
-            s3URL
+        const uploadParams = {
+          Bucket: "chatmingle-bucket", // Replace with your S3 bucket name
+          Key: `images/${userId}/${originalname}`,
+          Body: buffer,
+        };
+
+        try {
+          console.log("Uploading to S3 with params:", uploadParams);
+          const uploadResult = await s3.send(
+            new PutObjectCommand(uploadParams)
           );
+          console.log("S3 Upload Result:", uploadResult);
 
-          if (updateUserResult.success) {
-            console.log(
-              "User image details updated successfully:",
-              updateUserResult
+          const { Bucket, Key } = uploadParams;
+
+          if (Bucket && Key) {
+            const s3URL = `https://${Bucket}.s3.amazonaws.com/${Key}`;
+
+            console.log("S3 Image URL:", s3URL);
+
+            const updateUserResult = await ChatMingle.updateUserImage(
+              userId,
+              originalname,
+              s3URL
             );
-            res.status(200).json({
-              success: true,
-              message: "Image uploaded successfully",
-              filename: originalname,
-              filePath: updateUserResult.path,
-            });
+
+            if (updateUserResult.success) {
+              console.log(
+                "User image details updated successfully:",
+                updateUserResult
+              );
+              res.status(200).json({
+                success: true,
+                message: "Image uploaded successfully",
+                filename: originalname,
+                filePath: updateUserResult.path,
+              });
+            } else {
+              console.error(
+                "Error updating user with image details:",
+                updateUserResult.message
+              );
+              res.status(500).json({
+                success: false,
+                message: "Error updating user with image details.",
+                error: updateUserResult.message,
+              });
+            }
           } else {
             console.error(
-              "Error updating user with image details:",
-              updateUserResult.message
+              "Bucket or Key is undefined in uploadParams:",
+              uploadParams
             );
             res.status(500).json({
               success: false,
-              message: "Error updating user with image details.",
-              error: updateUserResult.message,
+              message: "Error uploading image. Bucket or Key is undefined.",
             });
           }
-        } else {
-          console.error(
-            "Bucket or Key is undefined in uploadParams:",
-            uploadParams
-          );
+        } catch (uploadError) {
+          console.error("Error uploading image to S3:", uploadError);
           res.status(500).json({
             success: false,
-            message: "Error uploading image. Bucket or Key is undefined.",
+            message: "Error uploading image to S3.",
+            error: uploadError.message,
           });
         }
-      } catch (uploadError) {
-        console.error("Error uploading image to S3:", uploadError);
-        res.status(500).json({
+      } catch (tokenError) {
+        console.error("Error decoding JWT Token:", tokenError);
+        res.status(401).json({
           success: false,
-          message: "Error uploading image to S3.",
-          error: uploadError.message,
+          message: "Error decoding JWT Token.",
+          error: tokenError.message,
         });
       }
     } catch (error) {
