@@ -35,7 +35,7 @@ const ResetPassword = ({ toast }) => {
       setIsLoading(true);
 
       const response = await fetch(
-        "https://6xv23cspdt.ap-southeast-1.awsapprunner.com/auth/resetpassword",
+        "https://wihwxepmb2.ap-southeast-1.awsapprunner.com/auth/resetpassword",
         {
           method: "POST",
           headers: {

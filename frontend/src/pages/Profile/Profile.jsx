@@ -42,7 +42,7 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
       try {
         const authToken = localStorage.getItem("authToken");
         const response = await fetch(
-          "https://6xv23cspdt.ap-southeast-1.awsapprunner.com/auth/isLoggedIn",
+          "https://wihwxepmb2.ap-southeast-1.awsapprunner.com/auth/isLoggedIn",
           {
             headers: {
               Authorization: `Bearer ${authToken}`,
@@ -79,7 +79,7 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
       try {
         const imageUrl = new URL(
           user.profileImage.path,
-          "https://6xv23cspdt.ap-southeast-1.awsapprunner.com"
+          "https://wihwxepmb2.ap-southeast-1.awsapprunner.com"
         ).href;
 
         // Append a timestamp as a query parameter to the image URL
@@ -119,7 +119,7 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
       formData.append("image", profileImage);
 
       const response = await fetch(
-        "https://6xv23cspdt.ap-southeast-1.awsapprunner.com/auth/uploadimg",
+        "https://wihwxepmb2.ap-southeast-1.awsapprunner.com/auth/uploadimg",
         {
           method: "POST",
           body: formData,

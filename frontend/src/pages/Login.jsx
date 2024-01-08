@@ -24,7 +24,7 @@ const Login = ({ setUser, isLoggedIn, setLoggedIn, toast }) => {
       setLoading(true);
 
       const response = await fetch(
-        "https://6xv23cspdt.ap-southeast-1.awsapprunner.com/auth/login",
+        "https://wihwxepmb2.ap-southeast-1.awsapprunner.com/auth/login",
         {
           method: "POST",
           headers: {
