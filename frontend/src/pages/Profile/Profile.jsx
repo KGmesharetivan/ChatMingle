@@ -100,6 +100,7 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
+    console.log("File:", file);
     setProfileImage(file);
 
     const previewURL = URL.createObjectURL(file);
@@ -130,6 +131,9 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
 
       // Log the FormData to the console for debugging
       console.log("FormData:", formData);
+
+      // Log the profileImage to the console for debugging
+      console.log("Profile Image:", profileImage);
 
       // Make the fetch request
       const response = await fetch(
