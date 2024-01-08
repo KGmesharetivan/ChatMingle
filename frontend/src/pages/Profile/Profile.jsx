@@ -120,7 +120,7 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
     setProfileImage(file);
     const previewURL = URL.createObjectURL(file);
     console.log("Image preview URL:", previewURL);
-    setImagePreview(() => previewURL);
+    setImagePreview(previewURL);
     setProfileImageUrl(previewURL);
   };
 
