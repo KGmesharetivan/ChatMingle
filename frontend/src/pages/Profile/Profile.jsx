@@ -132,13 +132,12 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
       const formData = new FormData();
       formData.append("image", profileImage);
 
-      const response = await fetch("http://localhost:3001/auth/uploadimg", {
+      const response = await fetch("http://localhost:3001/uploadimg", {
         method: "POST",
         body: formData,
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
-        credentials: "include",
       });
 
       if (response.ok) {
