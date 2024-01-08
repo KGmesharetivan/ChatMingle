@@ -140,10 +140,12 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
         }
       );
 
-      if (response.ok) {
-        toast("Profile image uploaded successfully", { type: "success" });
+      console.log("Headers sent in the request:", response.headers);
 
+      if (response.ok) {
         const result = await response.json();
+
+        console.log("Image uploaded successfully. Result:", result);
 
         // Update the user data immediately without a page refresh
         setUser((prevUser) => ({
@@ -153,6 +155,7 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
 
         setImagePreview(null);
         setProfileImage(null);
+        toast("Profile image uploaded successfully", { type: "success" });
       } else {
         const errorData = await response.json();
         console.error("Error uploading image:", errorData);

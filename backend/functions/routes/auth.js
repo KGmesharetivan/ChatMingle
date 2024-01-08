@@ -329,6 +329,7 @@ router.post(
       console.log("User ID:", userId);
 
       if (!userId) {
+        console.error("User ID not found in the decoded token.");
         return res
           .status(401)
           .json({ success: false, message: "Unauthorized." });
@@ -357,6 +358,10 @@ router.post(
           );
 
           if (updateUserResult.success) {
+            console.log(
+              "User image details updated successfully:",
+              updateUserResult
+            );
             res.status(200).json({
               success: true,
               message: "Image uploaded successfully",
