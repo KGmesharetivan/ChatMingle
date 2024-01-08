@@ -117,11 +117,12 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
     // Log FormData to verify that the file is appended
     console.log("FormData:", formData);
 
+    // Set the state and update the image preview
     setProfileImage(file);
     const previewURL = URL.createObjectURL(file);
     console.log("Image preview URL:", previewURL);
-    setImagePreview(previewURL);
     setProfileImageUrl(previewURL);
+    setImagePreview(previewURL);
   };
 
   const handleImageSubmit = async () => {
