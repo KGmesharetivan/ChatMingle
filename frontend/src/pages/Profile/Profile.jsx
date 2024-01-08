@@ -110,8 +110,14 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
     const file = event.target.files[0];
     console.log("Selected profile image file:", file);
 
-    setProfileImage(file);
+    // Create FormData and append the file
+    const formData = new FormData();
+    formData.append("image", file);
 
+    // Log FormData to verify that the file is appended
+    console.log("FormData:", formData);
+
+    setProfileImage(file);
     const previewURL = URL.createObjectURL(file);
     console.log("Image preview URL:", previewURL);
     setImagePreview(() => previewURL);
