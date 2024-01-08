@@ -111,14 +111,21 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
     try {
       setImageUploadLoading(true);
 
+      // Retrieve the authToken from localStorage
       const authToken = localStorage.getItem("authToken");
 
-      // Log the authToken to the console
-      console.log("Auth Token:", authToken);
+      // Check if authToken is missing or expired
+      if (!authToken) {
+        console.error("Auth Token is missing or expired.");
+        toast("Authentication error. Please login again.", { type: "error" });
+        return;
+      }
 
+      // Create FormData and append the image
       const formData = new FormData();
       formData.append("image", profileImage);
 
+      // Make the fetch request
       const response = await fetch(
         "https://wihwxepmb2.ap-southeast-1.awsapprunner.com/auth/uploadimg",
         {
@@ -131,12 +138,13 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
         }
       );
 
+      // Check if the response is successful
       if (response.ok) {
         toast("Profile image uploaded successfully", { type: "success" });
 
         const result = await response.json();
 
-        // Update the user data immediately without a page refresh
+        // Update user data without a page refresh
         setUser((prevUser) => ({
           ...prevUser,
           profileImage: { path: result.filePath },
@@ -145,6 +153,7 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
         setImagePreview(null);
         setProfileImage(null);
       } else {
+        // Handle error response
         const errorData = await response.json();
         console.error("Error uploading image:", errorData);
         toast(`Error uploading profile image: ${errorData.message}`, {
@@ -152,6 +161,7 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
         });
       }
     } catch (error) {
+      // Handle general error
       console.error("Error uploading profile image:", error);
       toast("Error uploading profile image", { type: "error" });
     } finally {
