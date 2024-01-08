@@ -296,6 +296,14 @@ router.post("/resetpassword", async (req, res) => {
 
 router.post(
   "/uploadimg",
+  (req, res, next) => {
+    // Log request headers and body for debugging
+    console.log("Request Headers:", req.headers);
+    console.log("Request Body:", req.body);
+
+    // Move to the next middleware
+    next();
+  },
   isLoggedIn,
   upload.single("image"),
   async (req, res) => {
