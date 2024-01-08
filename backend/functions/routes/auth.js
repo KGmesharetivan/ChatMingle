@@ -315,8 +315,10 @@ router.post(
       }
 
       const authToken = req.headers.authorization.split(" ")[1];
+      console.log("Decoded Token:", decodedToken);
       const decodedToken = jwt.verify(authToken, process.env.JWT_SECRET_KEY);
       const userId = decodedToken.sub;
+      console.log("User ID:", userId);
 
       if (!userId) {
         return res
