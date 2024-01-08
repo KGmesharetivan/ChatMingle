@@ -16,7 +16,13 @@ const winston = require("winston");
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 
 // Create an S3 client instance with the specified region
-const s3 = new S3Client({ region: "ap-southeast-1" });
+const s3 = new S3Client({
+  region: "ap-southeast-1",
+  credentials: {
+    accessKeyId: process.env.NETLIFY_AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.NETLIFY_AWS_SECRET_ACCESS_KEY,
+  },
+});
 
 // Multer setup for file upload
 const storage = multer.memoryStorage();
@@ -31,13 +37,13 @@ const upload = multer({ storage, fileFilter });
 
 const saltRounds = 10;
 
-const accountSid = "AC9e3dd6e20a92ebeb8014b25f1bfe7e25";
-const authToken = "63666ae5e82bfbeda25062aa381b859f";
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilioClient = new twilio(accountSid, authToken);
 
 var defaultClient = SibApiV3Sdk.ApiClient.instance;
 defaultClient.authentications["api-key"].apiKey =
-  "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";
+  process.env.SENDINBLUE_API_KEY;
 
 const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 
@@ -79,10 +85,7 @@ router.post("/login", async (req, res, next) => {
         return next(err);
       }
 
-      const token = jwt.sign(
-        { sub: user._id },
-        "fb541366046928fd9acfd2bcb1db8bf06d0d124342d136d56e079e27164113d9"
-      );
+      const token = jwt.sign({ sub: user._id }, process.env.JWT_SECRET_KEY);
 
       res.send({ loginStatus: true, user, token });
     });
@@ -297,24 +300,17 @@ router.post(
   upload.single("image"),
   async (req, res) => {
     try {
-      console.log("Received image upload request.");
-
       if (!req.file) {
-        console.log("No file uploaded.");
         return res
           .status(400)
           .json({ success: false, message: "No file uploaded." });
       }
 
       const authToken = req.headers.authorization.split(" ")[1];
-      const decodedToken = jwt.verify(
-        authToken,
-        "fb541366046928fd9acfd2bcb1db8bf06d0d124342d136d56e079e27164113d9"
-      );
+      const decodedToken = jwt.verify(authToken, process.env.JWT_SECRET_KEY);
       const userId = decodedToken.sub;
 
       if (!userId) {
-        console.log("Unauthorized request.");
         return res
           .status(401)
           .json({ success: false, message: "Unauthorized." });
@@ -328,21 +324,14 @@ router.post(
         Body: buffer,
       };
 
-      console.log("Uploading image to S3...");
-
       try {
         const uploadResult = await s3.send(new PutObjectCommand(uploadParams));
-
-        // Log the entire uploadResult object
-        console.log("Image uploaded successfully to S3:", uploadResult);
 
         // Extract Bucket and Key from uploadParams
         const { Bucket, Key } = uploadParams;
 
-        // Check if Bucket and Key are defined before using them
         if (Bucket && Key) {
           const s3URL = `https://${Bucket}.s3.amazonaws.com/${Key}`;
-          console.log("Constructed S3 URL:", s3URL);
 
           // Update user document with S3 image details
           const updateUserResult = await ChatMingle.updateUserImage(
@@ -352,7 +341,6 @@ router.post(
           );
 
           if (updateUserResult.success) {
-            console.log("User document updated successfully.");
             res.status(200).json({
               success: true,
               message: "Image uploaded successfully",
