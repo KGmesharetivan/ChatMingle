@@ -76,6 +76,30 @@ const Home = () => {
                     <li>Seamless Cross-Platform Experience</li>
                   </ul>
                 </div>
+                <div className="flex justify-center items-center mt-4">
+                  <Link to="/login">
+                    <div className="flex justify-center items-center">
+                      <button className="animated-button">
+                        <svg
+                          viewBox="0 0 24 24"
+                          className="arr-2"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path>
+                        </svg>
+                        <span className="text">Get Started</span>
+                        <span className="circle"></span>
+                        <svg
+                          viewBox="0 0 24 24"
+                          className="arr-1"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </Link>
+                </div>
               </div>
 
               {/* Image */}
@@ -86,45 +110,6 @@ const Home = () => {
                 alt="Landing"
                 className="w-full h-auto lg:max-w-[800px] object-cover lg:object-contain"
               />
-            </div>
-            <div className="flex justify-center items-center mt-4">
-              <Link to="/login">
-                <button className="customButton">
-                  <div>GET STARTED</div>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="25px"
-                    height="25px"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                  >
-                    <path
-                      d="M11.6801 14.62L14.2401 12.06L11.6801 9.5"
-                      stroke="black"
-                      strokeWidth={2}
-                      strokeMiterlimit={10}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    ></path>
-                    <path
-                      d="M4 12.0601H14.17"
-                      stroke="black"
-                      strokeWidth={2}
-                      strokeMiterlimit={10}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    ></path>
-                    <path
-                      d="M12 4C16.42 4 20 7 20 12C20 17 16.42 20 12 20"
-                      stroke="black"
-                      strokeWidth={2}
-                      strokeMiterlimit={10}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    ></path>
-                  </svg>
-                </button>
-              </Link>
             </div>
           </>
         )}

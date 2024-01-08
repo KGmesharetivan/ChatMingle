@@ -4,7 +4,7 @@
 
 @layer base {
   section {
-    @apply py-[50px];
+    @apply py-[75px];
   }
 }
 
@@ -27,13 +27,6 @@
   }
   .hero__section {
     @apply bg-[url('./assets/images/hero-bg.png')] bg-no-repeat bg-center bg-cover;
-  }
-}
-
-@media only screen and (max-width: 1440px) {
-  .customButton {
-    top: 20%;
-    bottom: -40%;
   }
 }
 
