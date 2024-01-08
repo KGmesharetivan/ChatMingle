@@ -65,6 +65,8 @@ const isLoggedIn = (req, res, next) => {
 };
 
 router.post("/login", async (req, res, next) => {
+  console.log("Received login request:", req.body);
+
   const { username, password } = req.body;
 
   try {
@@ -77,19 +79,23 @@ router.post("/login", async (req, res, next) => {
     }
 
     if (!user || !(await bcrypt.compare(password, user.hash))) {
+      console.log("Login failed: Invalid credentials");
       return res.status(401).send({ loginStatus: false });
     }
 
     req.logIn(user, (err) => {
       if (err) {
+        console.log("Error during login:", err);
         return next(err);
       }
 
       const token = jwt.sign({ sub: user._id }, process.env.JWT_SECRET_KEY);
+      console.log("User successfully logged in. Token generated:", token);
 
       res.send({ loginStatus: true, user, token });
     });
   } catch (error) {
+    console.error("Error during login:", error);
     res.status(500).send({ loginStatus: false });
   }
 });

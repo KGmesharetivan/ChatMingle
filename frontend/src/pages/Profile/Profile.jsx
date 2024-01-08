@@ -83,8 +83,12 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
           "http://localhost:3001"
         ).href;
 
+        console.log("Constructed Image URL:", imageUrl);
+
         // Append a timestamp as a query parameter to the image URL
         const cacheBustedImageUrl = `${imageUrl}?t=${Date.now()}`;
+        console.log("Cache Busted Image URL:", cacheBustedImageUrl);
+
         setProfileImageUrl(cacheBustedImageUrl);
       } catch (error) {
         console.error("Error constructing URL:", error);
@@ -93,7 +97,7 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
     } else {
       setProfileImageUrl(null);
     }
-  }, []);
+  }, [user]); // Include 'user' in the dependency array to trigger the effect when 'user' changes
 
   const handlePostTextChange = (event) => {
     setPostText(event.target.value);
@@ -101,9 +105,12 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
+    console.log("Selected profile image file:", file);
+
     setProfileImage(file);
 
     const previewURL = URL.createObjectURL(file);
+    console.log("Image preview URL:", previewURL);
     setImagePreview(() => previewURL);
     setProfileImageUrl(previewURL);
   };
@@ -113,8 +120,7 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
       setImageUploadLoading(true);
 
       const authToken = localStorage.getItem("authToken");
-
-      // You may want to add additional checks on the authToken if necessary
+      console.log("Auth Token:", authToken);
 
       const formData = new FormData();
       formData.append("image", profileImage);
