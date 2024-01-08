@@ -22,7 +22,7 @@ const server = http.createServer(app);
 // Socket.IO configuration
 const io = require("socket.io")(server, {
   cors: {
-    origin: "https://chatmingle--bright-cascaron-41cee7.netlify.app",
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   },
 });
@@ -30,7 +30,7 @@ const io = require("socket.io")(server, {
 // Use cors middleware
 app.use(
   cors({
-    origin: "https://chatmingle--bright-cascaron-41cee7.netlify.app",
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
   })
@@ -58,17 +58,17 @@ const sessionStore = new MongoStore({
   stringify: false,
 });
 
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-    store: sessionStore,
-    cookie: {
-      maxAge: 7 * 1000 * 60 * 60 * 24,
-    },
-  })
-);
+// app.use(
+//   session({
+//     secret: process.env.SESSION_SECRET,
+//     resave: false,
+//     saveUninitialized: true,
+//     store: sessionStore,
+//     cookie: {
+//       maxAge: 7 * 1000 * 60 * 60 * 24,
+//     },
+//   })
+// );
 
 // Passport middleware
 app.use(passport.initialize());
