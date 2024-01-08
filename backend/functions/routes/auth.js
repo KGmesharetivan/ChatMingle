@@ -61,7 +61,7 @@ const isLoggedIn = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
   }
-  res.status(401).json({ success: false, message: "Unauthorized" });
+  res.status(401).json({ message: "Unauthorized" });
 };
 
 router.post("/login", async (req, res, next) => {
@@ -300,6 +300,9 @@ router.post(
   upload.single("image"),
   async (req, res) => {
     try {
+      console.log("Request Headers:", req.headers);
+      console.log("Request Body:", req.body);
+
       if (!req.file) {
         return res
           .status(400)
@@ -308,7 +311,9 @@ router.post(
 
       const authToken = req.headers.authorization.split(" ")[1];
       const decodedToken = jwt.verify(authToken, process.env.JWT_SECRET_KEY);
+      console.log("Decoded Token:", decodedToken);
       const userId = decodedToken.sub;
+      console.log("User ID:", userId);
 
       if (!userId) {
         return res

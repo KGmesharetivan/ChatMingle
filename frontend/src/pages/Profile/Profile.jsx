@@ -41,6 +41,10 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
     const fetchData = async () => {
       try {
         const authToken = localStorage.getItem("authToken");
+
+        // Log the authToken to the console
+        console.log("Auth Token:", authToken);
+
         const response = await fetch("http://localhost:3001/auth/isLoggedIn", {
           headers: {
             Authorization: `Bearer ${authToken}`,
