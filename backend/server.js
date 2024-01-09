@@ -29,7 +29,7 @@ const server = http.createServer(app);
 import { Server as SocketIOServer } from "socket.io";
 const io = new SocketIOServer(server, {
   cors: {
-    origin: "https://chatmingle--bright-cascaron-41cee7.netlify.app",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   },
 });
@@ -37,7 +37,7 @@ const io = new SocketIOServer(server, {
 // Use cors middleware
 app.use(
   cors({
-    origin: "https://chatmingle--bright-cascaron-41cee7.netlify.app",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
   })
