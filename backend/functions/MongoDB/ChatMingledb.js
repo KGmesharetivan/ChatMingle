@@ -5,22 +5,34 @@ dotenv.config();
 
 class ChatMingle {
   constructor() {
-    if (!ChatMingle.instance) {
-      this.url = process.env.MONGO_URI;
-      this.DB_NAME = "ChatMingle";
-      this.client = new MongoClient(this.url, { maxPoolSize: 10 });
-      ChatMingle.instance = this;
-    }
+    this.url = process.env.MONGO_URI;
+    this.DB_NAME = "ChatMingle";
+    this.client = new MongoClient(this.url, { maxPoolSize: 10 });
+    this.connected = false; // Track the connection status
+  }
 
-    return ChatMingle.instance;
+  async init() {
+    try {
+      if (!this.connected) {
+        await this.client.connect();
+        console.log("Connected to MongoDB");
+        this.connected = true;
+      }
+    } catch (error) {
+      console.error("Error connecting to the database:", error);
+      throw error;
+    }
   }
 
   async connectToDatabase() {
     try {
-      if (!this.client || !this.client.isConnected()) {
+      await this.init(); // Ensure connection is established
+
+      // Reconnect logic moved here
+      if (!this.client.isConnected) {
         this.client = new MongoClient(this.url, { maxPoolSize: 10 });
         await this.client.connect();
-        console.log("Connected to MongoDB");
+        console.log("Reconnected to MongoDB");
       }
 
       return this.client;
@@ -448,12 +460,11 @@ class ChatMingle {
       if (this.client) {
         await this.client.close();
         console.log("Closed MongoDB connection");
+        this.connected = false; // Reset the connection status
       }
     } catch (error) {
       console.error("Error closing the database connection:", error);
       throw error;
-    } finally {
-      this.client = null; // Reset client to null after closing
     }
   }
 }

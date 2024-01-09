@@ -1,7 +1,7 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
-import ChatMingle from "../MongoDB/ChatMingledb.mjs";
+import ChatMingle from "../MongoDB/ChatMingledb.js";
 import bcrypt from "bcryptjs";
 
 // Local strategy for verifying email and password

@@ -6,7 +6,7 @@ import http from "http";
 import path from "path";
 import session from "express-session";
 import cors from "cors";
-import passport from "./functions/auth/passportConfig.mjs";
+import passport from "./functions/auth/passportConfig.js";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 import mongoose from "mongoose";
