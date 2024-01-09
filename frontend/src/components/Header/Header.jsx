@@ -60,13 +60,16 @@ const Header = ({ setLoggedIn, isLoggedIn, setUser, toast }) => {
     try {
       setLoadingLogout(true);
 
-      const response = await fetch("http://localhost:3001/auth/logout", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
+      const response = await fetch(
+        "https://wwybwsw3tw.ap-southeast-1.awsapprunner.com/auth/logout",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
 
       if (response.ok) {
         const result = await response.json();
