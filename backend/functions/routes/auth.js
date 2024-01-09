@@ -2,18 +2,14 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import { Router } from "express";
-import { promises as fsPromises } from "fs";
-import express from "express";
 import multer from "multer";
-import path from "path";
+
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import twilio from "twilio";
 import ChatMingle from "../MongoDB/ChatMingledb.mjs";
 import SibApiV3Sdk from "sib-api-v3-sdk";
 import moment from "moment";
-import { promisify } from "util";
-import winston from "winston";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
 const router = Router();

@@ -5,9 +5,14 @@ dotenv.config();
 
 class ChatMingle {
   constructor() {
-    this.url = process.env.MONGO_URI;
-    this.DB_NAME = "ChatMingle";
-    this.client = null; // Initialize client as null
+    if (!ChatMingle.instance) {
+      this.url = process.env.MONGO_URI;
+      this.DB_NAME = "ChatMingle";
+      this.client = new MongoClient(this.url, { maxPoolSize: 10 });
+      ChatMingle.instance = this;
+    }
+
+    return ChatMingle.instance;
   }
 
   async connectToDatabase() {
