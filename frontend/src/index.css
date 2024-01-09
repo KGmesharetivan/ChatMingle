@@ -77,3 +77,39 @@
     @apply ml-[15px];
   }
 }
+
+@media only screen and (max-width: 568px) {
+  .header {
+    @apply w-[385px];
+  }
+  .header-logo {
+    @apply ml-[-25px];
+  }
+  .container {
+    @apply w-full;
+  }
+  section {
+    @apply py-[50px];
+  }
+  .welcome-css {
+    @apply ml-[-25px];
+  }
+  .welcome-img {
+    @apply ml-[-25px];
+  }
+  .mingle-dashboard {
+    @apply w-[450px];
+  }
+  .videos_container {
+    @apply w-[385px] ml-[4px];
+  }
+  .mingle-message {
+    @apply w-[400px];
+  }
+  .messenger_container {
+    @apply ml-[-12px];
+  }
+  .dashboard_container {
+    @apply ml-[-15px];
+  }
+}
