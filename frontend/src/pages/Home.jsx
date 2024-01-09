@@ -29,7 +29,7 @@ const Home = () => {
           <>
             <div className="flex flex-col lg:flex-row gap-[30px] items-center justify-between">
               {/* ==== hero content ===== */}
-              <div className="lg:w-[570px] welcome-css">
+              <div className="lg:w-[570px]">
                 <h1
                   data-aos="fade-right"
                   data-aos-duration="1500"
@@ -108,7 +108,7 @@ const Home = () => {
                 data-aos-duration="1500"
                 src={landing}
                 alt="Landing"
-                className="w-full h-auto lg:max-w-[800px] object-cover lg:object-contain welcome-img"
+                className="w-full h-auto lg:max-w-[800px] object-cover lg:object-contain"
               />
             </div>
           </>

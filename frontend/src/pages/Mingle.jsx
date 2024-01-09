@@ -45,13 +45,13 @@ const Mingle = ({ isLoggedIn, toast, user }) => {
           <Loader />
         ) : (
           <div className="flex flex-col lg:flex-row items-start justify-start">
-            <div className="lg:w-[450px] mingle-dashboard">
+            <div className="lg:w-[450px]">
               <Dashboard toast={toast} user={user} isLoggedIn={isLoggedIn} />
             </div>
             <div className="lg:w-[750px] ml-[-40px] mt-[-20px]">
               <CallContainer />
             </div>
-            <div className="mingle-message">
+            <div className="ml-[-25px]">
               <MessageContainer />
             </div>
             <div id="dialog"></div>

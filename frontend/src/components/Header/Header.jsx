@@ -113,14 +113,14 @@ const Header = ({ setLoggedIn, isLoggedIn, setUser, toast }) => {
           <div>
             <img
               src={logo}
-              className="w-[175px] h-[125px] rounded-[50px] header-logo"
+              className="w-[175px] h-[125px] rounded-[50px]"
               alt=""
             />
           </div>
 
           {/* ===== menu ====== */}
           <div className="navigation" ref={menuRef} onClick={toggleMenu}>
-            <ul className="menu flex items-center gap-[2.7rem] menu-mingle">
+            <ul className="menu flex items-center gap-[2.7rem]">
               {navLinks.map((link, index) => (
                 <li key={index}>
                   <NavLink
