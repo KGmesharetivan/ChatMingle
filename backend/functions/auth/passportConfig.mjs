@@ -3,7 +3,6 @@ import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import ChatMingle from "../MongoDB/ChatMingledb.mjs";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 
 // Local strategy for verifying email and password
 const localOptions = {
