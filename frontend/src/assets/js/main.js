@@ -8,7 +8,7 @@ import * as recordingUtils from "./recordingUtils.js";
 import * as strangerUtils from "./strangerUtils.js";
 
 // initialization of socketIO connection
-const socket = io("https://wihwxepmb2.ap-southeast-1.awsapprunner.com");
+const socket = io("http://localhost:3001");
 wss.registerSocketEvents(socket);
 
 webRTCHandler.getLocalPreview();

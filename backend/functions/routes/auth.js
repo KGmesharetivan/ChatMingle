@@ -3,7 +3,6 @@ dotenv.config();
 
 import { Router } from "express";
 import multer from "multer";
-
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import twilio from "twilio";
