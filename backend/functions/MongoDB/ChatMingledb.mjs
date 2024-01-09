@@ -1,22 +1,42 @@
+import dotenv from "dotenv";
 import { MongoClient, ObjectId } from "mongodb";
+
+dotenv.config();
 
 class ChatMingle {
   constructor() {
-    this.url =
-      "mongodb+srv://mesharet93:fh1TKG5wWQigURlz@cluster0.osfx5k9.mongodb.net/ChatMingle";
+    this.url = process.env.MONGO_URI;
     this.DB_NAME = "ChatMingle";
+    this.client = null; // Initialize client as null
   }
 
   async connectToDatabase() {
-    const client = new MongoClient(this.url, { useUnifiedTopology: true });
-    await client.connect();
-    return client;
+    try {
+      if (!this.client || !this.client.isConnected()) {
+        this.client = new MongoClient(this.url, { maxPoolSize: 10 });
+        await this.client.connect();
+        console.log("Connected to MongoDB");
+      }
+
+      return this.client;
+    } catch (error) {
+      console.error("Error connecting to the database:", error);
+      throw error;
+    }
   }
 
-  async closeDatabaseConnection(client) {
-    if (client) {
-      await client.close();
-      console.log("Closed MongoDB connection");
+  async executeMongoOperation(callback) {
+    let client;
+    try {
+      client = await this.connectToDatabase();
+      return await callback(client.db(this.DB_NAME));
+    } catch (error) {
+      console.error("MongoDB Operation Error:", error);
+      throw error;
+    } finally {
+      if (client) {
+        await this.closeDatabaseConnection();
+      }
     }
   }
 
@@ -31,7 +51,9 @@ class ChatMingle {
       console.error("Error in getUserByEmail:", error);
       throw error;
     } finally {
-      await this.closeDatabaseConnection(client);
+      if (client) {
+        await this.closeDatabaseConnection(client);
+      }
     }
   }
 
@@ -39,24 +61,40 @@ class ChatMingle {
     let client;
     try {
       client = await this.connectToDatabase();
+      if (!client) {
+        console.error("MongoDB client not connected");
+        return null;
+      }
+
+      console.log("Connected to MongoDB");
+
       const db = client.db(this.DB_NAME);
       const usersCollection = db.collection("users");
 
       if (Array.isArray(query)) {
         const objectIds = query.map((id) => new ObjectId(id));
-        return await usersCollection
+        const users = await usersCollection
           .find({ _id: { $in: objectIds } })
           .toArray();
+
+        if (users.length === 0) {
+          console.error(`Users with IDs ${query.join(", ")} not found.`);
+        }
+
+        return users;
       } else {
         const userId = new ObjectId(query);
         const user = await usersCollection.findOne({ _id: userId });
 
         if (!user) {
-          console.error(`User with ID ${userId} not found.`);
+          console.error(`User with ID ${query} not found.`);
         }
 
         return user;
       }
+    } catch (error) {
+      console.error("Error in getUserById:", error);
+      throw error; // Rethrow the error
     } finally {
       await this.closeDatabaseConnection(client);
     }
@@ -178,9 +216,9 @@ class ChatMingle {
         ? await usersCollection.findOne({ phone: identifier })
         : await usersCollection.findOne({ email: identifier });
 
-      console.log("Reset token found:", user.resetToken);
+      console.log("Reset token found:", user && user[tokenType]);
 
-      return user.resetToken || null;
+      return user && user[tokenType] ? user[tokenType] : null;
     } catch (error) {
       console.error("Error in getResetToken:", error);
       throw error;
@@ -323,10 +361,8 @@ class ChatMingle {
   }
 
   async removeUserImage(userId) {
-    let client;
     try {
-      client = await this.connectToDatabase();
-      const db = client.db(this.DB_NAME);
+      const db = await this.connectToDatabase();
       const usersCollection = db.collection("users");
 
       const updateResult = await usersCollection.updateOne(
@@ -346,40 +382,73 @@ class ChatMingle {
       console.error("Error removing user image:", error);
       return { success: false, message: "Error removing user image." };
     } finally {
-      await this.closeDatabaseConnection(client);
+      await this.closeDatabaseConnection();
     }
   }
 
-  async saveTokenToMongoDB(userId, token) {
+  async saveResetToken(identifier, resetToken, tokenType) {
     let client;
     try {
       client = await this.connectToDatabase();
       const db = client.db(this.DB_NAME);
-      const usersCollection = db.collection("users");
+      const tokensCollection = db.collection("tokens");
 
-      const userIdObj = new ObjectId(userId);
-
-      console.log("Saving token for user:", userIdObj);
-
-      const result = await usersCollection.updateOne(
-        { _id: userIdObj },
-        { $set: { token: token } }
+      console.log(
+        `Saving ${tokenType} token for identifier: ${identifier}, Token: ${resetToken}`
       );
 
-      console.log("Update result:", result);
+      const existingToken = await tokensCollection.findOne({
+        [tokenType]: identifier,
+      });
+
+      if (!existingToken) {
+        console.log(
+          `Token not found. Creating new token for identifier: ${identifier}`
+        );
+      }
+
+      const result = await tokensCollection.updateOne(
+        { [tokenType]: identifier },
+        {
+          $set: { resetToken, tokenType }, // Include tokenType in the set operation
+          $setOnInsert: {
+            /* other fields */
+          },
+        },
+        { upsert: true }
+      );
+
+      console.log("Update Result:", result);
 
       return {
-        success: result.modifiedCount > 0,
+        success: result.modifiedCount > 0 || result.upsertedCount > 0,
         message:
           result.modifiedCount > 0
             ? "Token saved successfully"
-            : "User not found or token not saved",
+            : "Token not saved",
       };
     } catch (error) {
-      console.error("Error saving token:", error);
+      console.error(
+        `Error saving reset token for ${tokenType}. Identifier: ${identifier}`,
+        error
+      );
       throw error;
     } finally {
       await this.closeDatabaseConnection(client);
+    }
+  }
+
+  async closeDatabaseConnection() {
+    try {
+      if (this.client) {
+        await this.client.close();
+        console.log("Closed MongoDB connection");
+      }
+    } catch (error) {
+      console.error("Error closing the database connection:", error);
+      throw error;
+    } finally {
+      this.client = null; // Reset client to null after closing
     }
   }
 }

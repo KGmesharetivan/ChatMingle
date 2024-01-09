@@ -86,9 +86,10 @@ router.post("/login", async (req, res, next) => {
       const token = jwt.sign({ sub: user._id }, process.env.JWT_SECRET_KEY);
       console.log("User successfully logged in. Token generated:", token);
 
-      const saveTokenResult = await ChatMingle.saveTokenToMongoDB(
+      const saveTokenResult = await ChatMingle.saveResetToken(
         user._id,
-        token
+        token,
+        "tokenType"
       );
 
       if (!saveTokenResult.success) {
