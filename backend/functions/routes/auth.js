@@ -6,7 +6,7 @@ import multer from "multer";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import twilio from "twilio";
-import ChatMingle from "../MongoDB/ChatMingledb.mjs";
+import ChatMingle from "../MongoDB/ChatMingledb.js";
 import SibApiV3Sdk from "sib-api-v3-sdk";
 import moment from "moment";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
