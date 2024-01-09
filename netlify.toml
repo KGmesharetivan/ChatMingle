@@ -12,7 +12,7 @@
 [[headers]]
   for = "/.netlify/functions/*"
   [headers.values]
-    Access-Control-Allow-Origin = "http://localhost:5173"
+    Access-Control-Allow-Origin = "https://chatmingle--bright-cascaron-41cee7.netlify.app"
     Access-Control-Allow-Headers = "*"
     Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
 
