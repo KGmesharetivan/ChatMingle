@@ -112,4 +112,7 @@
   .dashboard_container {
     @apply ml-[-15px];
   }
+  .call_buttons_container {
+    @apply w-[300px] left-[12%];
+  }
 }
