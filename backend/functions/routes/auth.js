@@ -1,21 +1,23 @@
-require("dotenv").config();
+import dotenv from "dotenv";
+dotenv.config();
 
-const express = require("express");
-const fs = require("fs").promises;
-const router = express.Router();
-const multer = require("multer");
-const path = require("path");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const twilio = require("twilio");
-const ChatMingle = require("../MongoDB/ChatMingledb");
-const SibApiV3Sdk = require("sib-api-v3-sdk");
-const moment = require("moment");
-const { promisify } = require("util");
-const winston = require("winston");
-const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+import { Router } from "express";
+import { promises as fsPromises } from "fs";
+import express from "express";
+import multer from "multer";
+import path from "path";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import twilio from "twilio";
+import ChatMingle from "../MongoDB/ChatMingledb.mjs";
+import SibApiV3Sdk from "sib-api-v3-sdk";
+import moment from "moment";
+import { promisify } from "util";
+import winston from "winston";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
-// Create an S3 client instance with the specified region
+const router = Router();
+
 const s3 = new S3Client({
   region: "ap-southeast-1",
   credentials: {
@@ -24,7 +26,6 @@ const s3 = new S3Client({
   },
 });
 
-// Multer setup for file upload
 const storage = multer.memoryStorage();
 const fileFilter = (req, file, cb) => {
   if (file.mimetype.startsWith("image/")) {
@@ -76,7 +77,7 @@ router.post("/login", async (req, res, next) => {
       return res.status(401).send({ loginStatus: false });
     }
 
-    req.logIn(user, (err) => {
+    req.logIn(user, async (err) => {
       if (err) {
         console.log("Error during login:", err);
         return next(err);
@@ -84,6 +85,19 @@ router.post("/login", async (req, res, next) => {
 
       const token = jwt.sign({ sub: user._id }, process.env.JWT_SECRET_KEY);
       console.log("User successfully logged in. Token generated:", token);
+
+      const saveTokenResult = await ChatMingle.saveTokenToMongoDB(
+        user._id,
+        token
+      );
+
+      if (!saveTokenResult.success) {
+        console.error(
+          "Failed to save token to MongoDB:",
+          saveTokenResult.message
+        );
+        return res.status(500).send({ loginStatus: false });
+      }
 
       res.send({ loginStatus: true, user, token });
     });
@@ -419,4 +433,4 @@ router.post("/uploadimg", upload.single("image"), async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

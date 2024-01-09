@@ -1,18 +1,24 @@
-require("dotenv").config();
+import dotenv from "dotenv";
+dotenv.config();
 
-const express = require("express");
-const http = require("http");
-const path = require("path");
-const session = require("express-session");
-const cors = require("cors");
-const passport = require("./functions/auth/passportConfig");
-const cookieParser = require("cookie-parser");
-const logger = require("morgan");
-const mongoose = require("mongoose");
-const MongoStore = require("connect-mongo");
+import express from "express";
+import http from "http";
+import path from "path";
+import session from "express-session";
+import cors from "cors";
+import passport from "./functions/auth/passportConfig.mjs";
+import cookieParser from "cookie-parser";
+import logger from "morgan";
+import mongoose from "mongoose";
+import MongoStore from "connect-mongo";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
-const indexRouter = require("./functions/routes/index");
-const authRouter = require("./functions/routes/auth");
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+import indexRouter from "./functions/routes/index.js";
+import authRouter from "./functions/routes/auth.js";
 
 const PORT = process.env.PORT || 3001;
 
@@ -20,9 +26,10 @@ const app = express();
 const server = http.createServer(app);
 
 // Socket.IO configuration
-const io = require("socket.io")(server, {
+import { Server as SocketIOServer } from "socket.io";
+const io = new SocketIOServer(server, {
   cors: {
-    origin: "https://chatmingle--bright-cascaron-41cee7.netlify.app",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   },
 });
@@ -30,7 +37,7 @@ const io = require("socket.io")(server, {
 // Use cors middleware
 app.use(
   cors({
-    origin: "https://chatmingle--bright-cascaron-41cee7.netlify.app",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
   })
@@ -50,7 +57,7 @@ mongoose
   .catch((err) => console.error(err));
 
 // Session store configuration
-const sessionStore = new MongoStore({
+const sessionStore = MongoStore.create({
   mongoUrl: process.env.MONGO_URI,
   dbName: "ChatMingle",
   collection: "sessions",
@@ -109,16 +116,16 @@ io.on("connection", (socket) => {
     console.log(connectedPeer);
 
     if (connectedPeer) {
-      const data = {
+      const responseData = {
         callerSocketId: socket.id,
         callType,
       };
-      io.to(calleePersonalCode).emit("pre-offer", data);
+      io.to(calleePersonalCode).emit("pre-offer", responseData);
     } else {
-      const data = {
+      const responseData = {
         preOfferAnswer: "CALLEE_NOT_FOUND",
       };
-      io.to(socket.id).emit("pre-offer-answer", data);
+      io.to(socket.id).emit("pre-offer-answer", responseData);
     }
   });
 
@@ -187,11 +194,11 @@ io.on("connection", (socket) => {
       randomStrangerSocketId = null;
     }
 
-    const data = {
+    const responseData = {
       randomStrangerSocketId,
     };
 
-    io.to(socket.id).emit("stranger-socket-id", data);
+    io.to(socket.id).emit("stranger-socket-id", responseData);
   });
 
   socket.on("disconnect", () => {

@@ -23,17 +23,14 @@ const Login = ({ setUser, isLoggedIn, setLoggedIn, toast }) => {
     try {
       setLoading(true);
 
-      const response = await fetch(
-        "https://wihwxepmb2.ap-southeast-1.awsapprunner.com/auth/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ username: credentials, password }),
-          credentials: "include",
-        }
-      );
+      const response = await fetch("http://localhost:3001/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username: credentials, password }),
+        credentials: "include",
+      });
 
       if (!response.ok) {
         console.error("Login failed. Server response:", response.statusText);
@@ -47,8 +44,16 @@ const Login = ({ setUser, isLoggedIn, setLoggedIn, toast }) => {
         // Store token in localStorage
         localStorage.setItem("authToken", data.token);
 
+        // Update loggedIn state and user state
         setLoggedIn(true);
         setUser(data.user);
+
+        // Optionally, you can check if the server returned a new token
+        if (data.token) {
+          // If a new token is received, you might want to handle it accordingly
+          console.log("New token received:", data.token);
+          // You can set the new token in your state or perform any necessary actions
+        }
 
         setTimeout(() => {
           navigate("/mingle");
