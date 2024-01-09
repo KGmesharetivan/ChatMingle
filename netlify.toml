@@ -12,6 +12,12 @@
 [[headers]]
   for = "/.netlify/functions/*"
   [headers.values]
-    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Origin = "https://chatmingle--bright-cascaron-41cee7.netlify.app"
     Access-Control-Allow-Headers = "*"
     Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
+
+[[redirects]]
+  from = "/auth/uploadimg"
+  to = "/.netlify/functions/uploadimg"
+  status = 200
+  force = true

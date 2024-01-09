@@ -102,6 +102,7 @@ let connectedPeers = [];
 let connectedPeersStrangers = [];
 
 io.on("connection", (socket) => {
+  console.log(`User connected: ${socket.id}`);
   connectedPeers.push(socket.id);
 
   socket.on("pre-offer", (data) => {
