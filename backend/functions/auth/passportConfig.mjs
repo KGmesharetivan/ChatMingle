@@ -1,10 +1,9 @@
-const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
-const JwtStrategy = require("passport-jwt").Strategy;
-const ExtractJwt = require("passport-jwt").ExtractJwt;
-const ChatMingle = require("../MongoDB/ChatMingledb");
-const bcrypt = require('bcryptjs');
-const jwt = require("jsonwebtoken");
+import passport from "passport";
+import { Strategy as LocalStrategy } from "passport-local";
+import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
+import ChatMingle from "../MongoDB/ChatMingledb.mjs";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 // Local strategy for verifying email and password
 const localOptions = {
@@ -63,4 +62,4 @@ const jwtVerify = async (payload, done) => {
 const jwtStrategy = new JwtStrategy(jwtOptions, jwtVerify);
 passport.use(jwtStrategy);
 
-module.exports = passport;
+export default passport;

@@ -1,8 +1,9 @@
-var express = require("express");
-var router = express.Router();
+import express from "express";
+
+const router = express.Router();
 
 /* GET home page. */
-router.get("/", function (req, res) {
+router.get("/", (req, res) => {
   if (req.session.viewCount) {
     req.session.viewCount++;
   } else {
@@ -11,8 +12,8 @@ router.get("/", function (req, res) {
   res.send(`You have visited ${req.session.viewCount} times`);
 });
 
-router.get("/data", function (req, res) {
+router.get("/data", (req, res) => {
   res.send({ name: "We're connected...", email: "to the backend!!!" });
 });
 
-module.exports = router;
+export default router;

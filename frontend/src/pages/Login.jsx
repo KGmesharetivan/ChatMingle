@@ -47,8 +47,16 @@ const Login = ({ setUser, isLoggedIn, setLoggedIn, toast }) => {
         // Store token in localStorage
         localStorage.setItem("authToken", data.token);
 
+        // Update loggedIn state and user state
         setLoggedIn(true);
         setUser(data.user);
+
+        // Optionally, you can check if the server returned a new token
+        if (data.token) {
+          // If a new token is received, you might want to handle it accordingly
+          console.log("New token received:", data.token);
+          // You can set the new token in your state or perform any necessary actions
+        }
 
         setTimeout(() => {
           navigate("/mingle");

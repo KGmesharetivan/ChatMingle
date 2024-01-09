@@ -8,7 +8,7 @@ import * as recordingUtils from "./recordingUtils.js";
 import * as strangerUtils from "./strangerUtils.js";
 
 // initialization of socketIO connection
-const socket = io("/");
+const socket = io("https://wihwxepmb2.ap-southeast-1.awsapprunner.com");
 wss.registerSocketEvents(socket);
 
 webRTCHandler.getLocalPreview();
@@ -63,7 +63,9 @@ strangerChatButton.addEventListener("click", () => {
 const strangerVideoButton = document.getElementById("stranger_video_button");
 strangerVideoButton.addEventListener("click", () => {
   //logic
-  strangerUtils.getStrangerSocketIdAndConnect(constants.callType.VIDEO_STRANGER);
+  strangerUtils.getStrangerSocketIdAndConnect(
+    constants.callType.VIDEO_STRANGER
+  );
 });
 
 // register event for allow connections from strangers
