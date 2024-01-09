@@ -46,7 +46,7 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
         console.log("Auth Token:", authToken);
 
         const response = await fetch(
-          "https://wihwxepmb2.ap-southeast-1.awsapprunner.com/auth/isLoggedIn",
+          "https://wwybwsw3tw.ap-southeast-1.awsapprunner.com/auth/isLoggedIn",
           {
             headers: {
               Authorization: `Bearer ${authToken}`,
@@ -83,7 +83,7 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
       try {
         const imageUrl = new URL(
           user.profileImage.path,
-          "https://wihwxepmb2.ap-southeast-1.awsapprunner.com"
+          "https://wwybwsw3tw.ap-southeast-1.awsapprunner.com"
         ).href;
 
         console.log("Constructed Image URL:", imageUrl);
@@ -136,7 +136,7 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
       formData.append("image", profileImage);
 
       const response = await fetch(
-        "https://wihwxepmb2.ap-southeast-1.awsapprunner.com/auth/uploadimg",
+        "https://wwybwsw3tw.ap-southeast-1.awsapprunner.com/auth/uploadimg",
         {
           method: "POST",
           body: formData,

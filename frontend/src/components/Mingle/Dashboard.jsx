@@ -26,7 +26,7 @@ function Dashboard({ toast }) {
 
   useEffect(() => {
     // Initialize Socket.IO client
-    const newSocket = io("https://wihwxepmb2.ap-southeast-1.awsapprunner.com"); // Replace with your server URL
+    const newSocket = io("https://wwybwsw3tw.ap-southeast-1.awsapprunner.com"); // Replace with your server URL
     setSocket(newSocket);
 
     // Register socket events

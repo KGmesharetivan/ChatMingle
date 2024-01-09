@@ -29,13 +29,13 @@ const ForgotPassword = ({ toast }) => {
 
       if (resetOption === "email") {
         apiEndpoint =
-          "https://wihwxepmb2.ap-southeast-1.awsapprunner.com/auth/sendcode";
+          "https://wwybwsw3tw.ap-southeast-1.awsapprunner.com/auth/sendcode";
         requestBody = {
           toEmail: userInput,
         };
       } else if (resetOption === "sms") {
         apiEndpoint =
-          "https://wihwxepmb2.ap-southeast-1.awsapprunner.com/auth/sendsms";
+          "https://wwybwsw3tw.ap-southeast-1.awsapprunner.com/auth/sendsms";
         requestBody = {
           toPhone: userInput,
         };
