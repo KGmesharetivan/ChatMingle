@@ -80,7 +80,7 @@
 
 @media only screen and (max-width: 568px) {
   .header {
-    @apply w-[385px];
+    @apply w-[370px];
   }
   .header-logo {
     @apply ml-[-25px];
@@ -114,5 +114,8 @@
   }
   .call_buttons_container {
     @apply w-[300px] left-[12%];
+  }
+  .sticky__header {
+    @apply pt-[50px];
   }
 }
