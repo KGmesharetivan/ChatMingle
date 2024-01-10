@@ -48,7 +48,7 @@ const Mingle = ({ isLoggedIn, toast, user }) => {
             <div className="lg:w-[450px] mingle-dashboard">
               <Dashboard toast={toast} user={user} isLoggedIn={isLoggedIn} />
             </div>
-            <div className="lg:w-[750px] ml-[-40px] mt-[-20px]">
+            <div className="lg:w-[750px] ml-[-20px] mt-[-20px] mingle-call">
               <CallContainer />
             </div>
             <div className="mingle-message">

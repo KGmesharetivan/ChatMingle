@@ -115,4 +115,7 @@
   .call_buttons_container {
     @apply w-[300px] left-[12%];
   }
+  .mingle-call {
+    @apply ml-[5px];
+  }
 }
