@@ -128,17 +128,21 @@ const Profile = ({ isLoggedIn, toast, user, setUser }) => {
 
       const authToken = localStorage.getItem("authToken");
       console.log("Auth Token:", authToken);
+      console.log("User Object:", user);
 
       const formData = new FormData();
       formData.append("image", profileImage);
 
-      const response = await fetch("http://localhost:3001/auth/uploadimg", {
-        method: "POST",
-        body: formData,
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      });
+      const response = await fetch(
+        `http://localhost:3001/auth/uploadimg/${user.userId}`,
+        {
+          method: "POST",
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
 
       if (response.ok) {
         toast("Profile image uploaded successfully", { type: "success" });

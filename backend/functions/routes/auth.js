@@ -72,31 +72,30 @@ router.post("/login", async (req, res, next) => {
       return res.status(401).send({ loginStatus: false });
     }
 
-    req.logIn(user, async (err) => {
-      if (err) {
-        console.log("Error during login:", err);
-        return next(err);
-      }
+    // Set token expiration to 1 day (you can adjust this as needed)
+    const expiresIn = 60 * 60 * 24; // 1 day in seconds
 
-      const token = jwt.sign({ sub: user._id }, process.env.JWT_SECRET_KEY);
-      console.log("User successfully logged in. Token generated:", token);
+    const token = jwt.sign(
+      { sub: user._id, exp: Math.floor(Date.now() / 1000) + expiresIn },
+      process.env.JWT_SECRET_KEY
+    );
+    console.log("User successfully logged in. Token generated:", token);
 
-      const saveTokenResult = await ChatMingle.saveResetToken(
-        user._id,
-        token,
-        "tokenType"
+    const saveTokenResult = await ChatMingle.saveResetToken(
+      user._id,
+      token,
+      "tokenType"
+    );
+
+    if (!saveTokenResult.success) {
+      console.error(
+        "Failed to save token to MongoDB:",
+        saveTokenResult.message
       );
+      return res.status(500).send({ loginStatus: false });
+    }
 
-      if (!saveTokenResult.success) {
-        console.error(
-          "Failed to save token to MongoDB:",
-          saveTokenResult.message
-        );
-        return res.status(500).send({ loginStatus: false });
-      }
-
-      res.send({ loginStatus: true, user, token });
-    });
+    res.send({ loginStatus: true, user, token });
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).send({ loginStatus: false });
@@ -303,7 +302,7 @@ router.post("/resetpassword", async (req, res) => {
   }
 });
 
-router.post("/uploadimg", upload.single("image"), async (req, res) => {
+router.post("/uploadimg/:id", upload.single("image"), async (req, res) => {
   try {
     console.log("Request Headers:", req.headers);
     console.log("Request Body:", req.body);
