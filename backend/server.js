@@ -29,7 +29,7 @@ const server = http.createServer(app);
 import { Server as SocketIOServer } from "socket.io";
 const io = new SocketIOServer(server, {
   cors: {
-    origin: "https://chat-mingle-murex.vercel.app",
+    origin: "https://chat-mingle-rho.vercel.app",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   },
 });
@@ -37,7 +37,7 @@ const io = new SocketIOServer(server, {
 // Use cors middleware
 app.use(
   cors({
-    origin: "https://chat-mingle-murex.vercel.app",
+    origin: "https://chat-mingle-rho.vercel.app",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
   })
